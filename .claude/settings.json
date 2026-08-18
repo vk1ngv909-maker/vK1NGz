@@ -1,0 +1,23 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash scripts/setup-codex.sh",
+            "timeout": 180,
+            "statusMessage": "Setting up Codex CLI..."
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(codex:*)",
+      "Bash(bash scripts/setup-codex.sh)",
+      "Bash(bash scripts/codex-models.sh)"
+    ]
+  }
+}

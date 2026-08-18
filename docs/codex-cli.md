@@ -4,28 +4,16 @@ The OpenAI Codex CLI runs alongside Claude Code in this environment.
 
 ## Setup
 
+`.claude/settings.json` runs `scripts/setup-codex.sh` on every SessionStart, so
+Codex is installed and configured automatically. To run it by hand:
+
 ```bash
 bash scripts/setup-codex.sh
 ```
 
-This installs `@openai/codex` globally via npm and copies `.codex/config.toml`
-to `~/.codex/config.toml` (it will not overwrite an existing one).
-
-To have it run automatically at the start of every web session, add a
-`SessionStart` hook to `.claude/settings.json`:
-
-```json
-{
-  "hooks": {
-    "SessionStart": [
-      { "hooks": [{ "type": "command", "command": "bash scripts/setup-codex.sh" }] }
-    ]
-  },
-  "permissions": {
-    "allow": ["Bash(codex:*)", "Bash(bash scripts/setup-codex.sh)"]
-  }
-}
-```
+It installs `@openai/codex` globally via npm and copies `.codex/config.toml` to
+`~/.codex/config.toml` (never overwriting an existing one), then reports whether
+you are authenticated.
 
 ## Authentication
 
