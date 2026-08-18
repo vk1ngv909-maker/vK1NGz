@@ -1,0 +1,17 @@
+{
+  "enemy_hp_base": 10.0,
+  "enemy_hp_growth": 1.55,
+  "boss_hp_multiplier": 8.0,
+  "enemy_gold_base": 5.0,
+  "enemy_gold_growth": 1.48,
+  "upgrade_cost_base": 100.0,
+  "upgrade_cost_growth": 1.075,
+  "tap_damage_per_level": 5.0,
+  "critical_chance": 0.2,
+  "critical_multiplier": 5.0,
+  "falcon_interval": 1.5,
+  "falcon_damage_multiplier": 0.4,
+  "boss_duration": 30.0,
+  "boss_stage_interval": 10.0,
+  "tap_damage_growth": 1.06
+}

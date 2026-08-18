@@ -19,6 +19,9 @@ ui.inventory.unlock,Unlock
 ui.inventory.favorite,Favorite
 ui.inventory.unfavorite,Unfavorite
 ui.inventory.salvage,Salvage
+ui.inventory.cannot_equipped,Equipped items cannot be salvaged.
+ui.inventory.cannot_locked,Unlock this item before salvaging it.
+ui.inventory.cannot_unknown,This item is no longer available.
 ui.inventory.equipped_ok,Item equipped.
 ui.badge.locked,[LOCKED]
 ui.badge.favorite,[FAVORITE]
@@ -35,6 +38,7 @@ ui.stat.crit_chance_add,Crit chance
 ui.salvage.title,SALVAGE ITEM?
 ui.salvage.permanent,This action is permanent.
 ui.salvage.warning,Salvage %s? This action is permanent and cannot be undone.
+ui.salvage.favorite_warning,Favorite item: confirm that you really want to salvage it.
 ui.salvage.confirm,Confirm Salvage
 ui.salvage.success,Salvaged for %d Gold.
 ui.salvage.blocked.equipped,Equipped items cannot be salvaged.
@@ -58,8 +62,17 @@ ui.settings.vibration,Vibration
 ui.settings.reduced_flashing,Reduced flashing
 ui.settings.damage_numbers,Damage numbers
 ui.settings.language,Language
+ui.settings.reset_tutorial,Reset tutorial
 ui.language.en,English (en)
 ui.language.ar,Arabic (ar)
+ui.tutorial.tap_enemy,Tap the enemy to deal damage.
+ui.tutorial.upgrade_hero,Upgrade your hero's tap damage.
+ui.tutorial.support_dps,Use support heroes for automatic DPS.
+ui.tutorial.activate_skill,Activate a combat skill.
+ui.tutorial.boss_intro,Bosses must be defeated before time runs out.
+ui.tutorial.boss_retry,Retry the boss when you are stronger.
+ui.tutorial.prestige_intro,Prestige is unlocked. Reset your run for permanent power.
+ui.tutorial.skip,Skip tutorial
 hud.gold,%s Gold
 hud.stage,Stage %d
 hud.stage_boss,Stage %d — BOSS

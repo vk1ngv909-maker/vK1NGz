@@ -58,7 +58,13 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C13 | Retry Boss button sits between hero and enemy inside the combat area | P3 | OPEN — acceptable in blockout, revisit in UI polish |
 | C18 | Comparing an item against itself reported "DOWNGRADE" instead of no change, which could push a player to salvage a sidegrade | P2 | RESOLVED — added a SAME verdict |
 | C19 | A duplicate local variable in `inventory_panel.gd` (introduced by me) caused a parse error that silently blanked the entire HUD while every logic suite still passed | **P1** | RESOLVED — fixed, and `run-tests.sh` now boots the game and fails on any parse error |
-| C20 | The inventory UI offers a Salvage button on an equipped item; the logic correctly refuses, but the button should not be enabled | P2 | OPEN |
+| C20 | The inventory UI offers a Salvage button on an equipped item | P2 | RESOLVED — button state derives from `salvage_refusal_preview()`, one source of truth |
+| C21 | Tap damage was implemented LINEARLY while enemy HP grows exponentially, guaranteeing an impassable wall — and deviating from the brief's `base_tap x hero_level_multiplier` | **P1** | RESOLVED — multiplicative growth (1.06), chosen by measured sweep; first Prestige 9.6 -> 35.7 min, worst stall 86h -> 3.1h |
+| C22 | Compiled `.translation` files were stale, so newly added Arabic keys rendered as raw `ui.tutorial.*` identifiers in the running game | P2 | RESOLVED — reimported; keys now render |
+| C23 | Some production-facing strings are still English under Arabic (e.g. "HERO DPS — PLACEHOLDER", "Cost: 250 Gold") | P2 | OPEN |
+| C24 | Tutorial Skip button overlaps the settings gear at top-left | P2 | OPEN |
+| C25 | Mixed numeral systems under Arabic: HP shows "10 / 10" but percentage shows "٪١٠٠" | P3 | OPEN |
+| C26 | A unit test hardcoded a number derived from a balance value, so retuning balance failed a correctness test | P2 | RESOLVED — expectation now derived from `balance()` |
 | C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | **RESOLVED** — save split into run_state/permanent_state; apply() rebuilds run_state from the canonical factory |
 | C16 | `SkillSystem.from_dict` coerced saved timestamps without type checks, raising engine errors on a corrupt save | P2 | RESOLVED — non-numeric values dropped, negatives clamped |
 | C17 | First-Prestige pacing is OFF TARGET: ~10.3 min to stage 25 versus the brief's 25-45 min, and the curve then jumps to ~56h for stage 50 — a cliff, not a slope. An earlier entry called 10 min "close to target"; that assessment was wrong and is corrected in docs/BALANCE.md | P2 | OPEN — acceptance criteria and baseline recorded in `docs/BALANCE.md`; re-measure after Gate 4 equipment + offline land |
@@ -155,19 +161,22 @@ upgrades. Only elapsed time differs, which is exactly what relics should change.
 | Lock / favorite | DONE | badges rendered as TEXT, not colour alone |
 | Salvage safety | DONE | locked, equipped, rare+, favorite all refuse; exactly-once proven under 50 rapid calls |
 | Offline rewards | DONE | `offline_dialog.png` (2h), `offline_capped.png` (8h cap line) |
-| Settings panel | BUILT, behaviour unverified | `settings.png` captured; audio-bus and reduced-flash effects NOT yet proven |
-| Localization structure (en/ar CSV) | BUILT | Arabic RTL layout NOT yet visually evidenced |
-| Tutorial | NOT STARTED | — |
-| Balance re-simulation after equipment/offline | NOT STARTED | required by C17 criterion 4 |
+| Settings affect the live game | DONE | Settings autoload drives real audio buses; 11 assertions |
+| C20 salvage button state | DONE | `salvage_equipped_disabled.png`; UI state derives from a pure `salvage_refusal_preview()` so it cannot disagree with the logic |
+| Localization en/ar | DONE | 127 keys in both files |
+| Arabic RTL visual evidence | DONE | `rtl_ar_inventory.png`, `rtl_ar_tutorial.png` — RTL flow, correct shaping, translated rarities and badges |
+| Tutorial | DONE | 9 assertions; `rtl_ar_tutorial.png` shows step text and Skip |
+| Balance re-simulation | DONE | see docs/BALANCE.md — C17 criterion 1 now MET (35.7 min) |
 
 Independent adversarial totals this gate: inventory 23, offline 13.
 Full suite: 16 suites, `ALL SUITES PASSED`, plus a new parse guard.
 
 ## Next highest-priority action
 
-Finish Gate 4: verify settings actually change audio buses and combat flash,
-capture Arabic RTL evidence, build the first-time tutorial, then re-run the
-balance simulation with equipment and offline active (C17 criterion 4).
+Close the remaining Gate 4 P2s (C23 English strings under Arabic, C24 overlap),
+independently verify the reduced-flash and audio-bus behaviour with captures
+rather than relying on Codex's assertions, then tune equipment rarity scaling so
+legendary gear stops pulling first Prestige to 13.5 min (C17 remainder).
 
 ## Placeholders
 

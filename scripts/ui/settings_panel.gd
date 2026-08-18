@@ -1,17 +1,6 @@
 class_name SettingsPanel
 extends Control
 
-const DEFAULTS: Dictionary = {
-	"master_volume": 100.0,
-	"music_volume": 80.0,
-	"sfx_volume": 80.0,
-	"ui_volume": 80.0,
-	"vibration": true,
-	"reduced_flashing": false,
-	"damage_numbers": true,
-	"language": "en",
-}
-
 @onready var master_slider: HSlider = %MasterSlider
 @onready var music_slider: HSlider = %MusicSlider
 @onready var sfx_slider: HSlider = %SfxSlider
@@ -27,6 +16,7 @@ var _loading: bool = false
 func _ready() -> void:
 	add_to_group("settings_panel")
 	%Close.pressed.connect(hide)
+	%ResetTutorial.pressed.connect(_on_reset_tutorial)
 	for slider: HSlider in [master_slider, music_slider, sfx_slider, ui_slider]:
 		slider.value_changed.connect(_on_setting_changed.unbind(1))
 	for toggle: CheckButton in [vibration, reduced_flashing, damage_numbers]:
@@ -42,10 +32,8 @@ func open_panel() -> void:
 
 
 func debug_set_language(code: String) -> void:
-	var normalized: String = "ar" if code == "ar" else "en"
-	TranslationServer.set_locale(normalized)
-	_select_language(normalized)
-	_save_values()
+	Settings.set_value("language", "ar" if code == "ar" else "en")
+	_load_values()
 	_refresh_all_localized_ui()
 
 
@@ -60,83 +48,54 @@ func refresh_localized_text() -> void:
 	reduced_flashing.text = tr("ui.settings.reduced_flashing")
 	damage_numbers.text = tr("ui.settings.damage_numbers")
 	%LanguageLabel.text = tr("ui.settings.language")
+	%ResetTutorial.text = tr("ui.settings.reset_tutorial")
 	_build_language_options()
 
 
 func _load_values() -> void:
-	var state: Dictionary = SaveManager.data
-	if state.is_empty():
-		state = SaveManager.load()
-	var settings: Dictionary = DEFAULTS.duplicate(true)
-	settings.merge((state["permanent_state"] as Dictionary).get("settings", {}), true)
+	var permanent_state: Dictionary = SaveManager.data.get("permanent_state", {})
+	var current: Dictionary = Settings.load_values(permanent_state.get("settings", {}), true)
 	_loading = true
-	master_slider.value = float(settings["master_volume"])
-	music_slider.value = float(settings["music_volume"])
-	sfx_slider.value = float(settings["sfx_volume"])
-	ui_slider.value = float(settings["ui_volume"])
-	vibration.button_pressed = bool(settings["vibration"])
-	reduced_flashing.button_pressed = bool(settings["reduced_flashing"])
-	damage_numbers.button_pressed = bool(settings["damage_numbers"])
-	TranslationServer.set_locale(str(settings["language"]))
-	_select_language(str(settings["language"]))
+	master_slider.value = float(current["master_volume"])
+	music_slider.value = float(current["music_volume"])
+	sfx_slider.value = float(current["sfx_volume"])
+	ui_slider.value = float(current["ui_volume"])
+	vibration.button_pressed = bool(current["vibration"])
+	reduced_flashing.button_pressed = bool(current["reduced_flash"])
+	damage_numbers.button_pressed = bool(current["damage_numbers"])
+	_select_language(str(current["language"]))
 	_loading = false
-	_apply_runtime(settings)
 	refresh_localized_text()
 
 
 func _on_setting_changed() -> void:
-	if not _loading:
-		_save_values()
-
-
-func _on_language_selected(index: int) -> void:
 	if _loading:
 		return
-	var code: String = str(language.get_item_metadata(index))
-	TranslationServer.set_locale(code)
-	_save_values()
-	_refresh_all_localized_ui()
-
-
-func _save_values() -> void:
-	if _loading or SaveManager.data.is_empty():
-		return
-	var settings: Dictionary = {
+	Settings.load_values({
 		"master_volume": master_slider.value,
 		"music_volume": music_slider.value,
 		"sfx_volume": sfx_slider.value,
 		"ui_volume": ui_slider.value,
 		"vibration": vibration.button_pressed,
-		"reduced_flashing": reduced_flashing.button_pressed,
+		"reduced_flash": reduced_flashing.button_pressed,
 		"damage_numbers": damage_numbers.button_pressed,
 		"language": str(language.get_item_metadata(language.selected)) if language.selected >= 0 else "en",
-	}
-	var save_data: Dictionary = SaveManager.data.duplicate(true)
-	(save_data["permanent_state"] as Dictionary)["settings"] = settings
-	SaveManager.save(save_data)
-	_apply_runtime(settings)
+	}, true)
 
 
-func _apply_runtime(settings: Dictionary) -> void:
-	_set_bus_volume("Master", float(settings["master_volume"]))
-	_set_bus_volume("Music", float(settings["music_volume"]))
-	_set_bus_volume("SFX", float(settings["sfx_volume"]))
-	_set_bus_volume("UI", float(settings["ui_volume"]))
-	for arena: Node in get_tree().get_nodes_in_group("combat_arena"):
-		if arena.has_method("apply_accessibility_settings"):
-			arena.call("apply_accessibility_settings", settings)
+func _on_language_selected(index: int) -> void:
+	if _loading:
+		return
+	Settings.set_value("language", str(language.get_item_metadata(index)))
+	_refresh_all_localized_ui()
 
 
-func _set_bus_volume(bus_name: String, percent: float) -> void:
-	var index: int = AudioServer.get_bus_index(bus_name)
-	if index >= 0:
-		AudioServer.set_bus_volume_db(index, linear_to_db(clampf(percent / 100.0, 0.0001, 1.0)))
+func _on_reset_tutorial() -> void:
+	Settings.reset_tutorial()
 
 
 func _build_language_options() -> void:
-	var current: String = "en"
-	if language.selected >= 0 and language.item_count > 0:
-		current = str(language.get_item_metadata(language.selected))
+	var current: String = str(Settings.values.get("language", "en"))
 	language.clear()
 	language.add_item(tr("ui.language.en"))
 	language.set_item_metadata(0, "en")
@@ -153,7 +112,7 @@ func _select_language(code: String) -> void:
 
 
 func _refresh_all_localized_ui() -> void:
-	for group_name: String in ["hud", "settings_panel", "inventory_panel", "offline_rewards_dialog"]:
+	for group_name: String in ["hud", "settings_panel", "inventory_panel", "offline_rewards_dialog", "tutorial"]:
 		for node: Node in get_tree().get_nodes_in_group(group_name):
 			if node.has_method("refresh_localized_text"):
 				node.call("refresh_localized_text")

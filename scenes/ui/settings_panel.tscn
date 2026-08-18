@@ -99,8 +99,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 100.0
-value = 100.0
+max_value = 1.0
+step = 0.01
+value = 1.0
 
 [node name="MusicRow" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content"]
 custom_minimum_size = Vector2(0, 88)
@@ -119,8 +120,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 100.0
-value = 80.0
+max_value = 1.0
+step = 0.01
+value = 0.8
 
 [node name="SfxRow" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content"]
 custom_minimum_size = Vector2(0, 88)
@@ -139,8 +141,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 100.0
-value = 80.0
+max_value = 1.0
+step = 0.01
+value = 0.8
 
 [node name="UiRow" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content"]
 custom_minimum_size = Vector2(0, 88)
@@ -159,8 +162,9 @@ unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 size_flags_horizontal = 3
-max_value = 100.0
-value = 80.0
+max_value = 1.0
+step = 0.01
+value = 0.8
 
 [node name="Vibration" type="CheckButton" parent="SafeMargin/Panel/Margin/Content"]
 unique_name_in_owner = true
@@ -201,3 +205,10 @@ custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
+
+[node name="ResetTutorial" type="Button" parent="SafeMargin/Panel/Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 21
+text = "ui.settings.reset_tutorial"

@@ -80,7 +80,12 @@ func debug_fail_boss() -> void:
 func debug_tap() -> void:
 	## Test-only hook so automated capture can drive real taps through the same
 	## path as a player touch, giving genuine in-motion visual evidence.
-	_react_to_attack(combat.tap())
+	_handle_player_tap_result(combat.tap())
+
+
+func debug_flash(reduced: bool) -> void:
+	apply_accessibility_settings({"reduced_flash": reduced, "damage_numbers": true})
+	debug_tap()
 
 
 func debug_open_prestige(max_stage: int) -> void:
@@ -164,6 +169,32 @@ func _open_debug_panels_from_command_line() -> void:
 		if args[index] == "--debug-settings":
 			debug_open_settings()
 			return
+		if args[index] == "--debug-salvage-equipped":
+			_debug_open_salvage_state("equipped")
+			return
+		if args[index] == "--debug-salvage-locked":
+			_debug_open_salvage_state("locked")
+			return
+		if args[index] == "--debug-salvage-eligible":
+			_debug_open_salvage_state("eligible")
+			return
+		if args[index] == "--debug-salvage-rare":
+			_debug_open_salvage_state("rare")
+			return
+		if args[index] == "--debug-salvage-favorite":
+			_debug_open_salvage_state("favorite")
+			return
+		if args[index] == "--debug-flash-normal":
+			debug_flash(false)
+			return
+		if args[index] == "--debug-flash-reduced":
+			debug_flash(true)
+			return
+		if args[index] == "--debug-tutorial" and index + 1 < args.size():
+			var tutorial: Node = get_tree().get_first_node_in_group("tutorial")
+			if tutorial != null:
+				tutorial.call("debug_open_step", int(args[index + 1]))
+			return
 
 
 func _gui_input(event: InputEvent) -> void:
@@ -175,6 +206,16 @@ func _gui_input(event: InputEvent) -> void:
 	if result.get("ignored", false):
 		return
 	accept_event()
+	_handle_player_tap_result(result)
+
+
+func _handle_player_tap_result(result: Dictionary) -> void:
+	if result.get("ignored", false):
+		return
+	if combat.is_boss:
+		EventBus.tutorial_action.emit("boss_intro")
+	EventBus.tutorial_action.emit("tap_enemy")
+	Settings.vibrate()
 	_react_to_attack(result)
 
 
@@ -223,8 +264,8 @@ func _play_hit_reaction() -> void:
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x + 12.0 * direction, 0.055).set_trans(Tween.TRANS_QUAD)
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_flash_tween = create_tween()
-	var flash_color: Color = _enemy_color.lerp(Color.WHITE, 0.22 if _reduced_flashing else 1.0)
-	var flash_duration: float = 0.018 if _reduced_flashing else 0.035
+	var flash_color: Color = _enemy_color.lerp(Color.WHITE, 0.25 if _reduced_flashing else 1.0)
+	var flash_duration: float = 0.035
 	_flash_tween.tween_property(enemy, "color", flash_color, flash_duration)
 	_flash_tween.tween_property(enemy, "color", _enemy_color, 0.10)
 
@@ -250,11 +291,15 @@ func _play_death_reaction() -> void:
 func _on_buy_tap_upgrade() -> void:
 	if combat.buy_tap_upgrade():
 		_save_combat()
+		EventBus.tutorial_action.emit("upgrade_hero")
 	_refresh_hud()
 
 
 func _on_retry_boss() -> void:
+	var was_awaiting_retry: bool = combat.awaiting_retry
 	combat.retry_boss()
+	if was_awaiting_retry:
+		EventBus.tutorial_action.emit("boss_retry")
 	_death_in_progress = false
 	enemy.scale = Vector2.ONE
 	enemy.modulate = Color.WHITE
@@ -346,7 +391,7 @@ func _set_combat_children_to_ignore_mouse() -> void:
 
 
 func apply_accessibility_settings(settings: Dictionary) -> void:
-	_reduced_flashing = bool(settings.get("reduced_flashing", false))
+	_reduced_flashing = bool(settings.get("reduced_flash", settings.get("reduced_flashing", false)))
 	_damage_numbers_enabled = bool(settings.get("damage_numbers", true))
 	damage_pool.visible = _damage_numbers_enabled
 	if not _damage_numbers_enabled:
@@ -366,10 +411,13 @@ func refresh_localized_text() -> void:
 
 
 func _apply_saved_accessibility() -> void:
-	var permanent_state: Dictionary = SaveManager.data.get("permanent_state", {})
-	var settings: Dictionary = permanent_state.get("settings", {})
-	TranslationServer.set_locale(str(settings.get("language", "en")))
-	apply_accessibility_settings(settings)
+	apply_accessibility_settings(Settings.values)
+
+
+func _debug_open_salvage_state(kind: String) -> void:
+	var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+	if panel != null:
+		panel.call("debug_open_salvage_state", kind)
 
 
 func _set_mouse_ignored_recursive(node: Node) -> void:

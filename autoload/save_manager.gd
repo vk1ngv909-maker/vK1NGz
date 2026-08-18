@@ -13,7 +13,7 @@ const RUN_STATE_KEYS: Array[String] = [
 ]
 const PERMANENT_STATE_KEYS: Array[String] = [
 	"max_stage", "prestige_currency", "relic_levels", "equipment", "achievements",
-	"settings", "statistics", "last_seen_utc", "offline_claimed_utc",
+	"settings", "statistics", "last_seen_utc", "offline_claimed_utc", "tutorial",
 ]
 
 var last_load_source: String = "default"
@@ -121,15 +121,16 @@ static func default_permanent_state() -> Dictionary:
 		"equipment": {"owned_items": [], "equipped_slots": {}, "next_uid": 1},
 		"achievements": [],
 		"settings": {
-			"master_volume": 100.0,
-			"music_volume": 80.0,
-			"sfx_volume": 80.0,
-			"ui_volume": 80.0,
+			"master_volume": 1.0,
+			"music_volume": 0.8,
+			"sfx_volume": 0.8,
+			"ui_volume": 0.8,
 			"vibration": true,
-			"reduced_flashing": false,
+			"reduced_flash": false,
 			"damage_numbers": true,
 			"language": "en",
 		},
+		"tutorial": {"completed": false, "current_step": 0},
 		"statistics": {},
 		"last_seen_utc": int(Time.get_unix_time_from_system()),
 		"offline_claimed_utc": 0,

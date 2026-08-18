@@ -49,7 +49,61 @@ The gap between the gold exponent (1.48) and the HP exponent (1.55) is what
 produces the cliff: gold falls behind HP by ~4.5% per stage compounding. Any
 retune must be measured, not guessed.
 
-### Status
+## Root cause found (C21) — a formula defect, not a tuning problem
 
-**No balance values have been changed yet.** Re-measurement is scheduled after
-Gate 4 equipment and offline rewards land, per criterion 4.
+Re-measuring after equipment and offline landed showed the cliff was immune to
+tuning: closing the gold/HP exponent gap (1.48 -> 1.55) barely moved the wall
+(83.3h to stage 40 in every variant). That falsified the "gold falls behind HP"
+hypothesis.
+
+The real cause: **tap damage was implemented LINEARLY** —
+`damage = per_level * tap_level` — while enemy HP grows exponentially
+(`1.55^stage`) and upgrade cost grows exponentially in level (`1.075^level`).
+Beating stage N therefore needs a level count that is exponential in N, at a
+cost that is exponential in that level: a double exponential. An impassable
+wall was mathematically guaranteed.
+
+This also **deviates from the master brief**, which specifies
+`tap_damage = base_tap x hero_level_multiplier x permanent_multipliers` — a
+multiplier per level, i.e. multiplicative growth, not linear.
+
+### Fix
+
+`tap_damage = tap_damage_per_level * tap_damage_growth^(level-1) * multipliers`
+with `tap_damage_growth = 1.06`, chosen by measured sweep, not by guess.
+Balance also moved out of a script constant into `resources/balance.json`, as
+the brief requires.
+
+## Before / after (seed 20260818, taps 5/s)
+
+| metric | before (linear) | after (growth 1.06) | target |
+| --- | --- | --- | --- |
+| first Prestige, no equipment | 9.6 min | **35.7 min** | 25-45 min ✔ |
+| first Prestige, common | 9.0 min | 34.8 min | — |
+| first Prestige, rare | 7.4 min | 27.7 min | — |
+| first Prestige, epic | 5.8 min | 20.6 min | below window |
+| first Prestige, legendary | 4.1 min | 13.5 min | below window |
+| with ~1h offline gold | 7.8 min | 29.9 min | in window |
+| with ~8h offline gold | 7.3 min | 22.2 min | slightly below |
+| reach stage 50 | never (stalled at 40, 86h) | **14.0 h** | reachable |
+| worst stall | 309717s (86h) @40 | **11245s (3.1h)** @40 | slope, not cliff |
+| post-Prestige improvement | 20.0% faster | **20.0% faster** | must stay faster ✔ |
+
+### Criteria status
+
+1. First Prestige 25-45 min — **MET** (35.7 min)
+2. Post-Prestige measurably faster — **MET** (20.0%)
+3. No jump from minutes to tens of hours — **LARGELY MET**: worst stall fell
+   from 86h to 3.1h, stage 50 from unreachable to 14h. Still steep at depth.
+4. Re-run after equipment and offline — **DONE** (this table)
+5. Record before/after — **DONE**
+
+### Still open
+
+- Legendary equipment pulls first Prestige to 13.5 min, well below the window.
+  Equipment rarity scaling needs its own pass so rarity stays meaningful without
+  collapsing the intended pacing.
+- 8h offline gold pulls it to 22.2 min, marginally below the window.
+
+C17 therefore stays **OPEN** on equipment/offline scaling, even though the
+baseline curve now meets the target.

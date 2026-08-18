@@ -92,7 +92,12 @@ func _test_support_dps_and_kill_guard() -> void:
 func _test_relic_multipliers() -> void:
 	var state: CombatState = CombatState.new(1, null, 2, {"support_hero_levels": {"dune_scout": 1}})
 	state.set_relic_bonuses(2.0, 3.0)
-	_check(_approx_number(state.get_tap_damage(), 20.0), "damage relic multiplier applies to tap damage")
+	# Derive the expectation from the balance data, so retuning a balance value
+	# does not fail a correctness test. The test asserts the RELATIONSHIP
+	# (relic multiplier applies), not a hardcoded tuned number.
+	var b: Dictionary = CombatState.balance()
+	var expected_tap: float = float(b["tap_damage_per_level"]) * pow(float(b.get("tap_damage_growth", 1.0)), 1.0) * 2.0
+	_check(_approx_number(state.get_tap_damage(), expected_tap), "damage relic multiplier applies to tap damage")
 	var dps: Dictionary = state.dps_tick(0.5)
 	_check(_approx_number(dps["damage"], 2.0), "damage relic multiplier applies to support DPS")
 	state.enemy_hp = BigNumber.from_float(1.0)

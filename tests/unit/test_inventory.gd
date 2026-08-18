@@ -65,7 +65,7 @@ func _test_safe_salvage_order_and_once() -> void:
 	inventory.equip(rare)
 	inventory.set_locked(rare, true)
 	inventory.set_favorite(rare, true)
-	_check(inventory.salvage(rare, true, true)["reason"] == "equipped", "equipped refusal precedes locked and confirmations")
+	_check(inventory.salvage(rare, true, true)["reason"] == "locked", "locked refusal wins when an item is also equipped")
 	inventory.unequip("weapon")
 	_check(inventory.salvage(rare, true, true)["reason"] == "locked", "locked refusal precedes confirmations")
 	inventory.set_locked(rare, false)

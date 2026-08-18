@@ -33,6 +33,8 @@ const SKILL_IDS: Array[String] = [
 ]
 @onready var settings_button: Button = %Settings
 @onready var inventory_button: Button = %Inventory
+@onready var support_dps_button: Button = %HeroDPS
+@onready var relics_button: Button = %Relics
 @onready var inventory_panel: InventoryPanel = %InventoryPanel
 @onready var settings_panel: SettingsPanel = %SettingsPanel
 
@@ -47,6 +49,8 @@ func _ready() -> void:
 	_setup_skills()
 	settings_button.pressed.connect(settings_panel.open_panel)
 	inventory_button.pressed.connect(inventory_panel.open_panel)
+	support_dps_button.pressed.connect(_on_support_dps_pressed)
+	relics_button.pressed.connect(_on_relics_pressed)
 	refresh_localized_text()
 	_layout_combat.call_deferred()
 
@@ -99,6 +103,7 @@ func _on_skill_pressed(id: String) -> void:
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	if skill_system.activate(id, now_ms):
 		_save_skills()
+		EventBus.tutorial_action.emit("activate_skill")
 	_refresh_skill_buttons(now_ms)
 
 
@@ -143,6 +148,16 @@ func _save_skills() -> void:
 	(save_data["run_state"] as Dictionary)["skill_timestamps"] = skill_system.to_dict()
 	(save_data["permanent_state"] as Dictionary)["last_seen_utc"] = int(Time.get_unix_time_from_system())
 	SaveManager.save(save_data)
+
+
+func _on_support_dps_pressed() -> void:
+	EventBus.tutorial_action.emit("support_dps")
+
+
+func _on_relics_pressed() -> void:
+	var permanent_state: Dictionary = SaveManager.data.get("permanent_state", {})
+	if int(permanent_state.get("max_stage", 1)) >= 25:
+		EventBus.tutorial_action.emit("prestige_intro")
 
 
 func _layout_combat() -> void:

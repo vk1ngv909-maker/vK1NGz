@@ -27,6 +27,8 @@ const DEBUG_ITEMS: Array[String] = [
 @onready var equip_button: Button = %Equip
 @onready var lock_button: Button = %Lock
 @onready var favorite_button: Button = %Favorite
+@onready var salvage_button: Button = %Salvage
+@onready var salvage_reason: Label = %SalvageReason
 @onready var confirmation: Control = %Confirmation
 @onready var warning: Label = %Warning
 @onready var cancel_salvage: Button = %CancelSalvage
@@ -50,9 +52,12 @@ func _ready() -> void:
 
 func open_panel() -> void:
 	_debug_fixture = false
-	var loaded: Dictionary = SaveManager.data
+	var manager: Node = _save_manager()
+	var loaded: Dictionary = manager.get("data") if manager != null else {}
 	if loaded.is_empty():
-		loaded = SaveManager.load()
+		loaded = manager.call("load") if manager != null else {}
+	if loaded.is_empty():
+		return
 	inventory = InventoryLogic.new((loaded["permanent_state"] as Dictionary).get("equipment", {}))
 	_selected_uid = ""
 	message.text = ""
@@ -90,6 +95,37 @@ func debug_open_salvage_confirmation() -> void:
 	_refresh()
 	_select_item("owned_2")
 	_show_confirmation("owned_2")
+
+
+func debug_open_salvage_state(kind: String) -> void:
+	_debug_fixture = true
+	inventory = InventoryLogic.new()
+	var item_id: String = "sunsteel_sabre" if kind == "rare" else "dune_knife"
+	var uid: String = inventory.add(item_id)
+	if kind == "equipped":
+		inventory.equip(uid)
+	elif kind == "locked":
+		inventory.set_locked(uid, true)
+	elif kind == "favorite":
+		inventory.set_favorite(uid, true)
+	_selected_uid = uid
+	message.text = ""
+	confirmation.hide()
+	visible = true
+	_refresh()
+
+
+func salvage_ui_state(uid: String) -> Dictionary:
+	if inventory == null:
+		return {"enabled": false, "reason_key": "ui.inventory.cannot_unknown", "needs_confirm": false}
+	var preview: Dictionary = inventory.salvage_refusal_preview(uid)
+	var enabled: bool = bool(preview.get("ok", false))
+	var reason_key: String = ""
+	if not enabled:
+		var reason: String = str(preview.get("reason", "unknown"))
+		reason_key = "ui.inventory.cannot_%s" % reason
+	var needs: Array = preview.get("needs", [])
+	return {"enabled": enabled, "reason_key": reason_key, "needs_confirm": not needs.is_empty()}
 
 
 func refresh_localized_text() -> void:
@@ -215,6 +251,10 @@ func _refresh_compare() -> void:
 	equip_button.disabled = bool(owned.get("equipped", false))
 	lock_button.text = tr("ui.inventory.unlock" if bool(owned.get("locked", false)) else "ui.inventory.lock")
 	favorite_button.text = tr("ui.inventory.unfavorite" if bool(owned.get("favorite", false)) else "ui.inventory.favorite")
+	var salvage_state: Dictionary = salvage_ui_state(_selected_uid)
+	salvage_button.disabled = not bool(salvage_state["enabled"])
+	var reason_key: String = str(salvage_state["reason_key"])
+	salvage_reason.text = tr(reason_key) if not reason_key.is_empty() else ""
 	compare_panel.show()
 	actions.show()
 
@@ -241,20 +281,26 @@ func _on_favorite() -> void:
 
 
 func _on_salvage() -> void:
-	var result: Dictionary = inventory.salvage(_selected_uid)
-	if bool(result.get("ok", false)):
-		_finish_salvage(result)
-	elif str(result.get("reason", "")) == "needs_confirmation":
+	var state: Dictionary = salvage_ui_state(_selected_uid)
+	if not bool(state["enabled"]):
+		return
+	if bool(state["needs_confirm"]):
 		_show_confirmation(_selected_uid)
 	else:
-		message.text = tr("ui.salvage.blocked.%s" % str(result.get("reason", "unknown")))
+		var result: Dictionary = inventory.salvage(_selected_uid)
+		if bool(result.get("ok", false)):
+			_finish_salvage(result)
 
 
 func _show_confirmation(uid: String) -> void:
 	_pending_salvage_uid = uid
 	var owned: Dictionary = inventory.owned_items[uid]
 	var definition: Dictionary = inventory.definitions[str(owned["item_id"])]
-	warning.text = tr("ui.salvage.warning") % tr(str(definition["name_key"]))
+	var warning_lines: PackedStringArray = [tr("ui.salvage.warning") % tr(str(definition["name_key"]))]
+	var preview: Dictionary = inventory.salvage_refusal_preview(uid)
+	if (preview.get("needs", []) as Array).has("favorite"):
+		warning_lines.append(tr("ui.salvage.favorite_warning"))
+	warning.text = "\n".join(warning_lines)
 	confirmation.show()
 	cancel_salvage.grab_focus()
 
@@ -279,12 +325,15 @@ func _finish_salvage(result: Dictionary) -> void:
 	_selected_uid = ""
 	message.text = tr("ui.salvage.success") % int(awarded)
 	if not _debug_fixture:
-		var save_data: Dictionary = SaveManager.data.duplicate(true)
+		var manager: Node = _save_manager()
+		if manager == null:
+			return
+		var save_data: Dictionary = (manager.get("data") as Dictionary).duplicate(true)
 		var run_state: Dictionary = save_data["run_state"]
 		var current_gold: BigNumber = BigNumber.from_dict(run_state["gold"] as Dictionary)
 		run_state["gold"] = current_gold.add(BigNumber.from_float(awarded)).to_dict()
 		(save_data["permanent_state"] as Dictionary)["equipment"] = inventory.to_dict()
-		SaveManager.save(save_data)
+		manager.call("save", save_data)
 		_apply_runtime_inventory()
 	_refresh()
 
@@ -292,9 +341,12 @@ func _finish_salvage(result: Dictionary) -> void:
 func _save_inventory() -> void:
 	if _debug_fixture:
 		return
-	var save_data: Dictionary = SaveManager.data.duplicate(true)
+	var manager: Node = _save_manager()
+	if manager == null:
+		return
+	var save_data: Dictionary = (manager.get("data") as Dictionary).duplicate(true)
 	(save_data["permanent_state"] as Dictionary)["equipment"] = inventory.to_dict()
-	SaveManager.save(save_data)
+	manager.call("save", save_data)
 	_apply_runtime_inventory()
 
 
@@ -302,3 +354,10 @@ func _apply_runtime_inventory() -> void:
 	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
 	if arena != null and arena.has_method("apply_inventory_state"):
 		arena.call("apply_inventory_state", inventory.to_dict())
+
+
+func _save_manager() -> Node:
+	var loop: MainLoop = Engine.get_main_loop()
+	if loop is SceneTree:
+		return (loop as SceneTree).root.get_node_or_null("SaveManager")
+	return null

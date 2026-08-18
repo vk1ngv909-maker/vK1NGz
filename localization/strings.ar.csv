@@ -19,6 +19,9 @@ ui.inventory.unlock,فتح القفل
 ui.inventory.favorite,مفضل
 ui.inventory.unfavorite,إزالة من المفضلة
 ui.inventory.salvage,تفكيك
+ui.inventory.cannot_equipped,لا يمكن تفكيك الأغراض المجهزة.
+ui.inventory.cannot_locked,افتح قفل الغرض قبل تفكيكه.
+ui.inventory.cannot_unknown,هذا الغرض لم يعد متاحًا.
 ui.inventory.equipped_ok,تم تجهيز الغرض.
 ui.badge.locked,[مقفول]
 ui.badge.favorite,[مفضل]
@@ -35,6 +38,7 @@ ui.stat.crit_chance_add,فرصة الضربة الحرجة
 ui.salvage.title,تفكيك الغرض؟
 ui.salvage.permanent,هذا الإجراء دائم.
 ui.salvage.warning,تفكيك %s؟ هذا الإجراء دائم ولا يمكن التراجع عنه.
+ui.salvage.favorite_warning,الغرض مفضل: أكد أنك تريد تفكيكه فعلًا.
 ui.salvage.confirm,تأكيد التفكيك
 ui.salvage.success,تم التفكيك مقابل %d ذهب.
 ui.salvage.blocked.equipped,لا يمكن تفكيك الأغراض المجهزة.
@@ -58,8 +62,17 @@ ui.settings.vibration,الاهتزاز
 ui.settings.reduced_flashing,تقليل الوميض
 ui.settings.damage_numbers,أرقام الضرر
 ui.settings.language,اللغة
+ui.settings.reset_tutorial,إعادة ضبط البرنامج التعليمي
 ui.language.en,الإنجليزية (en)
 ui.language.ar,العربية (ar)
+ui.tutorial.tap_enemy,اضغط على العدو لإلحاق الضرر.
+ui.tutorial.upgrade_hero,طور ضرر لمس بطلك.
+ui.tutorial.support_dps,استخدم أبطال الدعم للضرر التلقائي.
+ui.tutorial.activate_skill,فعّل مهارة قتالية.
+ui.tutorial.boss_intro,يجب هزيمة الزعماء قبل انتهاء الوقت.
+ui.tutorial.boss_retry,أعد محاولة الزعيم عندما تصبح أقوى.
+ui.tutorial.prestige_intro,تم فتح الهيبة. أعد الجولة للحصول على قوة دائمة.
+ui.tutorial.skip,تخطي البرنامج التعليمي
 hud.gold,%s ذهب
 hud.stage,المرحلة %d
 hud.stage_boss,المرحلة %d — زعيم

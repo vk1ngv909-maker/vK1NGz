@@ -7,22 +7,24 @@ const Inventory = preload("res://scripts/progression/inventory.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
-const BALANCE: Dictionary = {
-	"enemy_hp_base": 10.0,
-	"enemy_hp_growth": 1.55,
-	"boss_hp_multiplier": 8.0,
-	"enemy_gold_base": 5.0,
-	"enemy_gold_growth": 1.48,
-	"upgrade_cost_base": 100.0,
-	"upgrade_cost_growth": 1.075,
-	"tap_damage_per_level": 5.0,
-	"critical_chance": 0.20,
-	"critical_multiplier": 5.0,
-	"falcon_interval": 1.5,
-	"falcon_damage_multiplier": 0.40,
-	"boss_duration": 30.0,
-	"boss_stage_interval": 10,
-}
+const BALANCE_PATH: String = "res://resources/balance.json"
+
+## Balance lives in data, per the master brief. `BALANCE_OVERRIDE` exists only
+## so the balance simulation can sweep candidate values without editing the file.
+static var BALANCE_OVERRIDE: Dictionary = {}
+static var _balance_cache: Dictionary = {}
+
+static func balance() -> Dictionary:
+	if not BALANCE_OVERRIDE.is_empty():
+		return BALANCE_OVERRIDE
+	if _balance_cache.is_empty():
+		var f: FileAccess = FileAccess.open(BALANCE_PATH, FileAccess.READ)
+		if f != null:
+			var parsed: Variant = JSON.parse_string(f.get_as_text())
+			f.close()
+			if parsed is Dictionary:
+				_balance_cache = parsed
+	return _balance_cache
 
 var stage: int = 1
 var is_boss: bool = false
@@ -66,11 +68,11 @@ func _init(
 func tap() -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
-	var critical: bool = _rng.randf() < float(BALANCE["critical_chance"])
+	var critical: bool = _rng.randf() < float(balance()["critical_chance"])
 	var damage: BigNumber = get_tap_damage()
 	var kind: String = "normal"
 	if critical:
-		damage = damage.mul_float(float(BALANCE["critical_multiplier"]))
+		damage = damage.mul_float(float(balance()["critical_multiplier"]))
 		kind = "critical"
 	return _apply_damage(damage, kind)
 
@@ -79,10 +81,10 @@ func falcon_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	_falcon_elapsed += maxf(0.0, delta)
-	if _falcon_elapsed < float(BALANCE["falcon_interval"]):
+	if _falcon_elapsed < float(balance()["falcon_interval"]):
 		return {"attacked": false}
-	_falcon_elapsed = fmod(_falcon_elapsed, float(BALANCE["falcon_interval"]))
-	var damage: BigNumber = get_tap_damage().mul_float(float(BALANCE["falcon_damage_multiplier"]))
+	_falcon_elapsed = fmod(_falcon_elapsed, float(balance()["falcon_interval"]))
+	var damage: BigNumber = get_tap_damage().mul_float(float(balance()["falcon_damage_multiplier"]))
 	return _apply_damage(damage, "falcon")
 
 
@@ -122,18 +124,24 @@ func buy_tap_upgrade() -> bool:
 
 
 func spawn_enemy() -> void:
-	is_boss = stage % int(BALANCE["boss_stage_interval"]) == 0
+	is_boss = stage % int(balance()["boss_stage_interval"]) == 0
 	enemy_max_hp = get_enemy_hp(stage)
 	if is_boss:
-		enemy_max_hp = enemy_max_hp.mul_float(float(BALANCE["boss_hp_multiplier"]))
+		enemy_max_hp = enemy_max_hp.mul_float(float(balance()["boss_hp_multiplier"]))
 	enemy_hp = enemy_max_hp._copy_normalized()
-	boss_time_left = float(BALANCE["boss_duration"]) if is_boss else 0.0
+	boss_time_left = float(balance()["boss_duration"]) if is_boss else 0.0
 	_falcon_elapsed = 0.0
 
 
 func get_tap_damage() -> BigNumber:
 	var equipment_mult: float = 1.0 + inventory.total_stat("tap_damage_mult")
-	return BigNumber.from_float(float(BALANCE["tap_damage_per_level"]) * tap_level).mul_float(_relic_damage_mult * equipment_mult)
+	# The master brief defines tap damage as base x hero_level_MULTIPLIER, i.e. it
+	# grows multiplicatively with level. It was implemented linearly, which cannot
+	# keep pace with exponential enemy HP and guarantees an impassable wall.
+	var growth: float = float(balance().get("tap_damage_growth", 1.0))
+	var per_level: float = float(balance()["tap_damage_per_level"])
+	var scaled: BigNumber = BigNumber.from_float(per_level).mul(BigNumber.from_float(growth).pow_float(float(maxi(0, tap_level - 1))))
+	return scaled.mul_float(_relic_damage_mult * equipment_mult)
 
 
 func set_inventory(value: Inventory) -> void:
@@ -152,18 +160,18 @@ func set_relic_bonuses(damage_mult: float, gold_mult: float) -> void:
 
 
 func get_upgrade_cost() -> BigNumber:
-	var growth: BigNumber = BigNumber.from_float(float(BALANCE["upgrade_cost_growth"]))
-	return BigNumber.from_float(float(BALANCE["upgrade_cost_base"])).mul(growth.pow_float(tap_level))
+	var growth: BigNumber = BigNumber.from_float(float(balance()["upgrade_cost_growth"]))
+	return BigNumber.from_float(float(balance()["upgrade_cost_base"])).mul(growth.pow_float(tap_level))
 
 
 static func get_enemy_hp(for_stage: int) -> BigNumber:
-	var growth: BigNumber = BigNumber.from_float(float(BALANCE["enemy_hp_growth"]))
-	return BigNumber.from_float(float(BALANCE["enemy_hp_base"])).mul(growth.pow_float(maxi(0, for_stage - 1)))
+	var growth: BigNumber = BigNumber.from_float(float(balance()["enemy_hp_growth"]))
+	return BigNumber.from_float(float(balance()["enemy_hp_base"])).mul(growth.pow_float(maxi(0, for_stage - 1)))
 
 
 static func get_enemy_gold(for_stage: int) -> BigNumber:
-	var growth: BigNumber = BigNumber.from_float(float(BALANCE["enemy_gold_growth"]))
-	return BigNumber.from_float(float(BALANCE["enemy_gold_base"])).mul(growth.pow_float(maxi(0, for_stage - 1)))
+	var growth: BigNumber = BigNumber.from_float(float(balance()["enemy_gold_growth"]))
+	return BigNumber.from_float(float(balance()["enemy_gold_base"])).mul(growth.pow_float(maxi(0, for_stage - 1)))
 
 
 func set_random_seed(seed_value: int) -> void:

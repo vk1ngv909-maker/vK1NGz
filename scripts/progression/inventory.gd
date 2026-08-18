@@ -167,6 +167,27 @@ func salvage(uid: String, confirmed_rarity: bool = false, confirmed_favorite: bo
 	return {"ok": true, "reason": "", "gold_awarded": gold_awarded, "needs": []}
 
 
+func salvage_refusal_preview(uid: String) -> Dictionary:
+	## Pure preview used by every caller that needs to explain salvage safety.
+	## It deliberately reports every confirmation warning, while hard refusals
+	## use exactly the same precedence as salvage().
+	if not owned_items.has(uid):
+		return {"ok": false, "reason": "unknown", "needs": []}
+	var owned: Dictionary = owned_items[uid]
+	# Locked wins when malformed/legacy data says the item is both states.
+	if bool(owned.get("locked", false)):
+		return {"ok": false, "reason": "locked", "needs": []}
+	if bool(owned.get("equipped", false)):
+		return {"ok": false, "reason": "equipped", "needs": []}
+	var definition: Dictionary = _definition_for_uid(uid)
+	var needs: Array[String] = []
+	if str(definition.get("rarity", "common")) != "common":
+		needs.append("rarity")
+	if bool(owned.get("favorite", false)):
+		needs.append("favorite")
+	return {"ok": true, "reason": "", "needs": needs}
+
+
 func salvage_batch(uids: Array, confirmed_rarity: bool, confirmed_favorite: bool) -> Dictionary:
 	var results: Dictionary = {}
 	var total: float = 0.0
@@ -218,17 +239,13 @@ func from_dict(saved: Dictionary) -> void:
 
 
 func _salvage_refusal(uid: String, confirmed_rarity: bool, confirmed_favorite: bool) -> Dictionary:
-	if not owned_items.has(uid):
-		return {"ok": false, "reason": "unknown", "gold_awarded": 0.0, "needs": []}
-	var owned: Dictionary = owned_items[uid]
-	if bool(owned.get("equipped", false)):
-		return {"ok": false, "reason": "equipped", "gold_awarded": 0.0, "needs": []}
-	if bool(owned.get("locked", false)):
-		return {"ok": false, "reason": "locked", "gold_awarded": 0.0, "needs": []}
-	var definition: Dictionary = _definition_for_uid(uid)
-	if str(definition["rarity"]) != "common" and not confirmed_rarity:
+	var preview: Dictionary = salvage_refusal_preview(uid)
+	if not bool(preview.get("ok", false)):
+		return {"ok": false, "reason": str(preview.get("reason", "unknown")), "gold_awarded": 0.0, "needs": []}
+	var needs: Array = preview.get("needs", [])
+	if needs.has("rarity") and not confirmed_rarity:
 		return {"ok": false, "reason": "needs_confirmation", "gold_awarded": 0.0, "needs": ["rarity"]}
-	if bool(owned.get("favorite", false)) and not confirmed_favorite:
+	if needs.has("favorite") and not confirmed_favorite:
 		return {"ok": false, "reason": "needs_confirmation", "gold_awarded": 0.0, "needs": ["favorite"]}
 	return {}
 
