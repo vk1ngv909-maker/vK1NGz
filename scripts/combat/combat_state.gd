@@ -5,6 +5,8 @@ const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const SupportHeroes = preload("res://scripts/progression/support_heroes.gd")
 const Inventory = preload("res://scripts/progression/inventory.gd")
 const RewardSystem = preload("res://scripts/progression/reward_system.gd")
+const SaveAdapterLogic = preload("res://scripts/utilities/save_adapter.gd")
+const SaveManagerLogic = preload("res://autoload/save_manager.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
@@ -42,6 +44,10 @@ var falcon_dps: BigNumber = BigNumber.new()
 var inventory: Inventory
 var boss_first_clears: Dictionary = {}
 var max_stage_reached: int = 1
+## Variant permits small duck-typed failure adapters in headless tests while
+## the production default is the concrete SaveAdapter requested by the API.
+var save_adapter: Variant = SaveAdapterLogic.new()
+var reward_pity: Dictionary = {}
 
 var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -68,6 +74,9 @@ func _init(
 	if saved_equipment is Dictionary:
 		inventory.from_dict(saved_equipment as Dictionary)
 	_load_boss_first_clears(permanent_state.get("boss_first_clears", {}))
+	var saved_pity: Variant = permanent_state.get("reward_pity", {})
+	if saved_pity is Dictionary:
+		reward_pity = (saved_pity as Dictionary).duplicate(true)
 	_rng.randomize()
 	spawn_enemy()
 
@@ -179,6 +188,7 @@ func begin_boss_first_clear(boss_stage: int, rewards: RewardSystem) -> Dictionar
 	if table_id.is_empty():
 		push_error("CombatState: no first-clear reward table for boss %d" % boss_stage)
 		return {"granted": false, "reason": "invalid"}
+	rewards.pity_counter = maxi(0, int(reward_pity.get(table_id, rewards.pity_counter)))
 	var reward: Dictionary = rewards.roll(table_id, maxi(max_stage_reached, boss_stage), inventory)
 	if not bool(reward.get("granted", false)):
 		return reward
@@ -191,7 +201,22 @@ func begin_boss_first_clear(boss_stage: int, rewards: RewardSystem) -> Dictionar
 	inventory.max_stage_reached = max_stage_reached
 	reward["uid"] = uid
 	reward["boss_stage"] = boss_stage
+	reward["table_id"] = table_id
+	reward["reward_system"] = rewards
+	reward_pity[table_id] = rewards.pity_counter
 	return reward
+
+
+func commit_boss_first_clear(transaction: Dictionary) -> bool:
+	if not bool(transaction.get("granted", false)) or save_adapter == null or not save_adapter.has_method("save"):
+		return false
+	var save_data: Dictionary = transaction.get("save_data", {})
+	if save_data.is_empty():
+		save_data = _transaction_save_data()
+	if not bool(save_adapter.call("save", save_data.duplicate(true))):
+		rollback_boss_first_clear(transaction)
+		return false
+	return true
 
 
 func rollback_boss_first_clear(transaction: Dictionary) -> void:
@@ -205,6 +230,48 @@ func rollback_boss_first_clear(transaction: Dictionary) -> void:
 		boss_first_clears.erase(str(boss_stage))
 	max_stage_reached = int(transaction.get("previous_max_stage", max_stage_reached))
 	inventory.max_stage_reached = max_stage_reached
+	var table_id: String = str(transaction.get("table_id", ""))
+	var previous_pity: int = int(transaction.get("previous_pity", 0))
+	if not table_id.is_empty():
+		reward_pity[table_id] = previous_pity
+	var rewards: Variant = transaction.get("reward_system")
+	if rewards != null and rewards is RewardSystem:
+		(rewards as RewardSystem).pity_counter = previous_pity
+
+
+func save_into(base: Dictionary) -> Dictionary:
+	var result: Dictionary = base.duplicate(true)
+	if result.is_empty():
+		var standalone_manager: Node = SaveManagerLogic.new()
+		result = standalone_manager.call("default_data") as Dictionary
+		standalone_manager.free()
+	var run_state: Dictionary = result.get("run_state", {})
+	var permanent_state: Dictionary = result.get("permanent_state", {})
+	run_state["stage"] = stage
+	run_state["gold"] = gold.to_dict()
+	run_state["tap_level"] = tap_level
+	run_state["boss_time_left"] = boss_time_left
+	run_state["awaiting_retry"] = awaiting_retry
+	permanent_state["max_stage"] = maxi(maxi(int(permanent_state.get("max_stage", 1)), max_stage_reached), stage)
+	permanent_state["equipment"] = inventory.to_dict()
+	permanent_state["boss_first_clears"] = boss_first_clears.duplicate(true)
+	permanent_state["reward_pity"] = reward_pity.duplicate(true)
+	permanent_state["last_seen_utc"] = int(Time.get_unix_time_from_system())
+	result["run_state"] = run_state
+	result["permanent_state"] = permanent_state
+	return result
+
+
+func _transaction_save_data() -> Dictionary:
+	var base: Dictionary = {}
+	var loop: MainLoop = Engine.get_main_loop()
+	if loop is SceneTree:
+		var manager: Node = (loop as SceneTree).root.get_node_or_null("SaveManager")
+		if manager != null:
+			var current: Variant = manager.get("data")
+			if current is Dictionary:
+				base = current as Dictionary
+	return save_into(base)
 
 
 func _load_boss_first_clears(value: Variant) -> void:
@@ -246,6 +313,10 @@ static func get_enemy_gold(for_stage: int) -> BigNumber:
 
 func set_random_seed(seed_value: int) -> void:
 	_rng.seed = seed_value
+
+
+func get_pity(table_id: String = "boss_first_clear_default") -> int:
+	return maxi(0, int(reward_pity.get(table_id, 0)))
 
 
 func _cannot_attack() -> bool:

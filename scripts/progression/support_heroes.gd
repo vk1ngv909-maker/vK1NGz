@@ -87,10 +87,11 @@ func reset_levels() -> void:
 
 func _load_data() -> void:
 	var parsed: Variant = _read_json(DATA_PATH)
-	if not parsed is Array:
+	var values: Variant = (parsed as Dictionary).get("support_heroes") if parsed is Dictionary else parsed
+	if not values is Array:
 		push_error("SupportHeroes: invalid data at %s" % DATA_PATH)
 		return
-	for value: Variant in parsed as Array:
+	for value: Variant in values as Array:
 		if not value is Dictionary:
 			continue
 		var definition: Dictionary = (value as Dictionary).duplicate(true)

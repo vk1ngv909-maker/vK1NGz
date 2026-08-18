@@ -37,8 +37,12 @@ const SKILL_IDS: Array[String] = [
 @onready var relics_button: Button = %Relics
 @onready var inventory_panel: InventoryPanel = %InventoryPanel
 @onready var settings_panel: SettingsPanel = %SettingsPanel
+@onready var combat_background: ColorRect = %DesertBackground
+@onready var world_name: Label = %WorldName
 
 var skill_system: SkillSystem
+var current_music_ref: String = ""
+var current_world: Dictionary = {}
 
 
 func _ready() -> void:
@@ -136,14 +140,34 @@ func refresh_localized_text() -> void:
 	# Placeholder status is recorded in docs/ASSET_MANIFEST.md instead.
 	%GoldPlaceholder.text = ""
 	%BackgroundLabel.text = Settings.t("hud.desert_placeholder")
+	if not current_world.is_empty():
+		world_name.text = Settings.t(str(current_world.get("name_key", "")))
 	%BalanceDataInvalid.visible = OS.is_debug_build() and BalanceData.balance_data_invalid
 	%BalanceDataInvalid.text = Settings.t("debug.balance_data_invalid")
+	%ContentDataInvalid.visible = OS.is_debug_build() and ContentValidator.content_invalid
+	%ContentDataInvalid.text = Settings.t("debug.content_data_invalid")
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	if skill_system != null:
 		_refresh_skill_buttons(now_ms)
 	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
 	if arena != null and arena.has_method("refresh_localized_text"):
 		arena.call("refresh_localized_text")
+
+
+func apply_world(world: Dictionary) -> void:
+	if world.is_empty():
+		return
+	current_world = world.duplicate(true)
+	var palette: Dictionary = world.get("palette", {})
+	var sand_html: String = str(palette.get("sand", "#C28C4C"))
+	if Color.html_is_valid(sand_html):
+		combat_background.color = Color.html(sand_html)
+	var accent_html: String = str(palette.get("accent", "#FFFFFF"))
+	if Color.html_is_valid(accent_html):
+		world_name.add_theme_color_override("font_color", Color.html(accent_html))
+	world_name.text = Settings.t(str(world.get("name_key", "")))
+	current_music_ref = str(world.get("music_ref", ""))
+	combat_background.set_meta("music_ref", current_music_ref)
 
 
 func _remaining_seconds(until_ms: int, now_ms: int) -> int:

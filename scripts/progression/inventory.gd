@@ -68,9 +68,14 @@ func migrate_owned(value: Variant) -> String:
 	return load_owned(item_id, str(item.get("uid", "")), item)
 
 func debug_add(item_id: String) -> String:
-	if not OS.is_debug_build() or not _has_debug_grant_flag():
+	if not is_debug_grant_allowed():
 		return ""
 	return load_owned(item_id)
+
+func is_debug_grant_allowed() -> bool:
+	## This explicit release-build guard is kept separate so export tests can
+	## assert that debug inventory grants are unreachable.
+	return OS.is_debug_build() and _has_debug_grant_flag()
 
 func add(item_id: String) -> String:
 	## Compatibility for existing gameplay/UI callers. New acquisition code must
@@ -358,10 +363,11 @@ func _load_data() -> void:
 		return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	file.close()
-	if not parsed is Array:
+	var values: Variant = (parsed as Dictionary).get("equipment") if parsed is Dictionary else parsed
+	if not values is Array:
 		push_error("Inventory: invalid data at %s" % DATA_PATH)
 		return
-	for value: Variant in parsed as Array:
+	for value: Variant in values as Array:
 		if _valid_definition(value):
 			var definition: Dictionary = (value as Dictionary).duplicate(true)
 			var id: String = str(definition["id"])

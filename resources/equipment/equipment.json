@@ -1,4 +1,4 @@
-[
+{"schema_version":1,"equipment":[
  {
   "id": "dune_knife",
   "name_key": "equipment.dune_knife.name",
@@ -12,7 +12,7 @@
    "gold_mult": 0.0,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/dune_knife.png",
+    "icon_ref": "placeholder://equipment/dune_knife",
   "unlock_stage": 1
  },
  {
@@ -28,7 +28,7 @@
    "gold_mult": 0.0,
    "crit_chance_add": 0.01
   },
-  "icon_ref": "res://assets/equipment/sunsteel_sabre.png",
+    "icon_ref": "placeholder://equipment/sunsteel_sabre",
   "unlock_stage": 10
  },
  {
@@ -44,7 +44,7 @@
    "gold_mult": 0.0,
    "crit_chance_add": 0.02
   },
-  "icon_ref": "res://assets/equipment/ifrit_fang.png",
+    "icon_ref": "placeholder://equipment/ifrit_fang",
   "unlock_stage": 25
  },
  {
@@ -60,7 +60,7 @@
    "gold_mult": 0.05,
    "crit_chance_add": 0.04
   },
-  "icon_ref": "res://assets/equipment/blade_of_high_noon.png",
+    "icon_ref": "placeholder://equipment/blade_of_high_noon",
   "unlock_stage": 50
  },
  {
@@ -76,7 +76,7 @@
    "gold_mult": 0.02,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/wanderer_wrap.png",
+    "icon_ref": "placeholder://equipment/wanderer_wrap",
   "unlock_stage": 1
  },
  {
@@ -92,7 +92,7 @@
    "gold_mult": 0.05,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/scarab_circlet.png",
+    "icon_ref": "placeholder://equipment/scarab_circlet",
   "unlock_stage": 10
  },
  {
@@ -108,7 +108,7 @@
    "gold_mult": 0.08,
    "crit_chance_add": 0.02
   },
-  "icon_ref": "res://assets/equipment/oracle_veil.png",
+    "icon_ref": "placeholder://equipment/oracle_veil",
   "unlock_stage": 25
  },
  {
@@ -124,7 +124,7 @@
    "gold_mult": 0.13,
    "crit_chance_add": 0.04
   },
-  "icon_ref": "res://assets/equipment/crown_of_stars.png",
+    "icon_ref": "placeholder://equipment/crown_of_stars",
   "unlock_stage": 50
  },
  {
@@ -140,7 +140,7 @@
    "gold_mult": 0.02,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/traveler_robes.png",
+    "icon_ref": "placeholder://equipment/traveler_robes",
   "unlock_stage": 1
  },
  {
@@ -156,7 +156,7 @@
    "gold_mult": 0.04,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/caravan_guard_mail.png",
+    "icon_ref": "placeholder://equipment/caravan_guard_mail",
   "unlock_stage": 10
  },
  {
@@ -172,7 +172,7 @@
    "gold_mult": 0.08,
    "crit_chance_add": 0.01
   },
-  "icon_ref": "res://assets/equipment/stormweave_mantle.png",
+    "icon_ref": "placeholder://equipment/stormweave_mantle",
   "unlock_stage": 25
  },
  {
@@ -188,7 +188,7 @@
    "gold_mult": 0.15,
    "crit_chance_add": 0.02
   },
-  "icon_ref": "res://assets/equipment/sultans_regalia.png",
+    "icon_ref": "placeholder://equipment/sultans_regalia",
   "unlock_stage": 50
  },
  {
@@ -204,7 +204,7 @@
    "gold_mult": 0.0,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/dust_wisp.png",
+    "icon_ref": "placeholder://equipment/dust_wisp",
   "unlock_stage": 1
  },
  {
@@ -220,7 +220,7 @@
    "gold_mult": 0.0,
    "crit_chance_add": 0.01
   },
-  "icon_ref": "res://assets/equipment/ember_halo.png",
+    "icon_ref": "placeholder://equipment/ember_halo",
   "unlock_stage": 10
  },
  {
@@ -236,7 +236,7 @@
    "gold_mult": 0.04,
    "crit_chance_add": 0.02
   },
-  "icon_ref": "res://assets/equipment/djinn_radiance.png",
+    "icon_ref": "placeholder://equipment/djinn_radiance",
   "unlock_stage": 25
  },
  {
@@ -252,7 +252,7 @@
    "gold_mult": 0.08,
    "crit_chance_add": 0.04
   },
-  "icon_ref": "res://assets/equipment/solar_ascendance.png",
+    "icon_ref": "placeholder://equipment/solar_ascendance",
   "unlock_stage": 50
  },
  {
@@ -268,7 +268,7 @@
    "gold_mult": 0.04,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/beetle_token.png",
+    "icon_ref": "placeholder://equipment/beetle_token",
   "unlock_stage": 1
  },
  {
@@ -284,7 +284,7 @@
    "gold_mult": 0.06,
    "crit_chance_add": 0.0
   },
-  "icon_ref": "res://assets/equipment/falcon_bell.png",
+    "icon_ref": "placeholder://equipment/falcon_bell",
   "unlock_stage": 10
  },
  {
@@ -300,7 +300,7 @@
    "gold_mult": 0.1,
    "crit_chance_add": 0.01
   },
-  "icon_ref": "res://assets/equipment/moon_fox_talisman.png",
+    "icon_ref": "placeholder://equipment/moon_fox_talisman",
   "unlock_stage": 25
  },
  {
@@ -316,7 +316,7 @@
    "gold_mult": 0.18,
    "crit_chance_add": 0.03
   },
-  "icon_ref": "res://assets/equipment/phoenix_signet.png",
+    "icon_ref": "placeholder://equipment/phoenix_signet",
   "unlock_stage": 50
  }
-]
+]}

@@ -7,6 +7,7 @@ const RARITIES: Array[String] = ["common", "rare", "epic", "legendary"]
 var tables: Dictionary = {}
 var _seed: int = 0
 var _data_valid: bool = true
+var pity_counter: int = 0
 
 
 func _init(seed: int) -> void:
@@ -34,7 +35,14 @@ func roll(table_id: String, max_stage: int, inventory: Inventory) -> Dictionary:
 		return _result(false, "", "", reason)
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = _roll_seed(table_id, max_stage, inventory)
+	var previous_pity: int = pity_counter
 	var rarity: String = _choose_rarity(table, candidates, rng)
+	if table.has("pity") and previous_pity + 1 >= int(table["pity"]):
+		for forced_rarity: String in ["legendary", "epic", "rare"]:
+			if _has_rarity(candidates, forced_rarity):
+				rarity = forced_rarity
+				break
+	pity_counter = 0 if rarity in ["legendary", "epic"] else previous_pity + 1
 	var slot: String = _choose_slot(table, candidates, rarity, rng)
 	var final_candidates: Array[Dictionary] = []
 	for definition: Dictionary in candidates:
@@ -45,7 +53,17 @@ func roll(table_id: String, max_stage: int, inventory: Inventory) -> Dictionary:
 		return refused
 	final_candidates.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a["id"]) < str(b["id"]))
 	var selected: Dictionary = final_candidates[rng.randi_range(0, final_candidates.size() - 1)]
-	return _result(true, str(selected["id"]), str(selected["rarity"]), "")
+	var result: Dictionary = _result(true, str(selected["id"]), str(selected["rarity"]), "")
+	result["previous_pity"] = previous_pity
+	result["pity_counter"] = pity_counter
+	return result
+
+
+func _has_rarity(candidates: Array[Dictionary], rarity: String) -> bool:
+	for definition: Dictionary in candidates:
+		if str(definition.get("rarity", "")) == rarity:
+			return true
+	return false
 
 
 func table_id_for_boss(boss_stage: int) -> String:
@@ -146,11 +164,12 @@ func _load_tables() -> void:
 		return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	file.close()
-	if not parsed is Array:
+	var values: Variant = (parsed as Dictionary).get("reward_tables") if parsed is Dictionary else parsed
+	if not values is Array:
 		_data_valid = false
 		push_error("RewardSystem: reward table root must be an array")
 		return
-	for value: Variant in parsed as Array:
+	for value: Variant in values as Array:
 		if not _valid_table(value):
 			_data_valid = false
 			push_error("RewardSystem: malformed reward table data")

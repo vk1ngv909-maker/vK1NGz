@@ -1,0 +1,11 @@
+{
+	"schema_version": 1,
+	"entries": [
+		{"id":"dune_raider","name_key":"enemy.dune_raider.name","world_id":"oasis_frontier","stage_from":1,"stage_to":33,"hp_modifier":1.0,"gold_modifier":1.0,"asset_ref":"placeholder://enemy/dune_raider"},
+		{"id":"oasis_scarab","name_key":"enemy.oasis_scarab.name","world_id":"oasis_frontier","stage_from":1,"stage_to":33,"hp_modifier":1.1,"gold_modifier":1.05,"asset_ref":"placeholder://enemy/oasis_scarab"},
+		{"id":"moon_jackal","name_key":"enemy.moon_jackal.name","world_id":"moonlit_dunes","stage_from":34,"stage_to":66,"hp_modifier":1.15,"gold_modifier":1.1,"asset_ref":"placeholder://enemy/moon_jackal"},
+		{"id":"star_wisp","name_key":"enemy.star_wisp.name","world_id":"moonlit_dunes","stage_from":34,"stage_to":66,"hp_modifier":1.25,"gold_modifier":1.15,"asset_ref":"placeholder://enemy/star_wisp"},
+		{"id":"sun_guardian","name_key":"enemy.sun_guardian.name","world_id":"ruins_of_the_sun_kingdom","stage_from":67,"stage_to":100,"hp_modifier":1.35,"gold_modifier":1.2,"asset_ref":"placeholder://enemy/sun_guardian"},
+		{"id":"ash_serpent","name_key":"enemy.ash_serpent.name","world_id":"ruins_of_the_sun_kingdom","stage_from":67,"stage_to":100,"hp_modifier":1.5,"gold_modifier":1.3,"asset_ref":"placeholder://enemy/ash_serpent"}
+	]
+}

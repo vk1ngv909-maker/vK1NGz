@@ -1,8 +1,8 @@
-[
+{"schema_version":1,"skills":[
 	{"id":"sand_fury","name_key":"skill.sand_fury","duration":10,"cooldown":45,"duration_ms":10000,"cooldown_ms":45000,"effects":{"tap_damage":3.0}},
 	{"id":"falcon_storm","name_key":"skill.falcon_storm","duration":8,"cooldown":60,"duration_ms":8000,"cooldown_ms":60000,"effects":{"falcon_rate":4.0}},
 	{"id":"golden_wind","name_key":"skill.golden_wind","duration":12,"cooldown":90,"duration_ms":12000,"cooldown_ms":90000,"effects":{"gold":2.5}},
 	{"id":"time_fracture","name_key":"skill.time_fracture","duration":1,"cooldown":120,"duration_ms":1000,"cooldown_ms":120000,"effects":{},"bonuses":{"boss_timer":10.0}},
 	{"id":"ancestor_call","name_key":"skill.ancestor_call","duration":15,"cooldown":75,"duration_ms":15000,"cooldown_ms":75000,"effects":{"support_dps":3.0}},
 	{"id":"critical_eclipse","name_key":"skill.critical_eclipse","duration":9,"cooldown":50,"duration_ms":9000,"cooldown_ms":50000,"effects":{"crit_chance":1.4,"crit_damage":2.0},"bonuses":{"crit_chance":0.4}}
-]
+]}

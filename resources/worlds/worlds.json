@@ -1,0 +1,8 @@
+{
+	"schema_version": 1,
+	"entries": [
+		{"id":"oasis_frontier","name_key":"world.oasis_frontier.name","desc_key":"world.oasis_frontier.desc","stage_from":1,"stage_to":33,"palette":{"sky":"#65B9D1","sand":"#D8A85F","accent":"#2D8C78"},"background_layers":["PLACEHOLDER: distant oasis","PLACEHOLDER: rolling dunes"],"music_ref":"placeholder://music/oasis_frontier","enemy_pool":["dune_raider","oasis_scarab"],"boss_ids":["sand_colossus","caravan_breaker","oasis_ifrit"],"transition":{"fade_seconds":0.35}},
+		{"id":"moonlit_dunes","name_key":"world.moonlit_dunes.name","desc_key":"world.moonlit_dunes.desc","stage_from":34,"stage_to":66,"palette":{"sky":"#25345F","sand":"#8777A7","accent":"#67D3C2"},"background_layers":["PLACEHOLDER: crescent moon","PLACEHOLDER: silver dunes"],"music_ref":"placeholder://music/moonlit_dunes","enemy_pool":["moon_jackal","star_wisp"],"boss_ids":["lunar_sphinx","night_djinn","eclipse_stalker"],"transition":{"fade_seconds":0.45}},
+		{"id":"ruins_of_the_sun_kingdom","name_key":"world.ruins_of_the_sun_kingdom.name","desc_key":"world.ruins_of_the_sun_kingdom.desc","stage_from":67,"stage_to":100,"palette":{"sky":"#6B2838","sand":"#C66B32","accent":"#F4C95D"},"background_layers":["PLACEHOLDER: ruined pillars","PLACEHOLDER: solar throne"],"music_ref":"placeholder://music/sun_kingdom","enemy_pool":["sun_guardian","ash_serpent"],"boss_ids":["gilded_manticore","sun_priest","phoenix_regent","sun_king"],"transition":{"fade_seconds":0.55}}
+	]
+}

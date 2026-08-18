@@ -102,10 +102,11 @@ func _load_data() -> void:
 		return
 	var parsed: Variant = JSON.parse_string(file.get_as_text())
 	file.close()
-	if not parsed is Array:
+	var values: Variant = (parsed as Dictionary).get("skills") if parsed is Dictionary else parsed
+	if not values is Array:
 		push_error("SkillSystem: invalid data at %s" % DATA_PATH)
 		return
-	for value: Variant in parsed as Array:
+	for value: Variant in values as Array:
 		if value is Dictionary:
 			var definition: Dictionary = (value as Dictionary).duplicate(true)
 			var id: String = str(definition.get("id", ""))

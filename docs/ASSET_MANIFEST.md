@@ -17,7 +17,12 @@ file has been imported.
 | Desert background | ColorRect | generated in-engine | n/a | PLACEHOLDER |
 | Gold icon | ColorRect | generated in-engine | n/a | PLACEHOLDER |
 | Skill icons 1-6 | Button + Label | generated in-engine | n/a | PLACEHOLDER |
+| World backgrounds (3 palettes, 6 layers) | ColorRect + labelled data layers | generated in-engine | n/a | PLACEHOLDER |
+| World music references (3) | `placeholder://music/*` labelled references | data-only | n/a | PLACEHOLDER |
+| Enemy silhouettes (6) | `placeholder://enemy/*` labelled references | data-only | n/a | PLACEHOLDER |
+| Boss silhouettes (10) | `placeholder://boss/*` labelled references | data-only | n/a | PLACEHOLDER |
+| Equipment icons (20) | `placeholder://equipment/*` labelled references | data-only | n/a | PLACEHOLDER |
 
-Placeholder count: **6 categories, 0 files**.
+Placeholder count: **11 categories, 0 files**.
 
 No placeholder above may be presented as production art.

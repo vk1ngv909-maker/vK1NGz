@@ -1,0 +1,37 @@
+{
+	"schema_version": 1,
+	"types": {
+		"worlds": {
+			"required": ["id", "name_key", "desc_key", "stage_from", "stage_to", "palette", "background_layers", "music_ref", "enemy_pool", "boss_ids", "transition"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"desc_key":{"type":"string"},"stage_from":{"type":"integer","minimum":1},"stage_to":{"type":"integer","minimum":1},"palette":{"type":"dictionary"},"background_layers":{"type":"array"},"music_ref":{"type":"asset_ref"},"enemy_pool":{"type":"array","reference":"enemy"},"boss_ids":{"type":"array","reference":"boss"},"transition":{"type":"dictionary"}}
+		},
+		"enemies": {
+			"required": ["id", "name_key", "world_id", "stage_from", "stage_to", "hp_modifier", "gold_modifier", "asset_ref"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"world_id":{"type":"string","reference":"world"},"stage_from":{"type":"integer","minimum":1},"stage_to":{"type":"integer","minimum":1},"hp_modifier":{"type":"number","exclusive_minimum":0,"maximum":100},"gold_modifier":{"type":"number","exclusive_minimum":0,"maximum":100},"asset_ref":{"type":"asset_ref"}}
+		},
+		"bosses": {
+			"required": ["id", "name_key", "world_id", "stage", "hp_modifier", "gold_modifier", "reward_table_id", "asset_ref"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"world_id":{"type":"string","reference":"world"},"stage":{"type":"integer","minimum":1},"hp_modifier":{"type":"number","exclusive_minimum":0,"maximum":1000},"gold_modifier":{"type":"number","exclusive_minimum":0,"maximum":1000},"reward_table_id":{"type":"string","reference":"reward_table"},"asset_ref":{"type":"asset_ref"}}
+		},
+		"support_heroes": {
+			"required": ["id", "name_key", "role", "base_dps", "base_cost", "cost_growth", "unlock_stage", "milestones"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"role":{"type":"string"},"base_dps":{"type":"number","exclusive_minimum":0},"base_cost":{"type":"number","exclusive_minimum":0},"cost_growth":{"type":"number","exclusive_minimum":1,"maximum":3},"unlock_stage":{"type":"integer","minimum":1},"milestones":{"type":"array"}}
+		},
+		"skills": {
+			"required": ["id", "name_key", "duration", "cooldown", "duration_ms", "cooldown_ms", "effects"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"duration":{"type":"number","exclusive_minimum":0},"cooldown":{"type":"number","exclusive_minimum":0},"duration_ms":{"type":"integer","minimum":1},"cooldown_ms":{"type":"integer","minimum":1},"effects":{"type":"dictionary"},"bonuses":{"type":"dictionary"}}
+		},
+		"relics": {
+			"required": ["id", "name_key", "category", "level", "max_level", "base_effect", "growth", "cost", "unlock_condition"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"category":{"type":"string"},"level":{"type":"integer","minimum":0},"max_level":{"type":"integer","minimum":1,"maximum":1000},"base_effect":{"type":"number","minimum":0,"maximum":10},"growth":{"type":"number","minimum":0,"maximum":1},"cost":{"type":"number","exclusive_minimum":0},"unlock_condition":{"type":"dictionary"}}
+		},
+		"equipment": {
+			"required": ["id", "name_key", "desc_key", "slot", "rarity", "item_level", "stats", "icon_ref", "unlock_stage"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"desc_key":{"type":"string"},"slot":{"type":"string"},"rarity":{"type":"string"},"item_level":{"type":"integer","minimum":1},"stats":{"type":"dictionary"},"icon_ref":{"type":"asset_ref"},"unlock_stage":{"type":"integer","minimum":1}}
+		},
+		"reward_tables": {
+			"required": ["id", "source", "boss_id", "eligible_rarities", "slot_weights", "drop_weights", "min_unlock_stage", "duplicate_policy", "pity"],
+			"properties": {"id":{"type":"string"},"source":{"type":"string"},"boss_id":{"type":"variant","reference":"boss"},"eligible_rarities":{"type":"array"},"slot_weights":{"type":"dictionary"},"drop_weights":{"type":"dictionary"},"min_unlock_stage":{"type":"integer","minimum":1},"duplicate_policy":{"type":"string"},"pity":{"type":"integer","minimum":1},"skill_ids":{"type":"array","reference":"skill"},"relic_ids":{"type":"array","reference":"relic"},"item_ids":{"type":"array","reference":"item"}}
+		}
+	}
+}

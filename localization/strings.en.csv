@@ -130,6 +130,7 @@ equipment.phoenix_signet.name,Phoenix Signet
 ui.inventory.same,SAME — NO CHANGE
 ui.cancel,Cancel
 debug.balance_data_invalid,INVALID BALANCE DATA — SAFE DEFAULTS ACTIVE
+debug.content_data_invalid,INVALID CONTENT DATA — CHECK DEBUG ERRORS
 ui.prestige.title,PRESTIGE
 ui.prestige.explanation,Trade this run for permanent Relic Currency and grow stronger every ascent.
 ui.prestige.will_reset,WILL RESET
@@ -158,3 +159,68 @@ ui.prestige.entry.statistics,Statistics
 ui.prestige.entry.last_seen_utc,Last Seen Time
 ui.prestige.entry.offline_claimed_utc,Offline Reward State
 ui.prestige.entry.tutorial,Tutorial
+world.oasis_frontier.name,Oasis Frontier
+world.oasis_frontier.desc,Follow the caravan road beyond the first oasis.
+world.moonlit_dunes.name,Moonlit Dunes
+world.moonlit_dunes.desc,Cross silver sands beneath an endless moon.
+world.ruins_of_the_sun_kingdom.name,Ruins of the Sun Kingdom
+world.ruins_of_the_sun_kingdom.desc,Challenge the fallen kingdom at the edge of dawn.
+enemy.dune_raider.name,Dune Raider
+enemy.oasis_scarab.name,Oasis Scarab
+enemy.moon_jackal.name,Moon Jackal
+enemy.star_wisp.name,Star Wisp
+enemy.sun_guardian.name,Sun Guardian
+enemy.ash_serpent.name,Ash Serpent
+boss.sand_colossus.name,Sand Colossus
+boss.caravan_breaker.name,Caravan Breaker
+boss.oasis_ifrit.name,Oasis Ifrit
+boss.lunar_sphinx.name,Lunar Sphinx
+boss.night_djinn.name,Night Djinn
+boss.eclipse_stalker.name,Eclipse Stalker
+boss.gilded_manticore.name,Gilded Manticore
+boss.sun_priest.name,Sun Priest
+boss.phoenix_regent.name,Phoenix Regent
+boss.sun_king.name,The Sun King
+hero.dune_scout,Dune Scout
+hero.falconer,Falconer
+hero.oasis_guard,Oasis Guard
+hero.scarab_knight,Scarab Knight
+hero.mirage_weaver,Mirage Weaver
+hero.djinn_binder,Djinn Binder
+hero.sun_priestess,Sun Priestess
+hero.star_vizier,Star Vizier
+relic.sun_blade,Sun Blade
+relic.falcon_feather,Falcon Feather
+relic.gilded_scarab,Gilded Scarab
+relic.oasis_charm,Oasis Charm
+relic.hourglass_shard,Hourglass Shard
+relic.djinn_lamp,Djinn Lamp
+relic.lion_seal,Lion Seal
+relic.moon_dial,Moon Dial
+relic.phoenix_ankh,Phoenix Ankh
+relic.storm_eye,Storm Eye
+relic.sultans_coin,Sultan's Coin
+relic.map_of_stars,Map of Stars
+relic.desert_wind,Desert Wind
+relic.ember_rune,Ember Rune
+relic.merchant_scale,Merchant Scale
+equipment.dune_knife.desc,A simple blade shaped by the desert road.
+equipment.sunsteel_sabre.desc,A sabre tempered in reflected sunlight.
+equipment.ifrit_fang.desc,A fierce edge carrying an ember's heat.
+equipment.blade_of_high_noon.desc,A legendary weapon bright as midday.
+equipment.wanderer_wrap.desc,A light wrap for long journeys.
+equipment.scarab_circlet.desc,A circlet marked by the sacred scarab.
+equipment.oracle_veil.desc,A veil that shimmers around hidden paths.
+equipment.crown_of_stars.desc,A crown set with a midnight constellation.
+equipment.traveler_robes.desc,Practical robes for the caravan trail.
+equipment.caravan_guard_mail.desc,Mail worn by steadfast caravan guards.
+equipment.stormweave_mantle.desc,A mantle woven with desert lightning.
+equipment.sultans_regalia.desc,Regalia worthy of an ancient court.
+equipment.dust_wisp.desc,A small aura of dancing desert dust.
+equipment.ember_halo.desc,A warm halo of banked embers.
+equipment.djinn_radiance.desc,Radiance drawn from a djinn's promise.
+equipment.solar_ascendance.desc,The blazing sign of a solar champion.
+equipment.beetle_token.desc,A humble token polished by travel.
+equipment.falcon_bell.desc,A silver bell known to desert falcons.
+equipment.moon_fox_talisman.desc,A moonlit charm for a clever companion.
+equipment.phoenix_signet.desc,A legendary signet of return and renewal.

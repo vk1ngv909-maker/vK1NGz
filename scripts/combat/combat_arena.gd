@@ -4,6 +4,7 @@ const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const CombatState = preload("res://scripts/combat/combat_state.gd")
 const Relics = preload("res://scripts/progression/relics.gd")
 const RewardSystem = preload("res://scripts/progression/reward_system.gd")
+const WorldsLogic = preload("res://scripts/progression/worlds.gd")
 
 @onready var hero: ColorRect = %Hero
 @onready var falcon: ColorRect = %Falcon
@@ -27,6 +28,8 @@ var _death_in_progress: bool = false
 var _enemy_color: Color
 var _reduced_flashing: bool = false
 var _damage_numbers_enabled: bool = true
+var worlds: RefCounted = WorldsLogic.new()
+var current_world_id: String = ""
 
 
 func _ready() -> void:
@@ -41,6 +44,7 @@ func _ready() -> void:
 	resized.connect(_update_facing)
 	_update_facing.call_deferred()
 	_refresh_hud()
+	_apply_world_for_stage(combat.stage)
 	_open_debug_panels_from_command_line.call_deferred()
 
 
@@ -260,6 +264,9 @@ func _react_to_attack(result: Dictionary) -> void:
 					result["stage_advanced"] = false
 			else:
 				_save_combat()
+			if bool(result.get("stage_advanced", false)):
+				EventBus.stage_changed.emit(combat.stage)
+				_apply_world_for_stage(combat.stage)
 		_play_death_reaction()
 
 
@@ -343,9 +350,12 @@ func _load_combat() -> void:
 	# --start-stage N lets automated capture jump straight to a boss stage so
 	# boss visuals can be evidenced without farming ten stages first.
 	var cli: PackedStringArray = OS.get_cmdline_args()
+	cli.append_array(OS.get_cmdline_user_args())
 	for i in cli.size():
 		if cli[i] == "--start-stage" and i + 1 < cli.size():
 			start_stage = int(cli[i + 1])
+		if cli[i] == "--debug-world" and i + 1 < cli.size() and OS.is_debug_build():
+			start_stage = maxi(1, int(cli[i + 1]))
 	var permanent_state: Dictionary = loaded["permanent_state"]
 	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state, permanent_state)
 	var relics: Relics = Relics.new(int(permanent_state.get("prestige_currency", 0)))
@@ -359,21 +369,10 @@ func _load_combat() -> void:
 
 
 func _save_combat() -> bool:
-	var save_data: Dictionary = SaveManager.data.duplicate(true)
-	if save_data.is_empty():
-		save_data = SaveManager.default_data()
-	var run_state: Dictionary = save_data["run_state"]
-	var permanent_state: Dictionary = save_data["permanent_state"]
-	run_state["stage"] = combat.stage
-	run_state["gold"] = combat.gold.to_dict()
-	run_state["tap_level"] = combat.tap_level
-	run_state["boss_time_left"] = combat.boss_time_left
-	run_state["awaiting_retry"] = combat.awaiting_retry
-	permanent_state["max_stage"] = maxi(int(permanent_state.get("max_stage", 1)), combat.stage)
-	permanent_state["equipment"] = combat.inventory.to_dict()
-	permanent_state["boss_first_clears"] = combat.boss_first_clears.duplicate(true)
-	permanent_state["last_seen_utc"] = int(Time.get_unix_time_from_system())
-	return SaveManager.save(save_data)
+	var save_data: Dictionary = combat.save_into(SaveManager.data)
+	if combat.save_adapter == null or not combat.save_adapter.has_method("save"):
+		return false
+	return bool(combat.save_adapter.call("save", save_data))
 
 
 func _commit_boss_first_clear(boss_stage: int) -> Dictionary:
@@ -385,8 +384,8 @@ func _commit_boss_first_clear(boss_stage: int) -> Dictionary:
 		if reason == "already_cleared":
 			_save_combat()
 		return transaction
-	if not _save_combat():
-		combat.rollback_boss_first_clear(transaction)
+	transaction["save_data"] = combat.save_into(SaveManager.data)
+	if not combat.commit_boss_first_clear(transaction):
 		return {"granted": false, "item_id": "", "rarity": "", "reason": "save_failed"}
 	return transaction
 
@@ -448,6 +447,20 @@ func apply_inventory_state(saved_inventory: Dictionary) -> void:
 func refresh_localized_text() -> void:
 	if combat != null:
 		_refresh_hud()
+		_apply_world_for_stage(combat.stage, true)
+
+
+func _apply_world_for_stage(for_stage: int, force_text_refresh: bool = false) -> void:
+	var world: Dictionary = worlds.world_for_stage(for_stage)
+	if world.is_empty():
+		return
+	var world_id: String = str(world.get("id", ""))
+	if world_id == current_world_id and not force_text_refresh:
+		return
+	current_world_id = world_id
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("apply_world"):
+		hud.call("apply_world", world)
 
 
 func _apply_saved_accessibility() -> void:

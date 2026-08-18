@@ -206,11 +206,51 @@ is what stops a balance-data change from confiscating a player's equipment.
 
 Independent adversarial totals this group: rewards 9, first-clear 9.
 
+### Group 2 — reward reliability, schemas, worlds (DONE)
+
+**Failure injection** (`test_reward_failure_injection.gd`, 11 assertions) drives
+a substituted save adapter, not hand-edited end state:
+
+| Injected failure | Result |
+| --- | --- |
+| save fails at commit | clean retry: not claimed, no reward |
+| retry after rollback | succeeds exactly once |
+| reload after interruption | cannot re-grant |
+| interruption at every boundary (0,1,2) | every outcome is a valid state |
+| pity counter on failed save | not half-advanced |
+| `debug_add()` in a release build | refused |
+
+The invariant holds: after any failure the player is either (A) unclaimed with
+no reward, or (B) claimed with exactly one reward. Never claimed-without-reward,
+never a duplicate, never a reward below its unlock stage.
+
+**Content validation**: `resources/schemas/content_schema.json` (versioned) plus
+`autoload/content_validator.gd`, failing loudly in debug with file, entry id and
+field named. Broken-fixture tests cover each rejection rule.
+
+**Worlds** (`test_worlds_adversarial.gd`, 15 assertions):
+
+| world | stages | palette |
+| --- | --- | --- |
+| oasis_frontier | 1-33 | sand/teal |
+| moonlit_dunes | 34-66 | night blue/violet |
+| ruins_of_the_sun_kingdom | 67-100 | crimson/gold |
+
+Contiguous, no gaps or overlaps; every stage 1-100 maps to exactly one world;
+both sides of every boundary checked; stages beyond 100 clamp to the last world
+(documented fallback); palettes are distinct; all name/desc keys exist in en and ar.
+
+Live evidence — background colour measured from the rendered frame, not assumed:
+stage 1 RGB(204,168,106), stage 34 RGB(132,125,170), stage 67 RGB(188,114,66).
+`world_stage1.png`, `world_stage34.png`, `world_stage67.png`.
+
+31 suites, `ALL SUITES PASSED`.
+
 ## Next highest-priority action
 
-Gate 5 group 2: content schemas and validators, then three worlds and the
-stage-to-world progression, then enemies, bosses, heroes, skills, relics and the
-full 20-item equipment set — each connected to live gameplay and evidenced.
+Gate 5 group 3: twelve enemies and four bosses wired into the world enemy pools,
+with deterministic selection and per-world identity — then heroes, skills,
+relics and the full equipment set.
 
 ## Placeholders
 

@@ -130,6 +130,7 @@ equipment.phoenix_signet.name,خاتم العنقاء
 ui.inventory.same,نفس المستوى
 ui.cancel,إلغاء
 debug.balance_data_invalid,بيانات التوازن غير صالحة — القيم الآمنة مفعّلة
+debug.content_data_invalid,بيانات المحتوى غير صالحة — راجع أخطاء التصحيح
 ui.prestige.title,الهيبة
 ui.prestige.explanation,استبدل هذه الجولة بعملة آثار دائمة وازدد قوة مع كل صعود.
 ui.prestige.will_reset,سيُعاد ضبطه
@@ -158,3 +159,68 @@ ui.prestige.entry.statistics,الإحصاءات
 ui.prestige.entry.last_seen_utc,وقت آخر ظهور
 ui.prestige.entry.offline_claimed_utc,حالة مكافأة الغياب
 ui.prestige.entry.tutorial,البرنامج التعليمي
+world.oasis_frontier.name,حدود الواحة
+world.oasis_frontier.desc,اتبع طريق القافلة وراء الواحة الأولى.
+world.moonlit_dunes.name,الكثبان المقمرة
+world.moonlit_dunes.desc,اعبر الرمال الفضية تحت قمر لا يغيب.
+world.ruins_of_the_sun_kingdom.name,أطلال مملكة الشمس
+world.ruins_of_the_sun_kingdom.desc,تحدَّ المملكة الساقطة عند حافة الفجر.
+enemy.dune_raider.name,مغير الكثبان
+enemy.oasis_scarab.name,جعران الواحة
+enemy.moon_jackal.name,ابن آوى القمري
+enemy.star_wisp.name,طيف النجوم
+enemy.sun_guardian.name,حارس الشمس
+enemy.ash_serpent.name,أفعى الرماد
+boss.sand_colossus.name,عملاق الرمال
+boss.caravan_breaker.name,محطم القوافل
+boss.oasis_ifrit.name,عفريت الواحة
+boss.lunar_sphinx.name,أبو الهول القمري
+boss.night_djinn.name,جني الليل
+boss.eclipse_stalker.name,مترصد الكسوف
+boss.gilded_manticore.name,المانتيكور المذهب
+boss.sun_priest.name,كاهن الشمس
+boss.phoenix_regent.name,وصي العنقاء
+boss.sun_king.name,ملك الشمس
+hero.dune_scout,كشاف الكثبان
+hero.falconer,الصقار
+hero.oasis_guard,حارس الواحة
+hero.scarab_knight,فارس الجعران
+hero.mirage_weaver,ناسج السراب
+hero.djinn_binder,مروض الجان
+hero.sun_priestess,كاهنة الشمس
+hero.star_vizier,وزير النجوم
+relic.sun_blade,نصل الشمس
+relic.falcon_feather,ريشة الصقر
+relic.gilded_scarab,الجعران المذهب
+relic.oasis_charm,تميمة الواحة
+relic.hourglass_shard,شظية الساعة الرملية
+relic.djinn_lamp,مصباح الجني
+relic.lion_seal,ختم الأسد
+relic.moon_dial,مزولة القمر
+relic.phoenix_ankh,عنخ العنقاء
+relic.storm_eye,عين العاصفة
+relic.sultans_coin,عملة السلطان
+relic.map_of_stars,خريطة النجوم
+relic.desert_wind,ريح الصحراء
+relic.ember_rune,نقش الجمر
+relic.merchant_scale,ميزان التاجر
+equipment.dune_knife.desc,نصل بسيط صاغه طريق الصحراء.
+equipment.sunsteel_sabre.desc,سيف مقوس صُقل بضوء الشمس.
+equipment.ifrit_fang.desc,حد شرس يحمل حرارة الجمر.
+equipment.blade_of_high_noon.desc,سلاح أسطوري يلمع كالظهيرة.
+equipment.wanderer_wrap.desc,لفافة خفيفة للرحلات الطويلة.
+equipment.scarab_circlet.desc,إكليل يحمل علامة الجعران المقدس.
+equipment.oracle_veil.desc,حجاب يتلألأ حول الدروب الخفية.
+equipment.crown_of_stars.desc,تاج مرصع بكوكبة ليلية.
+equipment.traveler_robes.desc,رداء عملي لطريق القوافل.
+equipment.caravan_guard_mail.desc,درع يرتديه حراس القوافل الصامدون.
+equipment.stormweave_mantle.desc,عباءة منسوجة ببرق الصحراء.
+equipment.sultans_regalia.desc,حلة تليق ببلاط قديم.
+equipment.dust_wisp.desc,هالة صغيرة من غبار الصحراء الراقص.
+equipment.ember_halo.desc,هالة دافئة من الجمر الخافت.
+equipment.djinn_radiance.desc,إشراقة مستمدة من عهد جني.
+equipment.solar_ascendance.desc,علامة متوهجة لبطل شمسي.
+equipment.beetle_token.desc,تميمة متواضعة صقلها السفر.
+equipment.falcon_bell.desc,جرس فضي تعرفه صقور الصحراء.
+equipment.moon_fox_talisman.desc,تميمة قمرية لرفيق ماكر.
+equipment.phoenix_signet.desc,خاتم أسطوري للعودة والتجدد.

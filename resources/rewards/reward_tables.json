@@ -1,4 +1,4 @@
-[
+{"schema_version":1,"reward_tables":[
 	{
 		"id": "boss_first_clear_default",
 		"source": "boss_first_clear",
@@ -21,4 +21,4 @@
 		"duplicate_policy": "reroll",
 		"pity": 10
 	}
-]
+]}
