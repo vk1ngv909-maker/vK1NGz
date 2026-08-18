@@ -34,13 +34,16 @@ func _layout_combat() -> void:
 		area_size.x * ACTOR_WIDTH_RATIO,
 		area_size.y * ACTOR_HEIGHT_RATIO
 	)
+	# Actors sit in the middle band, not the lower edge. This leaves headroom
+	# above for the boss banner, timer and rising damage numbers, and stops the
+	# large dead area that the first composition pass left at the top.
 	var hero_position := Vector2(
 		area_size.x * 0.10,
-		area_size.y * 0.60
+		area_size.y * 0.42
 	)
 	var enemy_position := Vector2(
-		area_size.x * 0.70,
-		area_size.y * 0.52
+		area_size.x * 0.68,
+		area_size.y * 0.34
 	)
 
 	hero.size = actor_size

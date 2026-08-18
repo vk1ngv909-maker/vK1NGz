@@ -27,6 +27,21 @@ func _ready() -> void:
 			if arena != null and arena.has_method("debug_tap"):
 				arena.debug_tap()
 			await get_tree().process_frame
+	if "--demo-falcon" in args:
+		var ar: Node = get_tree().get_first_node_in_group("combat_arena")
+		if ar != null and ar.has_method("debug_falcon"):
+			ar.debug_falcon()
+		await get_tree().process_frame
+	if "--demo-boss-fail" in args:
+		var ab: Node = get_tree().get_first_node_in_group("combat_arena")
+		if ab != null and ab.has_method("debug_fail_boss"):
+			ab.debug_fail_boss()
+		await get_tree().process_frame
+	if "--demo-retry" in args:
+		var ar2: Node = get_tree().get_first_node_in_group("combat_arena")
+		if ar2 != null and ar2.has_method("debug_retry"):
+			ar2.debug_retry()
+		await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
 	var shot: Image = get_viewport().get_texture().get_image()

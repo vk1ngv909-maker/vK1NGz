@@ -17,6 +17,7 @@ const CombatState = preload("res://scripts/combat/combat_state.gd")
 @onready var damage_pool: DamageNumberPool = %DamageNumberPool
 
 var combat: CombatState
+var _falcon_tween: Tween
 var _enemy_tween: Tween
 var _flash_tween: Tween
 var _death_in_progress: bool = false
@@ -50,6 +51,24 @@ func _process(delta: float) -> void:
 		_react_to_attack(falcon_result)
 
 
+func debug_retry() -> void:
+	## Test-only: press Retry Boss through the same handler the button uses.
+	_on_retry_boss()
+
+
+func debug_falcon() -> void:
+	## Test-only: force one falcon attack so its cyan damage and the strike can
+	## be captured in the same frame.
+	_react_to_attack(combat.falcon_tick(999.0))
+
+
+func debug_fail_boss() -> void:
+	## Test-only: burn the boss timer to force the failure state.
+	while not combat.awaiting_retry and combat.is_boss:
+		combat.tick(1.0)
+	_refresh_hud()
+
+
 func debug_tap() -> void:
 	## Test-only hook so automated capture can drive real taps through the same
 	## path as a player touch, giving genuine in-motion visual evidence.
@@ -78,11 +97,27 @@ func _react_to_attack(result: Dictionary) -> void:
 	damage_pool.show_damage(damage, kind, enemy.position + enemy.size * 0.5)
 	_refresh_hp()
 	_play_hit_reaction()
+	if kind == "falcon":
+		_play_falcon_strike()
 	if result.get("killed", false):
 		_death_in_progress = true
 		if result.get("stage_advanced", false):
 			_save_combat()
 		_play_death_reaction()
+
+
+func _play_falcon_strike() -> void:
+	## The falcon must visibly own its damage: it lunges toward the enemy on the
+	## same frame the cyan number appears, then returns beside the hero.
+	if not is_instance_valid(falcon) or not is_instance_valid(enemy):
+		return
+	if _falcon_tween != null and _falcon_tween.is_running():
+		_falcon_tween.kill()
+	var rest: Vector2 = falcon.position
+	var toward: Vector2 = rest + (enemy.position - rest) * 0.45
+	_falcon_tween = create_tween()
+	_falcon_tween.tween_property(falcon, "position", toward, 0.11).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_falcon_tween.tween_property(falcon, "position", rest, 0.22).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
 
 
 func _play_hit_reaction() -> void:
