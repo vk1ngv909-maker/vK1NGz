@@ -22,6 +22,12 @@ holds a circular reference.
 - `scenes/ui/hud.tscn` — presentation only, 15% / 55% / 30% zones by
   stretch ratio. Actors are sized as a fraction of the combat area so they
   cannot crowd the interface at any resolution.
+- `scripts/progression/enemy_pool.gd` — deterministic regular-enemy selection
+  scoped to the active world. Boss stages return no regular enemy.
+- `scripts/progression/boss_pool.gd` — four repeating boss archetypes. Durable
+  first-clear ownership uses `stage_N` encounter IDs rather than archetype IDs.
+  Stages above 100 clamp their assignment to stage 100 and reuse the final
+  world's boss presentation.
 
 ## Save format
 

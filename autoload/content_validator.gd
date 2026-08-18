@@ -15,6 +15,7 @@ const CONTENT_PATHS: Dictionary = {
 const EQUIPMENT_SLOTS: Array[String] = ["weapon", "head", "outfit", "aura", "companion_charm"]
 const RARITIES: Array[String] = ["common", "rare", "epic", "legendary"]
 const MAX_WEIGHT: float = 1_000_000.0
+const EnemyBossValidator = preload("res://scripts/progression/enemy_boss_validator.gd")
 
 var content_invalid: bool = false
 var errors: Array[String] = []
@@ -234,31 +235,22 @@ func _validate_rules(dataset: Dictionary, catalogs: Dictionary) -> void:
 
 
 func _validate_enemy_and_boss_rules(dataset: Dictionary, catalogs: Dictionary) -> void:
-	var worlds: Dictionary = catalogs.get("worlds", {})
-	for type_name: String in ["enemies", "bosses"]:
-		var packet: Dictionary = dataset.get(type_name, {})
-		var path: String = str(packet.get("file", type_name))
-		for value: Variant in packet.get("entries", []):
-			if not value is Dictionary:
-				continue
-			var entry: Dictionary = value as Dictionary
-			var entry_id: String = str(entry.get("id", "<entry>"))
-			var world: Dictionary = worlds.get(str(entry.get("world_id", "")), {})
-			if type_name == "enemies" and not world.is_empty():
-				if int(entry.get("stage_from", 0)) < int(world.get("stage_from", 0)) or int(entry.get("stage_to", 0)) > int(world.get("stage_to", 0)):
-					_reject(path, entry_id, "stage_from", "enemy stage range is outside its world")
-				if int(entry.get("stage_from", 0)) > int(entry.get("stage_to", 0)):
-					_reject(path, entry_id, "stage_from", "invalid stage range")
-			if type_name == "bosses":
-				var stage: int = int(entry.get("stage", 0))
-				if stage % 10 != 0:
-					_reject(path, entry_id, "stage", "boss is on a non-boss stage")
-				if not world.is_empty() and (stage < int(world.get("stage_from", 0)) or stage > int(world.get("stage_to", 0))):
-					_reject(path, entry_id, "stage", "boss stage is outside its world")
-			for modifier: String in ["hp_modifier", "gold_modifier"]:
-				var number: float = float(entry.get(modifier, 0.0))
-				if not is_finite(number) or number <= 0.0 or number > 1000.0:
-					_reject(path, entry_id, modifier, "invalid modifier")
+	for issue: Dictionary in EnemyBossValidator.validate(dataset, catalogs):
+		_reject(str(issue.path), str(issue.id), str(issue.field), str(issue.reason))
+
+
+func validate_first_clear_keys(first_clears: Dictionary, archetype_ids: Array = []) -> bool:
+	var issues: Array[Dictionary] = EnemyBossValidator.validate_first_clear_keys(first_clears, archetype_ids)
+	for issue: Dictionary in issues:
+		_reject(str(issue.path), str(issue.id), str(issue.field), str(issue.reason))
+	return issues.is_empty()
+
+
+func validate_encounter_ids(encounter_ids: Array) -> bool:
+	var issues: Array[Dictionary] = EnemyBossValidator.validate_encounter_ids(encounter_ids)
+	for issue: Dictionary in issues:
+		_reject(str(issue.path), str(issue.id), str(issue.field), str(issue.reason))
+	return issues.is_empty()
 
 
 func _validate_skill_rules(dataset: Dictionary) -> void:

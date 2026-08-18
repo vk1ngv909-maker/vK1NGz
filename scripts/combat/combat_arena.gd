@@ -291,11 +291,14 @@ func _play_hit_reaction() -> void:
 		_flash_tween.kill()
 	var rest_position: Vector2 = enemy.position
 	var direction: float = 1.0 if enemy.global_position.x >= hero.global_position.x else -1.0
+	var reaction: Dictionary = combat.current_enemy.get("hit_reaction", {})
+	var recoil: float = clampf(float(reaction.get("recoil_px", 12.0)), 0.0, 100.0)
+	var strength: float = clampf(float(reaction.get("flash_strength", 1.0)), 0.0, 1.0)
 	_enemy_tween = create_tween()
-	_enemy_tween.tween_property(enemy, "position:x", rest_position.x + 12.0 * direction, 0.055).set_trans(Tween.TRANS_QUAD)
+	_enemy_tween.tween_property(enemy, "position:x", rest_position.x + recoil * direction, 0.055).set_trans(Tween.TRANS_QUAD)
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_flash_tween = create_tween()
-	var flash_color: Color = _enemy_color.lerp(Color.WHITE, 0.25 if _reduced_flashing else 1.0)
+	var flash_color: Color = _enemy_color.lerp(Color.WHITE, strength * (0.25 if _reduced_flashing else 1.0))
 	var flash_duration: float = 0.035
 	_flash_tween.tween_property(enemy, "color", flash_color, flash_duration)
 	_flash_tween.tween_property(enemy, "color", _enemy_color, 0.10)
@@ -311,9 +314,8 @@ func _play_death_reaction() -> void:
 	_enemy_tween.tween_property(enemy, "modulate:a", 0.0, 0.24)
 	await _enemy_tween.finished
 	combat.spawn_enemy()
-	enemy.scale = Vector2.ONE
 	enemy.modulate = Color.WHITE
-	enemy.color = _enemy_color
+	_apply_enemy_presentation()
 	_death_in_progress = false
 	_update_facing()
 	_refresh_hud()
@@ -354,6 +356,8 @@ func _load_combat() -> void:
 	for i in cli.size():
 		if cli[i] == "--start-stage" and i + 1 < cli.size():
 			start_stage = int(cli[i + 1])
+		if cli[i] == "--debug-stage" and i + 1 < cli.size() and OS.is_debug_build():
+			start_stage = maxi(1, int(cli[i + 1]))
 		if cli[i] == "--debug-world" and i + 1 < cli.size() and OS.is_debug_build():
 			start_stage = maxi(1, int(cli[i + 1]))
 	var permanent_state: Dictionary = loaded["permanent_state"]
@@ -454,6 +458,7 @@ func _apply_world_for_stage(for_stage: int, force_text_refresh: bool = false) ->
 	var world: Dictionary = worlds.world_for_stage(for_stage)
 	if world.is_empty():
 		return
+	_apply_enemy_presentation()
 	var world_id: String = str(world.get("id", ""))
 	if world_id == current_world_id and not force_text_refresh:
 		return
@@ -461,6 +466,38 @@ func _apply_world_for_stage(for_stage: int, force_text_refresh: bool = false) ->
 	var hud: Node = get_tree().get_first_node_in_group("hud")
 	if hud != null and hud.has_method("apply_world"):
 		hud.call("apply_world", world)
+
+
+func _apply_enemy_presentation() -> void:
+	if combat == null or combat.current_enemy.is_empty() or not is_instance_valid(enemy):
+		return
+	var palette: Dictionary = combat.current_enemy.get("palette", {})
+	var body_html: String = str(palette.get("body", "#777777"))
+	if Color.html_is_valid(body_html):
+		enemy.color = Color.html(body_html)
+		_enemy_color = enemy.color
+	var accent_html: String = str(palette.get("accent", "#FFFFFF"))
+	var placeholder: Label = enemy.get_node_or_null("Placeholder") as Label
+	if placeholder != null:
+		placeholder.text = Settings.t(str(combat.current_enemy.get("name_key", "hud.enemy_placeholder")))
+		# The accent colour comes from the enemy palette and can land almost on
+		# top of the body colour, which made some names unreadable. Choose the
+		# label colour by contrast against the body instead, and outline it, so
+		# every enemy name stays legible whatever palette a designer picks.
+		var body: Color = enemy.color
+		var luminance: float = body.r * 0.2126 + body.g * 0.7152 + body.b * 0.0722
+		placeholder.add_theme_color_override("font_color", Color(0.06, 0.05, 0.08) if luminance > 0.55 else Color(1, 1, 1))
+		placeholder.add_theme_color_override("font_outline_color", Color(1, 1, 1, 0.85) if luminance > 0.55 else Color(0, 0, 0, 0.85))
+		placeholder.add_theme_constant_override("outline_size", 4)
+	var size_scale: float = clampf(float(combat.current_enemy.get("size_scale", 1.0)), 0.8, 1.25)
+	var shape_scale: Vector2 = Vector2.ONE
+	match str(combat.current_enemy.get("silhouette", "squat")):
+		"tall": shape_scale = Vector2(0.72, 1.18)
+		"wide": shape_scale = Vector2(1.18, 0.72)
+		"spindly": shape_scale = Vector2(0.58, 1.08)
+		_: shape_scale = Vector2(1.05, 0.72)
+	enemy.pivot_offset = enemy.size * 0.5
+	enemy.scale = shape_scale * size_scale
 
 
 func _apply_saved_accessibility() -> void:

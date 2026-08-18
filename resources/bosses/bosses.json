@@ -1,15 +1,9 @@
 {
 	"schema_version": 1,
 	"entries": [
-		{"id":"sand_colossus","name_key":"boss.sand_colossus.name","world_id":"oasis_frontier","stage":10,"hp_modifier":5.0,"gold_modifier":3.0,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/sand_colossus"},
-		{"id":"caravan_breaker","name_key":"boss.caravan_breaker.name","world_id":"oasis_frontier","stage":20,"hp_modifier":5.5,"gold_modifier":3.2,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/caravan_breaker"},
-		{"id":"oasis_ifrit","name_key":"boss.oasis_ifrit.name","world_id":"oasis_frontier","stage":30,"hp_modifier":6.0,"gold_modifier":3.4,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/oasis_ifrit"},
-		{"id":"lunar_sphinx","name_key":"boss.lunar_sphinx.name","world_id":"moonlit_dunes","stage":40,"hp_modifier":6.5,"gold_modifier":3.6,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/lunar_sphinx"},
-		{"id":"night_djinn","name_key":"boss.night_djinn.name","world_id":"moonlit_dunes","stage":50,"hp_modifier":7.0,"gold_modifier":3.8,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/night_djinn"},
-		{"id":"eclipse_stalker","name_key":"boss.eclipse_stalker.name","world_id":"moonlit_dunes","stage":60,"hp_modifier":7.5,"gold_modifier":4.0,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/eclipse_stalker"},
-		{"id":"gilded_manticore","name_key":"boss.gilded_manticore.name","world_id":"ruins_of_the_sun_kingdom","stage":70,"hp_modifier":8.0,"gold_modifier":4.2,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/gilded_manticore"},
-		{"id":"sun_priest","name_key":"boss.sun_priest.name","world_id":"ruins_of_the_sun_kingdom","stage":80,"hp_modifier":8.5,"gold_modifier":4.4,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/sun_priest"},
-		{"id":"phoenix_regent","name_key":"boss.phoenix_regent.name","world_id":"ruins_of_the_sun_kingdom","stage":90,"hp_modifier":9.0,"gold_modifier":4.6,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/phoenix_regent"},
-		{"id":"sun_king","name_key":"boss.sun_king.name","world_id":"ruins_of_the_sun_kingdom","stage":100,"hp_modifier":10.0,"gold_modifier":5.0,"reward_table_id":"boss_first_clear_default","asset_ref":"placeholder://boss/sun_king"}
+		{"id":"sandstorm_colossus","name_key":"boss.sandstorm_colossus.name","desc_key":"boss.sandstorm_colossus.desc","world_id":"milestone","hp_modifier":1.00,"timer_seconds":30.0,"palette":{"body":"#9A633B","accent":"#FFD166"},"silhouette":"wide","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
+		{"id":"lunar_glasswing","name_key":"boss.lunar_glasswing.name","desc_key":"boss.lunar_glasswing.desc","world_id":"milestone","hp_modifier":1.08,"timer_seconds":30.0,"palette":{"body":"#46518C","accent":"#B8FFF1"},"silhouette":"spindly","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
+		{"id":"ember_crown_construct","name_key":"boss.ember_crown_construct.name","desc_key":"boss.ember_crown_construct.desc","world_id":"milestone","hp_modifier":1.16,"timer_seconds":30.0,"palette":{"body":"#A83B2B","accent":"#FFB52E"},"silhouette":"tall","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
+		{"id":"vaultback_behemoth","name_key":"boss.vaultback_behemoth.name","desc_key":"boss.vaultback_behemoth.desc","world_id":"milestone","hp_modifier":1.25,"timer_seconds":30.0,"palette":{"body":"#565B50","accent":"#E0C784"},"silhouette":"squat","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"}
 	]
 }

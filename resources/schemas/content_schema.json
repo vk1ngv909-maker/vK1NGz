@@ -6,12 +6,12 @@
 			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"desc_key":{"type":"string"},"stage_from":{"type":"integer","minimum":1},"stage_to":{"type":"integer","minimum":1},"palette":{"type":"dictionary"},"background_layers":{"type":"array"},"music_ref":{"type":"asset_ref"},"enemy_pool":{"type":"array","reference":"enemy"},"boss_ids":{"type":"array","reference":"boss"},"transition":{"type":"dictionary"}}
 		},
 		"enemies": {
-			"required": ["id", "name_key", "world_id", "stage_from", "stage_to", "hp_modifier", "gold_modifier", "asset_ref"],
-			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"world_id":{"type":"string","reference":"world"},"stage_from":{"type":"integer","minimum":1},"stage_to":{"type":"integer","minimum":1},"hp_modifier":{"type":"number","exclusive_minimum":0,"maximum":100},"gold_modifier":{"type":"number","exclusive_minimum":0,"maximum":100},"asset_ref":{"type":"asset_ref"}}
+			"required": ["id", "name_key", "desc_key", "world_id", "stage_from", "stage_to", "hp_modifier", "gold_modifier", "palette", "silhouette", "size_scale", "hit_reaction", "asset_status"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"desc_key":{"type":"string"},"world_id":{"type":"string","reference":"world"},"stage_from":{"type":"integer","minimum":1},"stage_to":{"type":"integer","minimum":1},"hp_modifier":{"type":"number","minimum":0.85,"maximum":1.25},"gold_modifier":{"type":"number","minimum":0.85,"maximum":1.25},"palette":{"type":"dictionary"},"silhouette":{"type":"string"},"size_scale":{"type":"number","minimum":0.8,"maximum":1.25},"hit_reaction":{"type":"dictionary"},"asset_status":{"type":"string"}}
 		},
 		"bosses": {
-			"required": ["id", "name_key", "world_id", "stage", "hp_modifier", "gold_modifier", "reward_table_id", "asset_ref"],
-			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"world_id":{"type":"string","reference":"world"},"stage":{"type":"integer","minimum":1},"hp_modifier":{"type":"number","exclusive_minimum":0,"maximum":1000},"gold_modifier":{"type":"number","exclusive_minimum":0,"maximum":1000},"reward_table_id":{"type":"string","reference":"reward_table"},"asset_ref":{"type":"asset_ref"}}
+			"required": ["id", "name_key", "desc_key", "world_id", "hp_modifier", "timer_seconds", "palette", "silhouette", "reward_table_id", "asset_status"],
+			"properties": {"id":{"type":"string"},"name_key":{"type":"string"},"desc_key":{"type":"string"},"world_id":{"type":"string"},"hp_modifier":{"type":"number","exclusive_minimum":0,"maximum":1000},"timer_seconds":{"type":"number","exclusive_minimum":0,"maximum":600},"palette":{"type":"dictionary"},"silhouette":{"type":"string"},"reward_table_id":{"type":"string","reference":"reward_table"},"asset_status":{"type":"string"}}
 		},
 		"support_heroes": {
 			"required": ["id", "name_key", "role", "base_dps", "base_cost", "cost_growth", "unlock_stage", "milestones"],

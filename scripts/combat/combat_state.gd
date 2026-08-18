@@ -7,6 +7,10 @@ const Inventory = preload("res://scripts/progression/inventory.gd")
 const RewardSystem = preload("res://scripts/progression/reward_system.gd")
 const SaveAdapterLogic = preload("res://scripts/utilities/save_adapter.gd")
 const SaveManagerLogic = preload("res://autoload/save_manager.gd")
+const EnemyPoolLogic = preload("res://scripts/progression/enemy_pool.gd")
+const BossPoolLogic = preload("res://scripts/progression/boss_pool.gd")
+
+enum EncounterState { ACTIVE, VICTORY, FAILED }
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
@@ -48,11 +52,17 @@ var max_stage_reached: int = 1
 ## the production default is the concrete SaveAdapter requested by the API.
 var save_adapter: Variant = SaveAdapterLogic.new()
 var reward_pity: Dictionary = {}
+var encounter_state: EncounterState = EncounterState.ACTIVE
+var current_enemy: Dictionary = {}
+var enemy_seed: int = 0
 
 var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _relic_damage_mult: float = 1.0
 var _relic_gold_mult: float = 1.0
+var _death_processed: bool = false
+var _enemy_pool: EnemyPool
+var _boss_pool: BossPool
 
 
 func _init(
@@ -77,6 +87,9 @@ func _init(
 	var saved_pity: Variant = permanent_state.get("reward_pity", {})
 	if saved_pity is Dictionary:
 		reward_pity = (saved_pity as Dictionary).duplicate(true)
+	enemy_seed = int(run_state.get("enemy_seed", 0))
+	_enemy_pool = EnemyPoolLogic.new()
+	_boss_pool = BossPoolLogic.new()
 	_rng.randomize()
 	spawn_enemy()
 
@@ -113,18 +126,27 @@ func dps_tick(delta: float) -> Dictionary:
 	return _apply_damage(damage, "dps")
 
 
+func skill_damage(damage: BigNumber) -> Dictionary:
+	if _cannot_attack():
+		return {"ignored": true}
+	return _apply_damage(damage, "skill")
+
+
 func tick(delta: float) -> Dictionary:
-	if not is_boss or awaiting_retry or enemy_hp.mantissa == 0.0:
+	if encounter_state != EncounterState.ACTIVE or not is_boss:
 		return {}
 	boss_time_left = maxf(0.0, boss_time_left - maxf(0.0, delta))
 	if boss_time_left > 0.0:
 		return {"boss_failed": false, "boss_time_left": boss_time_left}
+	# Simultaneous-death rule: lethal damage accepted before this transition wins.
+	# Once FAILED is official, every later damage path is ignored.
+	encounter_state = EncounterState.FAILED
 	awaiting_retry = true
 	return {"boss_failed": true, "boss_time_left": boss_time_left}
 
 
 func retry_boss() -> void:
-	if not awaiting_retry:
+	if encounter_state != EncounterState.FAILED or not awaiting_retry:
 		return
 	awaiting_retry = false
 	spawn_enemy()
@@ -141,12 +163,18 @@ func buy_tap_upgrade() -> bool:
 
 func spawn_enemy() -> void:
 	is_boss = stage % int(balance()["boss_stage_interval"]) == 0
+	current_enemy = _boss_pool.select(stage) if is_boss else _enemy_pool.select(stage, enemy_seed)
 	enemy_max_hp = get_enemy_hp(stage)
 	if is_boss:
-		enemy_max_hp = enemy_max_hp.mul_float(float(balance()["boss_hp_multiplier"]))
+		enemy_max_hp = enemy_max_hp.mul_float(float(balance()["boss_hp_multiplier"]) * float(current_enemy.get("hp_modifier", 1.0)))
+	else:
+		enemy_max_hp = enemy_max_hp.mul_float(float(current_enemy.get("hp_modifier", 1.0)))
 	enemy_hp = enemy_max_hp._copy_normalized()
-	boss_time_left = float(balance()["boss_duration"]) if is_boss else 0.0
+	boss_time_left = float(current_enemy.get("timer_seconds", balance()["boss_duration"])) if is_boss else 0.0
 	_falcon_elapsed = 0.0
+	_death_processed = false
+	encounter_state = EncounterState.ACTIVE
+	awaiting_retry = false
 
 
 func get_tap_damage() -> BigNumber:
@@ -179,10 +207,10 @@ func set_inventory(value: Inventory) -> void:
 func begin_boss_first_clear(boss_stage: int, rewards: RewardSystem) -> Dictionary:
 	## This is the reversible in-memory half of the transaction. The arena only
 	## finalizes it by saving; a failed save calls rollback_boss_first_clear().
-	if boss_stage < 1 or rewards == null:
+	if boss_stage < 1 or boss_stage % int(balance()["boss_stage_interval"]) != 0 or rewards == null:
 		return {"granted": false, "reason": "invalid"}
-	var stage_key: String = str(boss_stage)
-	if bool(boss_first_clears.get(stage_key, false)):
+	var encounter_key: String = BossPoolLogic.encounter_id(boss_stage)
+	if bool(boss_first_clears.get(encounter_key, false)):
 		return {"granted": false, "reason": "already_cleared"}
 	var table_id: String = rewards.table_id_for_boss(boss_stage)
 	if table_id.is_empty():
@@ -195,7 +223,7 @@ func begin_boss_first_clear(boss_stage: int, rewards: RewardSystem) -> Dictionar
 	var uid: String = inventory.acquire(str(reward["item_id"]), maxi(max_stage_reached, boss_stage))
 	if uid.is_empty():
 		return {"granted": false, "item_id": "", "rarity": "", "reason": "inventory_full" if inventory.is_full() else "invalid"}
-	boss_first_clears[stage_key] = true
+	boss_first_clears[encounter_key] = true
 	reward["previous_max_stage"] = max_stage_reached
 	max_stage_reached = maxi(max_stage_reached, boss_stage + 1)
 	inventory.max_stage_reached = max_stage_reached
@@ -227,7 +255,7 @@ func rollback_boss_first_clear(transaction: Dictionary) -> void:
 	if not uid.is_empty():
 		inventory.remove(uid)
 	if boss_stage > 0:
-		boss_first_clears.erase(str(boss_stage))
+		boss_first_clears.erase(BossPoolLogic.encounter_id(boss_stage))
 	max_stage_reached = int(transaction.get("previous_max_stage", max_stage_reached))
 	inventory.max_stage_reached = max_stage_reached
 	var table_id: String = str(transaction.get("table_id", ""))
@@ -252,6 +280,7 @@ func save_into(base: Dictionary) -> Dictionary:
 	run_state["tap_level"] = tap_level
 	run_state["boss_time_left"] = boss_time_left
 	run_state["awaiting_retry"] = awaiting_retry
+	run_state["enemy_seed"] = enemy_seed
 	permanent_state["max_stage"] = maxi(maxi(int(permanent_state.get("max_stage", 1)), max_stage_reached), stage)
 	permanent_state["equipment"] = inventory.to_dict()
 	permanent_state["boss_first_clears"] = boss_first_clears.duplicate(true)
@@ -279,10 +308,17 @@ func _load_boss_first_clears(value: Variant) -> void:
 	if not value is Dictionary:
 		push_warning("CombatState: ignoring malformed boss_first_clears")
 		return
-	for stage_value: Variant in value:
-		var boss_stage: int = int(stage_value)
-		if boss_stage > 0 and bool((value as Dictionary)[stage_value]):
-			boss_first_clears[str(boss_stage)] = true
+	for key_value: Variant in value:
+		var key: String = str(key_value)
+		if not bool((value as Dictionary)[key_value]):
+			continue
+		if key.is_valid_int() and int(key) > 0:
+			# Save compatibility: numeric stage keys predate explicit encounter IDs.
+			boss_first_clears[BossPoolLogic.encounter_id(int(key))] = true
+		elif key.begins_with("stage_") and key.trim_prefix("stage_").is_valid_int():
+			boss_first_clears[key] = true
+		else:
+			push_warning("CombatState: ignoring invalid first-clear key '%s'" % key)
 
 
 func set_support_hero_levels(saved_levels: Variant) -> void:
@@ -313,6 +349,15 @@ static func get_enemy_gold(for_stage: int) -> BigNumber:
 
 func set_random_seed(seed_value: int) -> void:
 	_rng.seed = seed_value
+	enemy_seed = seed_value
+
+
+static func encounter_id(boss_stage: int) -> String:
+	return BossPoolLogic.encounter_id(boss_stage)
+
+
+func boss_archetype_for_stage(boss_stage: int) -> String:
+	return str(_boss_pool.select(boss_stage).get("id", ""))
 
 
 func get_pity(table_id: String = "boss_first_clear_default") -> int:
@@ -320,27 +365,44 @@ func get_pity(table_id: String = "boss_first_clear_default") -> int:
 
 
 func _cannot_attack() -> bool:
-	return awaiting_retry or enemy_hp.mantissa == 0.0
+	return encounter_state != EncounterState.ACTIVE or enemy_hp.mantissa == 0.0
 
 
 func _apply_damage(damage: BigNumber, kind: String) -> Dictionary:
+	if _cannot_attack():
+		return {"ignored": true}
 	var defeated_stage: int = stage
 	var defeated_boss: bool = is_boss
 	var hp_before: BigNumber = enemy_hp
 	enemy_hp = enemy_hp.sub(damage)
 	var killed: bool = hp_before.mantissa > 0.0 and enemy_hp.mantissa == 0.0
 	var gold_awarded: BigNumber = BigNumber.new()
-	var stage_advanced: bool = false
 	if killed:
-		gold_awarded = get_enemy_gold(stage).mul_float(_relic_gold_mult)
-		gold = gold.add(gold_awarded)
-		stage += 1
-		stage_advanced = true
+		return _process_death_once(damage, kind, defeated_stage, defeated_boss)
 	return {
 		"damage": damage,
 		"kind": kind,
-		"killed": killed,
+		"killed": false,
 		"gold_awarded": gold_awarded,
-		"stage_advanced": stage_advanced,
-		"boss_stage": defeated_stage if killed and defeated_boss else 0,
+		"stage_advanced": false,
+		"boss_stage": 0,
+	}
+
+
+func _process_death_once(damage: BigNumber, kind: String, defeated_stage: int, defeated_boss: bool) -> Dictionary:
+	if _death_processed or encounter_state != EncounterState.ACTIVE:
+		return {"ignored": true}
+	_death_processed = true
+	encounter_state = EncounterState.VICTORY
+	var gold_modifier: float = 1.0 if defeated_boss else float(current_enemy.get("gold_modifier", 1.0))
+	var gold_awarded: BigNumber = get_enemy_gold(defeated_stage).mul_float(_relic_gold_mult * gold_modifier)
+	gold = gold.add(gold_awarded)
+	stage += 1
+	return {
+		"damage": damage,
+		"kind": kind,
+		"killed": true,
+		"gold_awarded": gold_awarded,
+		"stage_advanced": true,
+		"boss_stage": defeated_stage if defeated_boss else 0,
 	}

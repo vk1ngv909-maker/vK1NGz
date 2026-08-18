@@ -67,6 +67,7 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C27 | Offline formula was `seconds * max_stage * 0.5`, not the brief's `min(hours,8) * gold_per_second * 0.35`; it handed a stage-1 player 14400 gold and pulled first Prestige to 22.1 min | P2 | RESOLVED — brief formula implemented, measured at 26.1 min for an 8h absence |
 | C28 | Equipment bonuses summed raw, so a full legendary set nearly doubled early damage (first Prestige 13.4 min) | P2 | RESOLVED — diminishing returns `raw/(1+2.5*raw)`, chosen by sweep |
 | C29 | `sim_balance_c17.gd` passed raw multipliers straight to `set_relic_bonuses`, bypassing the diminishing-returns curve, so it reported equipment numbers players would never experience | P2 | RESOLVED — the sim now goes through the real curve |
+| C32 | Enemy name labels took their colour straight from the enemy palette, so some names were nearly invisible against the body colour | P2 | RESOLVED — label colour now chosen by luminance contrast plus an outline; measured contrast spread went from near-zero to 225 |
 | C30 | Clipped Arabic text in the top HUD ("الذهب — ACEHOLDER") | P2 | **RESOLVED** — two causes at once: a localized PLACEHOLDER sentence was being rendered inside a fixed 72px icon swatch, and under RTL `clip_text` cuts from the left, which is what produced "ACEHOLDER". The swatch is art, so it no longer renders text at all; the key was deleted from both CSVs; gold and stage labels are clip-guarded. Guard: `test_hud_layout.gd`. Evidence: `c30_ar_topbar.png`, `c30_en_topbar.png` |
 | C31 | The claim that legendary gear was unobtainable before first Prestige was **unfounded** — there was no drop system and no unlock field, so nothing enforced it | **P1** | RESOLVED — `unlock_stage` added per rarity (legendary 50), enforced in `Inventory.add()`, proven by `test_equipment_gating.gd` |
 | C26 | A unit test hardcoded a number derived from a balance value, so retuning balance failed a correctness test | P2 | RESOLVED — expectation now derived from `balance()` |
@@ -246,11 +247,45 @@ stage 1 RGB(204,168,106), stage 34 RGB(132,125,170), stage 67 RGB(188,114,66).
 
 31 suites, `ALL SUITES PASSED`.
 
+### Group 3 — twelve enemies, four bosses (DONE)
+
+| world | enemies |
+| --- | --- |
+| oasis_frontier | dune_raider, oasis_scarab, thorn_lizard, mirage_stalker |
+| moonlit_dunes | night_howler, dust_wraith, moon_moth, glass_serpent |
+| ruins_of_the_sun_kingdom | sunstone_sentinel, cursed_regalia, ember_djinn_construct, ossuary_warden |
+
+Boss archetypes: sandstorm_colossus, lunar_glasswing, ember_crown_construct, vaultback_behemoth — they REPEAT across the
+ten boss stages, so first-clear ownership is keyed by **encounter id (stage)**,
+never by archetype. Clearing an archetype at stage 10 does not block its reward
+at stage 40; that case has its own test.
+
+**Simultaneous-death rule (documented and implemented):** lethal damage accepted
+while `encounter_state == ACTIVE` wins; once the encounter is officially FAILED,
+later damage is ignored. `_death_processed` guards the shared kill transition so
+four sources landing in one frame process the kill exactly once. Both orderings
+are tested, so the outcome does not depend on frame-processing order.
+
+Independent adversarial results:
+- `test_enemies_bosses_adversarial.gd` — 12/12: deterministic selection, no
+  enemy ever outside its world, boss stages never return a regular enemy,
+  four sources kill once, repeated archetype still grants its own first clear.
+- `test_encounter_race.gd` — 10/10: both race orderings, rapid taps during
+  death, and transitions 30->31, 33->34, 60->61, 66->67, 90->91, 100->101.
+
+Balance after enemy modifiers: first Prestige **36.2 min** (target 25-45),
+legendary 27.0, 8h offline 25.8, stage 50 in 13.7h, no NaN or negative gold.
+
+Group 2 visual evidence completed here: `world1_en.png`, `world34_en.png`,
+`world67_en.png`, `world34_ar_720.png`, `world67_ar_2400.png`.
+
+34 suites, `ALL SUITES PASSED`.
+
 ## Next highest-priority action
 
-Gate 5 group 3: twelve enemies and four bosses wired into the world enemy pools,
-with deterministic selection and per-world identity — then heroes, skills,
-relics and the full equipment set.
+Gate 5 group 4: eight support heroes, six skills and fifteen relics as validated
+content, then the full twenty-item equipment set, then the closing simulation
+and regression.
 
 ## Placeholders
 

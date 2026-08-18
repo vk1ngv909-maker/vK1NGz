@@ -10,6 +10,7 @@ const MAX_OFFLINE_SECONDS: int = 28_800
 const RUN_STATE_KEYS: Array[String] = [
 	"stage", "gold", "tap_level", "support_hero_levels", "active_skills",
 	"skill_timestamps", "temporary_buffs", "boss_time_left", "awaiting_retry",
+	"enemy_seed",
 ]
 const PERMANENT_STATE_KEYS: Array[String] = [
 	"max_stage", "prestige_currency", "relic_levels", "equipment", "achievements",
@@ -111,6 +112,7 @@ static func default_run_state() -> Dictionary:
 		"temporary_buffs": {},
 		"boss_time_left": 0.0,
 		"awaiting_retry": false,
+		"enemy_seed": 0,
 	}
 
 

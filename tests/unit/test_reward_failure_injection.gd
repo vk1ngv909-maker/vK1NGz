@@ -51,7 +51,7 @@ func _init() -> void:
 	ck("transaction was prepared", tx.get("granted", false), str(tx))
 	var committed: bool = c.commit_boss_first_clear(tx)
 	ck("commit reports failure when the save fails", not committed)
-	var claimed: bool = bool(c.boss_first_clears.get("10", false))
+	var claimed: bool = bool(c.boss_first_clears.get("stage_10", false))
 	ck("failed save leaves a CLEAN RETRY state (not claimed, no reward)",
 		state_is_valid(claimed, owned(c.inventory)) and not claimed,
 		"claimed=%s items=%d" % [str(claimed), owned(c.inventory)])
@@ -63,9 +63,9 @@ func _init() -> void:
 	ck("retry after rollback is allowed", tx2.get("granted", false), str(tx2))
 	ck("retry commit succeeds", c.commit_boss_first_clear(tx2))
 	ck("after successful retry: claimed with exactly one reward",
-		state_is_valid(bool(c.boss_first_clears.get("10", false)), owned(c.inventory))
-		and bool(c.boss_first_clears.get("10", false)),
-		"claimed=%s items=%d" % [str(c.boss_first_clears.get("10", false)), owned(c.inventory)])
+		state_is_valid(bool(c.boss_first_clears.get("stage_10", false)), owned(c.inventory))
+		and bool(c.boss_first_clears.get("stage_10", false)),
+		"claimed=%s items=%d" % [str(c.boss_first_clears.get("stage_10", false)), owned(c.inventory)])
 
 	# ---------- reload after the interrupted transaction ----------
 	var saved: Dictionary = ok_adapter.payloads[-1] if not ok_adapter.payloads.is_empty() else {}
@@ -86,7 +86,7 @@ func _init() -> void:
 		var t: Dictionary = cc.begin_boss_first_clear(20, RS.new(boundary + 3))
 		if t.get("granted", false):
 			cc.commit_boss_first_clear(t)
-		var cl: bool = bool(cc.boss_first_clears.get("20", false))
+		var cl: bool = bool(cc.boss_first_clears.get("stage_20", false))
 		if not state_is_valid(cl, owned(cc.inventory)):
 			bad_states.append("boundary %d -> claimed=%s items=%d" % [boundary, str(cl), owned(cc.inventory)])
 	ck("every interruption boundary leaves a valid state", bad_states.is_empty(), str(bad_states))

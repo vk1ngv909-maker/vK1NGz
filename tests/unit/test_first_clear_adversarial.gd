@@ -41,6 +41,11 @@ func _init() -> void:
 	var c2 = CS.new(10, null, 1, {}, {"boss_first_clears": c.boss_first_clears.duplicate(true)})
 	ck("reload cannot repeat the first clear",
 		not c2.begin_boss_first_clear(10, RS.new(4242)).get("granted", true))
+	ck("repeated archetype at stage 40 has an independent encounter reward",
+		c.begin_boss_first_clear(40, rewards).get("granted", false))
+	ck("both repeated-archetype encounters are owned separately",
+		bool(c.boss_first_clears.get("stage_10", false)) and bool(c.boss_first_clears.get("stage_40", false)),
+		str(c.boss_first_clears))
 
 	# rollback must leave the stage retryable, not half-committed
 	var c3 = CS.new(30)
@@ -52,7 +57,7 @@ func _init() -> void:
 	c3.rollback_boss_first_clear(tx)
 	ck("rollback removed the granted item", owned_count(c3.inventory) == 0,
 		str(owned_count(c3.inventory)))
-	ck("rollback leaves the boss retryable", not bool(c3.boss_first_clears.get("30", false)),
+	ck("rollback leaves the boss retryable", not bool(c3.boss_first_clears.get("stage_30", false)),
 		str(c3.boss_first_clears))
 
 	print("FIRST CLEAR: FAIL %d" % failed if failed > 0 else "FIRST CLEAR: all passed")

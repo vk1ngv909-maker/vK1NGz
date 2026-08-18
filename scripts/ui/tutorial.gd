@@ -44,6 +44,10 @@ func _ready() -> void:
 	var manager: Node = _save_manager()
 	var permanent_state: Dictionary = manager.get("data").get("permanent_state", {}) if manager != null else {}
 	load_state(permanent_state.get("tutorial", {}))
+	var args: PackedStringArray = OS.get_cmdline_args()
+	args.append_array(OS.get_cmdline_user_args())
+	if "--debug-complete-tutorial" in args:
+		skip(false)
 	get_viewport().size_changed.connect(_refresh_display)
 	_refresh_display.call_deferred()
 

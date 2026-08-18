@@ -19,8 +19,8 @@ file has been imported.
 | Skill icons 1-6 | Button + Label | generated in-engine | n/a | PLACEHOLDER |
 | World backgrounds (3 palettes, 6 layers) | ColorRect + labelled data layers | generated in-engine | n/a | PLACEHOLDER |
 | World music references (3) | `placeholder://music/*` labelled references | data-only | n/a | PLACEHOLDER |
-| Enemy silhouettes (6) | `placeholder://enemy/*` labelled references | data-only | n/a | PLACEHOLDER |
-| Boss silhouettes (10) | `placeholder://boss/*` labelled references | data-only | n/a | PLACEHOLDER |
+| Enemy silhouettes (12) | Runtime rectangles using each entry's distinct palette and silhouette hint | generated in-engine | n/a | PLACEHOLDER |
+| Boss archetype silhouettes (4) | Runtime rectangles using each archetype's distinct palette and silhouette hint | generated in-engine | n/a | PLACEHOLDER |
 | Equipment icons (20) | `placeholder://equipment/*` labelled references | data-only | n/a | PLACEHOLDER |
 
 Placeholder count: **11 categories, 0 files**.

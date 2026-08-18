@@ -57,7 +57,8 @@ func _test_kill_rewards_and_advances_once() -> void:
 	var second: Dictionary = state.tap()
 	_check(first["killed"] and first["stage_advanced"], "a lethal tap reports one kill and stage advance")
 	_check(state.stage == 2, "stage advances exactly once per kill")
-	_check(_approx_number(gold_after_kill, 5.0), "kill awards the stage's gold once")
+	var expected_gold: float = 5.0 * float(state.current_enemy.get("gold_modifier", 1.0))
+	_check(_approx_number(gold_after_kill, expected_gold), "kill awards modifier-adjusted stage gold once")
 	_check(second.get("ignored", false), "a same-frame tap after death is ignored")
 	_check(state.gold.equals(gold_after_kill), "ignored post-death tap cannot duplicate gold")
 	state.spawn_enemy()
@@ -85,7 +86,8 @@ func _test_support_dps_and_kill_guard() -> void:
 	var gold_after_kill: BigNumber = state.gold
 	var after_death: Dictionary = state.dps_tick(1.0)
 	_check(kill["killed"] and kill["stage_advanced"] and state.stage == 2, "lethal DPS advances exactly one stage")
-	_check(_approx_number(gold_after_kill, 5.0), "lethal DPS awards gold exactly once")
+	var expected_gold: float = 5.0 * float(state.current_enemy.get("gold_modifier", 1.0))
+	_check(_approx_number(gold_after_kill, expected_gold), "lethal DPS awards modifier-adjusted gold exactly once")
 	_check(after_death.get("ignored", false) and state.gold.equals(gold_after_kill), "DPS after death cannot duplicate its reward")
 
 
@@ -102,7 +104,8 @@ func _test_relic_multipliers() -> void:
 	_check(_approx_number(dps["damage"], 2.0), "damage relic multiplier applies to support DPS")
 	state.enemy_hp = BigNumber.from_float(1.0)
 	state.tap()
-	_check(_approx_number(state.gold, 15.0), "gold relic multiplier applies to kill rewards")
+	var expected_gold: float = 15.0 * float(state.current_enemy.get("gold_modifier", 1.0))
+	_check(_approx_number(state.gold, expected_gold), "gold relic and enemy multipliers apply to kill rewards")
 
 
 func _test_upgrade_never_makes_gold_negative() -> void:

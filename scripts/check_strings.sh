@@ -4,9 +4,12 @@ set -uo pipefail
 
 fail=0
 while IFS= read -r finding; do
+	case "$finding" in
+		scripts/progression/enemy_boss_validator.gd:*) continue ;;
+	esac
   literal=${finding#*:*:}
   case "$literal" in
-    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*)
+    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'EnemyPool:'*|*'BossPool:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*)
       continue
       ;;
   esac

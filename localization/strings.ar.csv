@@ -224,3 +224,35 @@ equipment.beetle_token.desc,تميمة متواضعة صقلها السفر.
 equipment.falcon_bell.desc,جرس فضي تعرفه صقور الصحراء.
 equipment.moon_fox_talisman.desc,تميمة قمرية لرفيق ماكر.
 equipment.phoenix_signet.desc,خاتم أسطوري للعودة والتجدد.
+enemy.dune_raider.name,مغير الكثبان
+enemy.dune_raider.desc,جامع سريع يلتف بوشاح يحميه من رياح الحدود.
+enemy.oasis_scarab.name,جعران الواحة
+enemy.oasis_scarab.desc,حفار مدرع يحرس البرك الباردة.
+enemy.thorn_lizard.name,سحلية الشوك
+enemy.thorn_lizard.desc,زاحف صحراوي عريض تعلوه أشواك.
+enemy.mirage_stalker.name,متعقب السراب
+enemy.mirage_stalker.desc,صياد نحيل يتلألأ في وهج الحر.
+enemy.night_howler.name,عواء الليل
+enemy.night_howler.desc,متجول قمري يمتد نداؤه فوق الكثبان.
+enemy.dust_wraith.name,طيف الغبار
+enemy.dust_wraith.desc,دوامة رملية طويلة لا تهدأ حركتها.
+enemy.moon_moth.name,عثة القمر
+enemy.moon_moth.desc,حشرة رقيقة تنجذب إلى الضوء الفضي.
+enemy.glass_serpent.name,أفعى الزجاج
+enemy.glass_serpent.desc,أفعى منخفضة ذات حراشف بلورية تنساب بصمت.
+enemy.sunstone_sentinel.name,حارس حجر الشمس
+enemy.sunstone_sentinel.desc,حارس شاهق مركب من حجارة دافئة.
+enemy.cursed_regalia.name,الحلة المسحورة
+enemy.cursed_regalia.desc,زينة ملكية مهجورة تحركها بقايا السحر.
+enemy.ember_djinn_construct.name,بناء جني الجمر
+enemy.ember_djinn_construct.desc,وعاء مصنوع تحركه ريح جمر أسيرة.
+enemy.ossuary_warden.name,حارس العظام
+enemy.ossuary_warden.desc,حارس قصير مصنوع من حجر شاحب عتيق.
+boss.sandstorm_colossus.name,عملاق العاصفة الرملية
+boss.sandstorm_colossus.desc,آلة حدودية هائلة تلفها عاصفة هادرة.
+boss.lunar_glasswing.name,الجناح الزجاجي القمري
+boss.lunar_glasswing.desc,صياد بلوري ضخم بأجنحة رفيعة حادة.
+boss.ember_crown_construct.name,بناء تاج الجمر
+boss.ember_crown_construct.desc,آلة ملكية شاهقة يتوجها لهب حي.
+boss.vaultback_behemoth.name,هائل الظهر الحصين
+boss.vaultback_behemoth.desc,وحش على هيئة حصن تكسوه صفائح معدن عتيق.

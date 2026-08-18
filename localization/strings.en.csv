@@ -224,3 +224,35 @@ equipment.beetle_token.desc,A humble token polished by travel.
 equipment.falcon_bell.desc,A silver bell known to desert falcons.
 equipment.moon_fox_talisman.desc,A moonlit charm for a clever companion.
 equipment.phoenix_signet.desc,A legendary signet of return and renewal.
+enemy.dune_raider.name,Dune Raider
+enemy.dune_raider.desc,A swift scavenger wrapped against the frontier wind.
+enemy.oasis_scarab.name,Oasis Scarab
+enemy.oasis_scarab.desc,A plated burrower that guards cool pools.
+enemy.thorn_lizard.name,Thorn Lizard
+enemy.thorn_lizard.desc,A broad desert crawler with a crown of thorns.
+enemy.mirage_stalker.name,Mirage Stalker
+enemy.mirage_stalker.desc,A slender hunter that shimmers in the heat.
+enemy.night_howler.name,Night Howler
+enemy.night_howler.desc,A moonlit prowler whose call rolls over the dunes.
+enemy.dust_wraith.name,Dust Wraith
+enemy.dust_wraith.desc,A tall swirl of sand held in restless motion.
+enemy.moon_moth.name,Moon Moth
+enemy.moon_moth.desc,A delicate flier drawn to silver light.
+enemy.glass_serpent.name,Glass Serpent
+enemy.glass_serpent.desc,A low crystal-scaled serpent that glides without sound.
+enemy.sunstone_sentinel.name,Sunstone Sentinel
+enemy.sunstone_sentinel.desc,A towering guardian assembled from warm stone.
+enemy.cursed_regalia.name,Cursed Regalia
+enemy.cursed_regalia.desc,Abandoned royal finery animated by lingering magic.
+enemy.ember_djinn_construct.name,Ember Djinn Construct
+enemy.ember_djinn_construct.desc,A crafted vessel driven by a captive ember wind.
+enemy.ossuary_warden.name,Ossuary Warden
+enemy.ossuary_warden.desc,A squat keeper built from pale relic-stone.
+boss.sandstorm_colossus.name,Sandstorm Colossus
+boss.sandstorm_colossus.desc,A massive frontier engine wrapped in a roaring gale.
+boss.lunar_glasswing.name,Lunar Glasswing
+boss.lunar_glasswing.desc,A vast crystalline hunter with razor-thin wings.
+boss.ember_crown_construct.name,Ember Crown Construct
+boss.ember_crown_construct.desc,A towering royal machine crowned with living flame.
+boss.vaultback_behemoth.name,Vaultback Behemoth
+boss.vaultback_behemoth.desc,A fortress-shaped brute plated in ancient metal.
