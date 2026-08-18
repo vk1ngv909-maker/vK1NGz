@@ -1,0 +1,115 @@
+key,ar
+ui.close,إغلاق
+ui.cancel_safe,إلغاء — الاحتفاظ بالغرض
+ui.inventory.title,المخزون
+ui.inventory.empty,مخزونك فارغ
+ui.inventory.empty_hint,اهزم الأعداء للعثور على معدات.
+ui.inventory.select_hint,اختر غرضًا للمقارنة وإدارته.
+ui.inventory.compare,مقارنة الأغراض
+ui.inventory.selected,المختار
+ui.inventory.equipped,المجهز في الخانة
+ui.inventory.none,لا يوجد
+ui.inventory.score,التقييم
+ui.inventory.score_delta,التقييم
+ui.inventory.upgrade,ترقية
+ui.inventory.downgrade,تخفيض
+ui.inventory.equip,تجهيز
+ui.inventory.lock,قفل
+ui.inventory.unlock,فتح القفل
+ui.inventory.favorite,مفضل
+ui.inventory.unfavorite,إزالة من المفضلة
+ui.inventory.salvage,تفكيك
+ui.inventory.equipped_ok,تم تجهيز الغرض.
+ui.badge.locked,[مقفول]
+ui.badge.favorite,[مفضل]
+ui.badge.equipped,[مجهز]
+ui.badge.none,[بلا شارات]
+ui.rarity.common,عادي
+ui.rarity.rare,نادر
+ui.rarity.epic,ملحمي
+ui.rarity.legendary,أسطوري
+ui.stat.tap_damage_mult,ضرر اللمس
+ui.stat.dps_mult,الضرر في الثانية
+ui.stat.gold_mult,الذهب
+ui.stat.crit_chance_add,فرصة الضربة الحرجة
+ui.salvage.title,تفكيك الغرض؟
+ui.salvage.permanent,هذا الإجراء دائم.
+ui.salvage.warning,تفكيك %s؟ هذا الإجراء دائم ولا يمكن التراجع عنه.
+ui.salvage.confirm,تأكيد التفكيك
+ui.salvage.success,تم التفكيك مقابل %d ذهب.
+ui.salvage.blocked.equipped,لا يمكن تفكيك الأغراض المجهزة.
+ui.salvage.blocked.locked,افتح قفل الغرض قبل تفكيكه.
+ui.salvage.blocked.unknown,هذا الغرض لم يعد متاحًا.
+ui.offline.title,مرحبًا بعودتك
+ui.offline.time,مدة الغياب: %s
+ui.offline.gold,الذهب المكتسب: %d
+ui.offline.capped,المكافأة محدودة بثماني ساعات
+ui.offline.collect,جمع
+ui.offline.collected,تم جمع المكافآت! عد قريبًا.
+ui.duration.hours_minutes,%d س %d د
+ui.duration.minutes,%d د
+ui.duration.seconds,%d ث
+ui.settings.title,الإعدادات
+ui.settings.master,الصوت الرئيسي
+ui.settings.music,صوت الموسيقى
+ui.settings.sfx,صوت المؤثرات
+ui.settings.ui_volume,صوت الواجهة
+ui.settings.vibration,الاهتزاز
+ui.settings.reduced_flashing,تقليل الوميض
+ui.settings.damage_numbers,أرقام الضرر
+ui.settings.language,اللغة
+ui.language.en,الإنجليزية (en)
+ui.language.ar,العربية (ar)
+hud.gold,%s ذهب
+hud.stage,المرحلة %d
+hud.stage_boss,المرحلة %d — زعيم
+hud.tap_upgrade,لمس مستوى %d — ضرر %s | التكلفة: %s ذهب
+hud.boss_failed,فشلت معركة الزعيم
+hud.boss_battle,⚠ معركة الزعيم ⚠
+hud.time_up,انتهى الوقت
+hud.retry_boss,إعادة محاولة الزعيم
+hud.enemy_hp,%s / %s صحة
+hud.ready,جاهز
+hud.active,نشط
+hud.cooldown,إعادة شحن
+hud.seconds_short,%d ث
+hud.seconds_decimal,%.1f ث
+hud.battle,المعركة
+hud.heroes,الأبطال
+hud.skills,المهارات
+hud.inventory,المخزون
+hud.relics,الآثار
+hud.shop,المتجر
+hud.hero_dps_placeholder,AR:HERO DPS — PLACEHOLDER
+hud.desert_placeholder,AR:DESERT BACKGROUND — PLACEHOLDER
+hud.gold_placeholder,AR:GOLD PLACEHOLDER
+hud.hero_placeholder,AR:HERO — PLACEHOLDER
+hud.enemy_placeholder,AR:ENEMY — PLACEHOLDER
+hud.falcon_placeholder,AR:FALCON — PLACEHOLDER
+skill.sand_fury,غضب الرمال
+skill.falcon_storm,عاصفة الصقر
+skill.golden_wind,الريح الذهبية
+skill.time_fracture,صدع الزمن
+skill.ancestor_call,نداء الأسلاف
+skill.critical_eclipse,كسوف حرج
+equipment.dune_knife.name,سكين الكثبان
+equipment.sunsteel_sabre.name,سيف فولاذ الشمس
+equipment.ifrit_fang.name,ناب العفريت
+equipment.blade_of_high_noon.name,نصل الظهيرة
+equipment.wanderer_wrap.name,لفافة المتجول
+equipment.scarab_circlet.name,إكليل الجعران
+equipment.oracle_veil.name,حجاب العراف
+equipment.crown_of_stars.name,تاج النجوم
+equipment.traveler_robes.name,رداء المسافر
+equipment.caravan_guard_mail.name,درع حارس القافلة
+equipment.stormweave_mantle.name,عباءة نسج العاصفة
+equipment.sultans_regalia.name,حلة السلطان
+equipment.dust_wisp.name,طيف الغبار
+equipment.ember_halo.name,هالة الجمر
+equipment.djinn_radiance.name,إشراقة الجني
+equipment.solar_ascendance.name,السمو الشمسي
+equipment.beetle_token.name,تعويذة الخنفساء
+equipment.falcon_bell.name,جرس الصقر
+equipment.moon_fox_talisman.name,طلسم ثعلب القمر
+equipment.phoenix_signet.name,خاتم العنقاء
+ui.inventory.same,نفس المستوى

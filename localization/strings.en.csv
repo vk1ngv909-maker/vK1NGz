@@ -1,0 +1,115 @@
+key,en
+ui.close,Close
+ui.cancel_safe,Cancel — Keep Item
+ui.inventory.title,INVENTORY
+ui.inventory.empty,Your inventory is empty
+ui.inventory.empty_hint,Defeat enemies to find equipment.
+ui.inventory.select_hint,Select an item to compare and manage it.
+ui.inventory.compare,ITEM COMPARISON
+ui.inventory.selected,SELECTED
+ui.inventory.equipped,EQUIPPED IN SLOT
+ui.inventory.none,None
+ui.inventory.score,Score
+ui.inventory.score_delta,Score
+ui.inventory.upgrade,UPGRADE
+ui.inventory.downgrade,DOWNGRADE
+ui.inventory.equip,Equip
+ui.inventory.lock,Lock
+ui.inventory.unlock,Unlock
+ui.inventory.favorite,Favorite
+ui.inventory.unfavorite,Unfavorite
+ui.inventory.salvage,Salvage
+ui.inventory.equipped_ok,Item equipped.
+ui.badge.locked,[LOCKED]
+ui.badge.favorite,[FAVORITE]
+ui.badge.equipped,[EQUIPPED]
+ui.badge.none,[NO BADGES]
+ui.rarity.common,COMMON
+ui.rarity.rare,RARE
+ui.rarity.epic,EPIC
+ui.rarity.legendary,LEGENDARY
+ui.stat.tap_damage_mult,Tap damage
+ui.stat.dps_mult,DPS
+ui.stat.gold_mult,Gold
+ui.stat.crit_chance_add,Crit chance
+ui.salvage.title,SALVAGE ITEM?
+ui.salvage.permanent,This action is permanent.
+ui.salvage.warning,Salvage %s? This action is permanent and cannot be undone.
+ui.salvage.confirm,Confirm Salvage
+ui.salvage.success,Salvaged for %d Gold.
+ui.salvage.blocked.equipped,Equipped items cannot be salvaged.
+ui.salvage.blocked.locked,Unlock this item before salvaging it.
+ui.salvage.blocked.unknown,This item is no longer available.
+ui.offline.title,WELCOME BACK
+ui.offline.time,Time away: %s
+ui.offline.gold,Gold earned: %d
+ui.offline.capped,Reward capped at 8 hours
+ui.offline.collect,Collect
+ui.offline.collected,Rewards collected! Come back soon.
+ui.duration.hours_minutes,%d h %d min
+ui.duration.minutes,%d min
+ui.duration.seconds,%d sec
+ui.settings.title,SETTINGS
+ui.settings.master,Master volume
+ui.settings.music,Music volume
+ui.settings.sfx,SFX volume
+ui.settings.ui_volume,UI volume
+ui.settings.vibration,Vibration
+ui.settings.reduced_flashing,Reduced flashing
+ui.settings.damage_numbers,Damage numbers
+ui.settings.language,Language
+ui.language.en,English (en)
+ui.language.ar,Arabic (ar)
+hud.gold,%s Gold
+hud.stage,Stage %d
+hud.stage_boss,Stage %d — BOSS
+hud.tap_upgrade,TAP Lv.%d — %s dmg | Cost: %s Gold
+hud.boss_failed,BOSS FAILED
+hud.boss_battle,⚠ BOSS BATTLE ⚠
+hud.time_up,TIME UP
+hud.retry_boss,Retry Boss
+hud.enemy_hp,%s / %s HP
+hud.ready,READY
+hud.active,ACTIVE
+hud.cooldown,COOLDOWN
+hud.seconds_short,%d s
+hud.seconds_decimal,%.1f s
+hud.battle,Battle
+hud.heroes,Heroes
+hud.skills,Skills
+hud.inventory,Inventory
+hud.relics,Relics
+hud.shop,Shop
+hud.hero_dps_placeholder,HERO DPS — PLACEHOLDER
+hud.desert_placeholder,DESERT BACKGROUND — PLACEHOLDER
+hud.gold_placeholder,GOLD PLACEHOLDER
+hud.hero_placeholder,HERO — PLACEHOLDER
+hud.enemy_placeholder,ENEMY — PLACEHOLDER
+hud.falcon_placeholder,FALCON — PLACEHOLDER
+skill.sand_fury,SAND FURY
+skill.falcon_storm,FALCON STORM
+skill.golden_wind,GOLDEN WIND
+skill.time_fracture,TIME FRACTURE
+skill.ancestor_call,ANCESTOR CALL
+skill.critical_eclipse,CRITICAL ECLIPSE
+equipment.dune_knife.name,Dune Knife
+equipment.sunsteel_sabre.name,Sunsteel Sabre
+equipment.ifrit_fang.name,Ifrit Fang
+equipment.blade_of_high_noon.name,Blade of High Noon
+equipment.wanderer_wrap.name,Wanderer Wrap
+equipment.scarab_circlet.name,Scarab Circlet
+equipment.oracle_veil.name,Oracle Veil
+equipment.crown_of_stars.name,Crown of Stars
+equipment.traveler_robes.name,Traveler Robes
+equipment.caravan_guard_mail.name,Caravan Guard Mail
+equipment.stormweave_mantle.name,Stormweave Mantle
+equipment.sultans_regalia.name,Sultan's Regalia
+equipment.dust_wisp.name,Dust Wisp
+equipment.ember_halo.name,Ember Halo
+equipment.djinn_radiance.name,Djinn Radiance
+equipment.solar_ascendance.name,Solar Ascendance
+equipment.beetle_token.name,Beetle Token
+equipment.falcon_bell.name,Falcon Bell
+equipment.moon_fox_talisman.name,Moon Fox Talisman
+equipment.phoenix_signet.name,Phoenix Signet
+ui.inventory.same,SAME — NO CHANGE

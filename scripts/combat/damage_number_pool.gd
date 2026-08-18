@@ -64,6 +64,14 @@ func _color_for(kind: String) -> Color:
 	return NORMAL_COLOR
 
 
+func hide_all() -> void:
+	for label: Label in _labels:
+		label.visible = false
+	for tween_value: Variant in _tweens.values():
+		(tween_value as Tween).kill()
+	_tweens.clear()
+
+
 func _release(label: Label) -> void:
 	label.visible = false
 	_tweens.erase(label)

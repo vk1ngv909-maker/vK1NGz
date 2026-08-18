@@ -56,9 +56,12 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C11 | Falcon attack and boss-failure/Retry states not yet visually captured | P2 | RESOLVED — both captured |
 | C12 | Falcon dealt damage but never visibly moved, so it did not appear to own its damage | P2 | RESOLVED — lunge tween fires on the same frame as the cyan number |
 | C13 | Retry Boss button sits between hero and enemy inside the combat area | P3 | OPEN — acceptable in blockout, revisit in UI polish |
+| C18 | Comparing an item against itself reported "DOWNGRADE" instead of no change, which could push a player to salvage a sidegrade | P2 | RESOLVED — added a SAME verdict |
+| C19 | A duplicate local variable in `inventory_panel.gd` (introduced by me) caused a parse error that silently blanked the entire HUD while every logic suite still passed | **P1** | RESOLVED — fixed, and `run-tests.sh` now boots the game and fails on any parse error |
+| C20 | The inventory UI offers a Salvage button on an equipped item; the logic correctly refuses, but the button should not be enabled | P2 | OPEN |
 | C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | **RESOLVED** — save split into run_state/permanent_state; apply() rebuilds run_state from the canonical factory |
 | C16 | `SkillSystem.from_dict` coerced saved timestamps without type checks, raising engine errors on a corrupt save | P2 | RESOLVED — non-numeric values dropped, negatives clamped |
-| C17 | First-Prestige pacing: reaching stage 50 takes ~56 simulated hours. Stage 25 (first prestige) is ~10 minutes, close to the brief's 25-45 min target, so this is wall depth rather than a broken curve | P2 | OPEN — Milestone 3 balance work |
+| C17 | First-Prestige pacing is OFF TARGET: ~10.3 min to stage 25 versus the brief's 25-45 min, and the curve then jumps to ~56h for stage 50 — a cliff, not a slope. An earlier entry called 10 min "close to target"; that assessment was wrong and is corrected in docs/BALANCE.md | P2 | OPEN — acceptance criteria and baseline recorded in `docs/BALANCE.md`; re-measure after Gate 4 equipment + offline land |
 | C15 | `scripts/shot.sh` dropped forwarded game args (my `shift 3` conflicted with Codex's `${@:4}`), so the prestige dialog never opened and the first capture looked like a plain HUD | P2 | RESOLVED — args forwarded correctly; Codex's claim of having inspected the dialog did not hold up |
 
 ## Blockers
@@ -142,12 +145,29 @@ Upgrades and final gold are identical by design: both runs kill the same number
 of enemies to reach stage 50, so they earn the same gold and can afford the same
 upgrades. Only elapsed time differs, which is exactly what relics should change.
 
+## Gate 4 — MVP systems (checkpoint, NOT closed)
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Inventory + equipment foundation (5 slots, 4 rarities, 20 items) | DONE | `inventory.png` |
+| Item score + comparison with per-stat deltas | DONE | `salvage_confirm.png` shows the compare block |
+| Equip / unequip, wrong-slot rejected | DONE | adversarial suite |
+| Lock / favorite | DONE | badges rendered as TEXT, not colour alone |
+| Salvage safety | DONE | locked, equipped, rare+, favorite all refuse; exactly-once proven under 50 rapid calls |
+| Offline rewards | DONE | `offline_dialog.png` (2h), `offline_capped.png` (8h cap line) |
+| Settings panel | BUILT, behaviour unverified | `settings.png` captured; audio-bus and reduced-flash effects NOT yet proven |
+| Localization structure (en/ar CSV) | BUILT | Arabic RTL layout NOT yet visually evidenced |
+| Tutorial | NOT STARTED | — |
+| Balance re-simulation after equipment/offline | NOT STARTED | required by C17 criterion 4 |
+
+Independent adversarial totals this gate: inventory 23, offline 13.
+Full suite: 16 suites, `ALL SUITES PASSED`, plus a new parse guard.
+
 ## Next highest-priority action
 
-**Gate 4 — MVP systems.** Inventory and equipment (compare, lock, salvage with
-confirmation for Rare+), offline rewards dialog on the existing collect-once
-guard, settings, localization structure, and tutorial — without breaking the
-Gate 2/3 loops.
+Finish Gate 4: verify settings actually change audio buses and combat flash,
+capture Arabic RTL evidence, build the first-time tutorial, then re-run the
+balance simulation with equipment and offline active (C17 criterion 4).
 
 ## Placeholders
 

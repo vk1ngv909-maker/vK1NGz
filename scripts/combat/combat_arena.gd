@@ -23,6 +23,8 @@ var _enemy_tween: Tween
 var _flash_tween: Tween
 var _death_in_progress: bool = false
 var _enemy_color: Color
+var _reduced_flashing: bool = false
+var _damage_numbers_enabled: bool = true
 
 
 func _ready() -> void:
@@ -30,13 +32,14 @@ func _ready() -> void:
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_set_combat_children_to_ignore_mouse()
 	_load_combat()
+	_apply_saved_accessibility()
 	_enemy_color = enemy.color
 	tap_upgrade_button.pressed.connect(_on_buy_tap_upgrade)
 	retry_button.pressed.connect(_on_retry_boss)
 	resized.connect(_update_facing)
 	_update_facing.call_deferred()
 	_refresh_hud()
-	_open_debug_prestige_from_command_line.call_deferred()
+	_open_debug_panels_from_command_line.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -47,7 +50,7 @@ func _process(delta: float) -> void:
 	if timer_result.get("boss_failed", false):
 		_refresh_hud()
 	elif combat.is_boss and not combat.awaiting_retry:
-		boss_countdown.text = "%.1fs" % combat.boss_time_left
+		boss_countdown.text = tr("hud.seconds_decimal") % combat.boss_time_left
 	var dps_result: Dictionary = combat.dps_tick(delta)
 	if dps_result.has("damage") and (dps_result["damage"] as BigNumber).mantissa > 0.0:
 		_react_to_attack(dps_result)
@@ -89,12 +92,77 @@ func debug_open_prestige(max_stage: int) -> void:
 		dialog.call("debug_open", max_stage)
 
 
-func _open_debug_prestige_from_command_line() -> void:
+func debug_open_inventory() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+	if panel != null:
+		panel.call("debug_open_populated", false)
+
+
+func debug_open_inventory_empty() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+	if panel != null:
+		panel.call("debug_open_empty")
+
+
+func debug_open_compare() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+	if panel != null:
+		panel.call("debug_open_populated", true)
+
+
+func debug_open_salvage_confirm() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+	if panel != null:
+		panel.call("debug_open_salvage_confirmation")
+
+
+func debug_open_offline(seconds_away: int) -> void:
+	var dialog: Node = get_tree().get_first_node_in_group("offline_rewards_dialog")
+	if dialog != null:
+		dialog.call("open_for_seconds", seconds_away, true)
+
+
+func debug_open_settings() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("settings_panel")
+	if panel != null:
+		panel.call("open_panel")
+
+
+func debug_set_language(code: String) -> void:
+	var panel: Node = get_tree().get_first_node_in_group("settings_panel")
+	if panel != null:
+		panel.call("debug_set_language", code)
+	else:
+		TranslationServer.set_locale("ar" if code == "ar" else "en")
+
+
+func _open_debug_panels_from_command_line() -> void:
 	var args: PackedStringArray = OS.get_cmdline_args()
 	args.append_array(OS.get_cmdline_user_args())
 	for index: int in args.size():
+		if args[index] == "--debug-lang" and index + 1 < args.size():
+			debug_set_language(args[index + 1])
+	for index: int in args.size():
 		if args[index] == "--debug-prestige" and index + 1 < args.size():
 			debug_open_prestige(int(args[index + 1]))
+			return
+		if args[index] == "--debug-inventory":
+			debug_open_inventory()
+			return
+		if args[index] == "--debug-inventory-empty":
+			debug_open_inventory_empty()
+			return
+		if args[index] == "--debug-compare":
+			debug_open_compare()
+			return
+		if args[index] == "--debug-salvage":
+			debug_open_salvage_confirm()
+			return
+		if args[index] == "--debug-offline" and index + 1 < args.size():
+			debug_open_offline(int(args[index + 1]))
+			return
+		if args[index] == "--debug-settings":
+			debug_open_settings()
 			return
 
 
@@ -117,7 +185,8 @@ func _react_to_attack(result: Dictionary) -> void:
 		return
 	var damage: BigNumber = result["damage"] as BigNumber
 	var kind: String = result["kind"] as String
-	damage_pool.show_damage(damage, kind, enemy.position + enemy.size * 0.5)
+	if _damage_numbers_enabled:
+		damage_pool.show_damage(damage, kind, enemy.position + enemy.size * 0.5)
 	_refresh_hp()
 	_play_hit_reaction()
 	if kind == "falcon":
@@ -154,7 +223,9 @@ func _play_hit_reaction() -> void:
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x + 12.0 * direction, 0.055).set_trans(Tween.TRANS_QUAD)
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_flash_tween = create_tween()
-	_flash_tween.tween_property(enemy, "color", Color.WHITE, 0.035)
+	var flash_color: Color = _enemy_color.lerp(Color.WHITE, 0.22 if _reduced_flashing else 1.0)
+	var flash_duration: float = 0.018 if _reduced_flashing else 0.035
+	_flash_tween.tween_property(enemy, "color", flash_color, flash_duration)
 	_flash_tween.tween_property(enemy, "color", _enemy_color, 0.10)
 
 
@@ -206,8 +277,8 @@ func _load_combat() -> void:
 	for i in cli.size():
 		if cli[i] == "--start-stage" and i + 1 < cli.size():
 			start_stage = int(cli[i + 1])
-	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state)
 	var permanent_state: Dictionary = loaded["permanent_state"]
+	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state, permanent_state)
 	var relics: Relics = Relics.new(int(permanent_state.get("prestige_currency", 0)))
 	relics.from_dict({
 		"levels": permanent_state.get("relic_levels", {}),
@@ -230,26 +301,28 @@ func _save_combat() -> void:
 	run_state["boss_time_left"] = combat.boss_time_left
 	run_state["awaiting_retry"] = combat.awaiting_retry
 	permanent_state["max_stage"] = maxi(int(permanent_state.get("max_stage", 1)), combat.stage)
+	permanent_state["equipment"] = combat.inventory.to_dict()
 	permanent_state["last_seen_utc"] = int(Time.get_unix_time_from_system())
 	SaveManager.save(save_data)
 
 
 func _refresh_hud() -> void:
-	gold_label.text = "%s Gold" % combat.gold.format()
-	stage_label.text = "Stage %d%s" % [combat.stage, " — BOSS" if combat.is_boss else ""]
+	gold_label.text = tr("hud.gold") % combat.gold.format()
+	stage_label.text = tr("hud.stage_boss" if combat.is_boss else "hud.stage") % combat.stage
 	var cost: BigNumber = combat.get_upgrade_cost()
-	tap_upgrade_button.text = "TAP Lv.%d — %s dmg\nCost: %s Gold" % [combat.tap_level, combat.get_tap_damage().format(), cost.format()]
+	tap_upgrade_button.text = tr("hud.tap_upgrade") % [combat.tap_level, combat.get_tap_damage().format(), cost.format()]
 	tap_upgrade_button.disabled = combat.gold.compare(cost) < 0
 	boss_warning.visible = combat.is_boss
 	boss_countdown.visible = combat.is_boss
 	retry_button.visible = combat.awaiting_retry
-	boss_warning.text = "BOSS FAILED" if combat.awaiting_retry else "⚠ BOSS BATTLE ⚠"
-	boss_countdown.text = "TIME UP" if combat.awaiting_retry else "%.1fs" % combat.boss_time_left
+	boss_warning.text = tr("hud.boss_failed" if combat.awaiting_retry else "hud.boss_battle")
+	boss_countdown.text = tr("hud.time_up") if combat.awaiting_retry else tr("hud.seconds_decimal") % combat.boss_time_left
+	retry_button.text = tr("hud.retry_boss")
 	_refresh_hp()
 
 
 func _refresh_hp() -> void:
-	enemy_hp_label.text = "%s / %s HP" % [combat.enemy_hp.format(), combat.enemy_max_hp.format()]
+	enemy_hp_label.text = tr("hud.enemy_hp") % [combat.enemy_hp.format(), combat.enemy_max_hp.format()]
 	var ratio: BigNumber = combat.enemy_hp.div(combat.enemy_max_hp)
 	enemy_hp_bar.value = clampf(ratio.mantissa * pow(10.0, ratio.exponent) * 100.0, 0.0, 100.0)
 
@@ -270,6 +343,33 @@ func _update_facing() -> void:
 func _set_combat_children_to_ignore_mouse() -> void:
 	for child: Node in get_children():
 		_set_mouse_ignored_recursive(child)
+
+
+func apply_accessibility_settings(settings: Dictionary) -> void:
+	_reduced_flashing = bool(settings.get("reduced_flashing", false))
+	_damage_numbers_enabled = bool(settings.get("damage_numbers", true))
+	damage_pool.visible = _damage_numbers_enabled
+	if not _damage_numbers_enabled:
+		damage_pool.hide_all()
+
+
+func apply_inventory_state(saved_inventory: Dictionary) -> void:
+	if combat == null:
+		return
+	combat.inventory.from_dict(saved_inventory)
+	_refresh_hud()
+
+
+func refresh_localized_text() -> void:
+	if combat != null:
+		_refresh_hud()
+
+
+func _apply_saved_accessibility() -> void:
+	var permanent_state: Dictionary = SaveManager.data.get("permanent_state", {})
+	var settings: Dictionary = permanent_state.get("settings", {})
+	TranslationServer.set_locale(str(settings.get("language", "en")))
+	apply_accessibility_settings(settings)
 
 
 func _set_mouse_ignored_recursive(node: Node) -> void:

@@ -1,0 +1,356 @@
+[gd_scene load_steps=7 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/inventory_panel.gd" id="1"]
+
+[sub_resource type="StyleBoxFlat" id="Panel"]
+bg_color = Color(0.055, 0.045, 0.08, 0.99)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.78, 0.58, 0.2, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Compare"]
+bg_color = Color(0.09, 0.1, 0.16, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.32, 0.48, 0.72, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Danger"]
+bg_color = Color(0.3, 0.055, 0.065, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.95, 0.28, 0.22, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="Cancel"]
+bg_color = Color(0.12, 0.25, 0.18, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.4, 0.9, 0.6, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="Confirm"]
+bg_color = Color(0.64, 0.08, 0.07, 1)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 0.5, 0.36, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[node name="InventoryPanel" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+z_index = 110
+script = ExtResource("1")
+
+[node name="Scrim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.01, 0.008, 0.02, 0.9)
+
+[node name="SafeMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Panel" type="PanelContainer" parent="SafeMargin"]
+layout_mode = 2
+theme_override_styles/panel = SubResource("Panel")
+
+[node name="Margin" type="MarginContainer" parent="SafeMargin/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 14
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 14
+theme_override_constants/margin_bottom = 10
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Panel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+
+[node name="Title" type="Label" parent="SafeMargin/Panel/Margin/Content/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(1, 0.78, 0.25, 1)
+theme_override_font_sizes/font_size = 32
+text = "ui.inventory.title"
+vertical_alignment = 1
+
+[node name="Close" type="Button" parent="SafeMargin/Panel/Margin/Content/Header"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(96, 88)
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "ui.close"
+
+[node name="ItemScroll" type="ScrollContainer" parent="SafeMargin/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemGrid" type="GridContainer" parent="SafeMargin/Panel/Margin/Content/ItemScroll"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="EmptyState" type="Label" parent="SafeMargin/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.82, 0.82, 0.88, 1)
+theme_override_font_sizes/font_size = 26
+text = "ui.inventory.empty"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="ComparePanel" type="PanelContainer" parent="SafeMargin/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_styles/panel = SubResource("Compare")
+
+[node name="Margin" type="MarginContainer" parent="SafeMargin/Panel/Margin/Content/ComparePanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 8
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 8
+
+[node name="Column" type="VBoxContainer" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="CompareTitle" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "ui.inventory.compare"
+horizontal_alignment = 1
+
+[node name="Items" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SelectedItem" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "ui.inventory.selected"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="EquippedItem" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column/Items"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 17
+text = "ui.inventory.equipped"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="StatDeltas" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "+0"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Verdict" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 1, 0.62, 1)
+theme_override_font_sizes/font_size = 26
+text = "ui.inventory.upgrade"
+horizontal_alignment = 1
+
+[node name="Message" type="Label" parent="SafeMargin/Panel/Margin/Content"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.35, 1)
+theme_override_font_sizes/font_size = 16
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="GridContainer" parent="SafeMargin/Panel/Margin/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+columns = 2
+
+[node name="Equip" type="Button" parent="SafeMargin/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "ui.inventory.equip"
+
+[node name="Lock" type="Button" parent="SafeMargin/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "ui.inventory.lock"
+
+[node name="Favorite" type="Button" parent="SafeMargin/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "ui.inventory.favorite"
+
+[node name="Salvage" type="Button" parent="SafeMargin/Panel/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+text = "ui.inventory.salvage"
+
+[node name="Confirmation" type="Control" parent="."]
+unique_name_in_owner = true
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+z_index = 5
+
+[node name="Scrim" type="ColorRect" parent="Confirmation"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.82)
+
+[node name="SafeMargin" type="MarginContainer" parent="Confirmation"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Center" type="CenterContainer" parent="Confirmation/SafeMargin"]
+layout_mode = 2
+
+[node name="Dialog" type="PanelContainer" parent="Confirmation/SafeMargin/Center"]
+custom_minimum_size = Vector2(0, 420)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("Danger")
+
+[node name="Margin" type="MarginContainer" parent="Confirmation/SafeMargin/Center/Dialog"]
+layout_mode = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 20
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 20
+
+[node name="Content" type="VBoxContainer" parent="Confirmation/SafeMargin/Center/Dialog/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 18
+alignment = 1
+
+[node name="Title" type="Label" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.72, 0.58, 1)
+theme_override_font_sizes/font_size = 30
+text = "ui.salvage.title"
+horizontal_alignment = 1
+
+[node name="Warning" type="Label" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+text = "ui.salvage.permanent"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Actions" type="HBoxContainer" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="CancelSalvage" type="Button" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Cancel")
+text = "ui.cancel_safe"
+
+[node name="ConfirmSalvage" type="Button" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("Confirm")
+text = "ui.salvage.confirm"

@@ -3,6 +3,7 @@ extends RefCounted
 
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const SupportHeroes = preload("res://scripts/progression/support_heroes.gd")
+const Inventory = preload("res://scripts/progression/inventory.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
@@ -34,6 +35,7 @@ var awaiting_retry: bool = false
 var support_heroes: SupportHeroes
 var support_total_dps: BigNumber = BigNumber.new()
 var falcon_dps: BigNumber = BigNumber.new()
+var inventory: Inventory
 
 var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -45,13 +47,18 @@ func _init(
 	initial_stage: int = 1,
 	initial_gold: BigNumber = null,
 	initial_tap_level: int = 1,
-	run_state: Dictionary = {}
+	run_state: Dictionary = {},
+	permanent_state: Dictionary = {}
 ) -> void:
 	stage = maxi(1, initial_stage)
 	gold = initial_gold._copy_normalized() if initial_gold != null else BigNumber.new()
 	tap_level = maxi(1, initial_tap_level)
 	support_heroes = SupportHeroes.new()
 	set_support_hero_levels(run_state.get("support_hero_levels", {}))
+	inventory = Inventory.new()
+	var saved_equipment: Variant = permanent_state.get("equipment", {})
+	if saved_equipment is Dictionary:
+		inventory.from_dict(saved_equipment as Dictionary)
 	_rng.randomize()
 	spawn_enemy()
 
@@ -83,7 +90,8 @@ func dps_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	var combined_dps: BigNumber = support_total_dps.add(falcon_dps)
-	var damage: BigNumber = combined_dps.mul_float(maxf(0.0, delta) * _relic_damage_mult)
+	var equipment_mult: float = 1.0 + inventory.total_stat("dps_mult")
+	var damage: BigNumber = combined_dps.mul_float(maxf(0.0, delta) * _relic_damage_mult * equipment_mult)
 	return _apply_damage(damage, "dps")
 
 
@@ -124,7 +132,12 @@ func spawn_enemy() -> void:
 
 
 func get_tap_damage() -> BigNumber:
-	return BigNumber.from_float(float(BALANCE["tap_damage_per_level"]) * tap_level).mul_float(_relic_damage_mult)
+	var equipment_mult: float = 1.0 + inventory.total_stat("tap_damage_mult")
+	return BigNumber.from_float(float(BALANCE["tap_damage_per_level"]) * tap_level).mul_float(_relic_damage_mult * equipment_mult)
+
+
+func set_inventory(value: Inventory) -> void:
+	inventory = value if value != null else Inventory.new()
 
 
 func set_support_hero_levels(saved_levels: Variant) -> void:

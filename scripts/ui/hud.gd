@@ -15,15 +15,6 @@ const SKILL_IDS: Array[String] = [
 	"ancestor_call",
 	"critical_eclipse",
 ]
-const SKILL_NAMES: Dictionary = {
-	"sand_fury": "SAND FURY",
-	"falcon_storm": "FALCON STORM",
-	"golden_wind": "GOLDEN WIND",
-	"time_fracture": "TIME FRACTURE",
-	"ancestor_call": "ANCESTOR CALL",
-	"critical_eclipse": "CRITICAL ECLIPSE",
-}
-
 @onready var safe_area: MarginContainer = %SafeArea
 @onready var bottom_margin: MarginContainer = %BottomMargin
 @onready var combat_area: Control = %CombatArea
@@ -40,15 +31,23 @@ const SKILL_NAMES: Dictionary = {
 	%Skill5,
 	%Skill6,
 ]
+@onready var settings_button: Button = %Settings
+@onready var inventory_button: Button = %Inventory
+@onready var inventory_panel: InventoryPanel = %InventoryPanel
+@onready var settings_panel: SettingsPanel = %SettingsPanel
 
 var skill_system: SkillSystem
 
 
 func _ready() -> void:
+	add_to_group("hud")
 	safe_area.add_theme_constant_override("margin_top", SAFE_TOP)
 	bottom_margin.add_theme_constant_override("margin_bottom", SAFE_BOTTOM)
 	combat_area.resized.connect(_layout_combat)
 	_setup_skills()
+	settings_button.pressed.connect(settings_panel.open_panel)
+	inventory_button.pressed.connect(inventory_panel.open_panel)
+	refresh_localized_text()
 	_layout_combat.call_deferred()
 
 
@@ -107,15 +106,30 @@ func _refresh_skill_buttons(now_ms: int) -> void:
 	for index: int in skill_buttons.size():
 		var id: String = SKILL_IDS[index]
 		var button: Button = skill_buttons[index]
-		var state_text: String = "READY"
+		var state_text: String = tr("hud.ready")
 		if skill_system.is_active(id):
 			var definition: Dictionary = skill_system.skills.get(id, {})
 			var active_until_ms: int = int(skill_system.activated_at_ms[id]) + int(definition.get("duration_ms", 0))
-			state_text = "ACTIVE\n%ds" % _remaining_seconds(active_until_ms, now_ms)
+			state_text = "%s\n%s" % [tr("hud.active"), tr("hud.seconds_short") % _remaining_seconds(active_until_ms, now_ms)]
 		elif skill_system.is_on_cooldown(id):
-			state_text = "COOLDOWN\n%ds" % _remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms)
-		button.text = "%s\n%s" % [SKILL_NAMES.get(id, id.to_upper()), state_text]
-		button.disabled = state_text != "READY"
+			state_text = "%s\n%s" % [tr("hud.cooldown"), tr("hud.seconds_short") % _remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms)]
+		button.text = "%s\n%s" % [tr("skill.%s" % id), state_text]
+		button.disabled = state_text != tr("hud.ready")
+
+
+func refresh_localized_text() -> void:
+	%Battle.text = tr("hud.battle")
+	%Heroes.text = tr("hud.heroes")
+	%Skills.text = tr("hud.skills")
+	%Inventory.text = tr("hud.inventory")
+	%Relics.text = tr("hud.relics")
+	%Shop.text = tr("hud.shop")
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	if skill_system != null:
+		_refresh_skill_buttons(now_ms)
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	if arena != null and arena.has_method("refresh_localized_text"):
+		arena.call("refresh_localized_text")
 
 
 func _remaining_seconds(until_ms: int, now_ms: int) -> int:
