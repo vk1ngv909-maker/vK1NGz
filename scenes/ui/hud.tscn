@@ -1,0 +1,367 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_hud")
+
+[node name="Zones" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 0
+
+[node name="TopZone" type="Control" parent="Zones"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 15.0
+
+[node name="SafeArea" type="MarginContainer" parent="Zones/TopZone"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 12
+
+[node name="CurrencyRow" type="HBoxContainer" parent="Zones/TopZone/SafeArea"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="GoldIcon" type="ColorRect" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+custom_minimum_size = Vector2(72, 64)
+layout_mode = 2
+color = Color(0.95, 0.67, 0.12, 1)
+
+[node name="Placeholder" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow/GoldIcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.16, 0.1, 0.02, 1)
+theme_override_font_sizes/font_size = 11
+text = "GOLD
+PH"
+clip_text = true
+horizontal_alignment = 1
+vertical_alignment = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="GoldAmount" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 24
+text = "12,450 Gold"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Stage" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 28
+text = "Stage 1"
+horizontal_alignment = 1
+vertical_alignment = 1
+text_overrun_behavior = 3
+
+[node name="Settings" type="Button" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+custom_minimum_size = Vector2(72, 64)
+layout_mode = 2
+theme_override_font_sizes/font_size = 28
+text = "⚙"
+
+[node name="MiddleZone" type="Control" parent="Zones"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 55.0
+
+[node name="DesertBackground" type="ColorRect" parent="Zones/MiddleZone"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.76, 0.55, 0.31, 1)
+
+[node name="BackgroundLabel" type="Label" parent="Zones/MiddleZone/DesertBackground"]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = 48.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.3, 0.19, 0.1, 0.65)
+theme_override_font_sizes/font_size = 20
+text = "DESERT BACKGROUND — PLACEHOLDER"
+horizontal_alignment = 1
+text_overrun_behavior = 3
+
+[node name="CombatMargin" type="MarginContainer" parent="Zones/MiddleZone"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CombatArea" type="Control" parent="Zones/MiddleZone/CombatMargin"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="Falcon" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 0
+color = Color(0.22, 0.62, 0.78, 1)
+
+[node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Falcon"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 13
+text = "FALCON\nPLACEHOLDER"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Hero" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 0
+color = Color(0.13, 0.34, 0.58, 1)
+
+[node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Hero"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "HERO →\nPLACEHOLDER"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="EnemyHPLabel" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 0
+theme_override_font_sizes/font_size = 17
+text = "ENEMY HP"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnemyHP" type="ProgressBar" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 0
+value = 72.0
+show_percentage = true
+
+[node name="Enemy" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 0
+color = Color(0.63, 0.16, 0.2, 1)
+
+[node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Enemy"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 18
+text = "← ENEMY\nPLACEHOLDER"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="BottomZone" type="Control" parent="Zones"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 30.0
+
+[node name="Panel" type="ColorRect" parent="Zones/BottomZone"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.1, 0.08, 0.12, 1)
+
+[node name="BottomMargin" type="MarginContainer" parent="Zones/BottomZone"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_bottom = 24
+
+[node name="BottomRows" type="VBoxContainer" parent="Zones/BottomZone/BottomMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="UpgradeMargin" type="MarginContainer" parent="Zones/BottomZone/BottomMargin/BottomRows"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="UpgradeRow" type="HBoxContainer" parent="Zones/BottomZone/BottomMargin/BottomRows/UpgradeMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TapDamage" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/UpgradeMargin/UpgradeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "TAP DAMAGE — PLACEHOLDER\nCost: 100 Gold"
+autowrap_mode = 2
+text_overrun_behavior = 3
+
+[node name="HeroDPS" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/UpgradeMargin/UpgradeRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "HERO DPS — PLACEHOLDER\nCost: 250 Gold"
+autowrap_mode = 2
+text_overrun_behavior = 3
+
+[node name="SkillMargin" type="MarginContainer" parent="Zones/BottomZone/BottomMargin/BottomRows"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_right = 16
+
+[node name="SkillRow" type="HBoxContainer" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Skill1" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 1\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Skill2" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 2\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Skill3" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 3\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Skill4" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 4\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Skill5" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 5\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Skill6" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 14
+text = "SKILL 6\nPLACEHOLDER"
+autowrap_mode = 2
+
+[node name="Navigation" type="HBoxContainer" parent="Zones/BottomZone/BottomMargin/BottomRows"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 0
+
+[node name="Battle" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Battle"
+
+[node name="Heroes" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Heroes"
+
+[node name="Skills" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Skills"
+
+[node name="Inventory" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Inventory"
+text_overrun_behavior = 3
+
+[node name="Relics" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Relics"
+
+[node name="Shop" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "Shop"

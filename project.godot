@@ -7,6 +7,9 @@ config/description="Original Arabian-fantasy portrait idle/action RPG"
 run/main_scene="res://scenes/boot/boot.tscn"
 config/features=PackedStringArray("4.3", "GL Compatibility")
 
+[autoload]
+EventBus="*res://autoload/event_bus.gd"
+
 [display]
 window/size/viewport_width=1080
 window/size/viewport_height=1920
