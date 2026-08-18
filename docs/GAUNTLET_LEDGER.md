@@ -50,7 +50,10 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C5 | At 720x1280 the hero, enemy, HP bar, upgrade labels and skill buttons were clipped off-screen | P1 | RESOLVED — layout made proportional; re-verified by capture |
 | C6 | Gold icon label overflowed its box at 720 wide | P2 | RESOLVED — clip_text |
 | C7 | Faint ghost text from a stale framebuffer in the tall capture | P3 | MITIGATED — extra frame before capture; re-check next capture |
-| C8 | Combat area has large empty upper region; actors sit low | P2 | OPEN — revisit during Gate 2 composition |
+| C8 | Combat area has large empty upper region; actors sit low | P2 | OPEN — composition pass pending |
+| C9 | `_react_to_attack` crashed on an ignored/no-op attack result (only `_gui_input` guarded it) | P1 | RESOLVED — guard moved into `_react_to_attack` so every caller is safe |
+| C10 | Damage numbers stacked at one point and were illegible under rapid taps | P2 | RESOLVED — positional scatter + horizontal drift |
+| C11 | Falcon attack and boss-failure/Retry states not yet visually captured | P2 | OPEN — logic tested, visuals pending |
 
 ## Blockers
 
@@ -63,12 +66,36 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
   representative of real GPU performance. Visual/layout evidence is valid;
   performance evidence is not.
 
+## Gate 2 — combat vertical slice (in progress)
+
+Logic lives in `scripts/combat/combat_state.gd` as a pure RefCounted class with
+no node access, so the invariants are unit-testable headless. Presentation is
+`combat_arena.gd` + `damage_number_pool.gd`.
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Tap input, normal + critical damage | PASS | `combat_motion.png` — yellow 5, orange-red 25 |
+| Falcon damage (cyan) | LOGIC PASS, visual unconfirmed | `falcon_tick` tested; not yet captured mid-attack |
+| Pooled damage numbers | PASS | 32 pre-allocated, reused; scattered so rapid taps stay readable |
+| Enemy recoil + flash + HP + death | PASS | enemy renders flashed pink, HP 0%, stage advances |
+| Gold reward | PASS | 12.4 Gold after kills |
+| Hero upgrade + affordance | PASS | "TAP Lv.1 — 5 dmg / Cost 107.5" greyed when unaffordable |
+| Stage progression | PASS | stage 1 -> 2 -> 3 across captures |
+| Boss every 10 stages, 30s timer | PASS | `combat_boss.png` — "Stage 10 — BOSS", 29.7s, HP 4.13K (8x) |
+| Boss failure keeps gold, Retry | LOGIC PASS, visual unconfirmed | adversarial tests 5-7 |
+| Save/reload | PASS | saves on stage change via SaveManager |
+
+Test totals: 95 assertions passing (36 BigNumber + 12 adversarial, 36 save + 17
+adversarial, 23 combat + 13 adversarial). `ALL SUITES PASSED`.
+
+Evidence: `docs/evidence/combat_motion.png`, `combat_boss.png`, `combat_idle.png`
+
 ## Next highest-priority action
 
-**Gate 2 — combat vertical slice.** Tap input, damage types (normal / critical /
-falcon), pooled damage numbers, enemy recoil + flash + death, gold, hero upgrade,
-stage progression, boss every 10 stages with a 30s timer, boss failure and Retry,
-save/reload.
+1. Capture falcon attack (cyan damage) and the boss-failure / Retry Boss state.
+2. Close C8 composition (actors sit low, large empty upper area).
+3. Rapid-tap node-count measurement to prove the pool bounds allocation.
+4. Then Gate 2 exit review.
 
 ## Placeholders
 

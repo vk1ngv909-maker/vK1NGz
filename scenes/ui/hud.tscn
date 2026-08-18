@@ -1,6 +1,8 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=4 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+[ext_resource type="Script" path="res://scripts/combat/combat_arena.gd" id="2_combat"]
+[ext_resource type="Script" path="res://scripts/combat/damage_number_pool.gd" id="3_damage_pool"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -67,6 +69,7 @@ vertical_alignment = 1
 autowrap_mode = 2
 
 [node name="GoldAmount" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 24
@@ -76,6 +79,7 @@ vertical_alignment = 1
 text_overrun_behavior = 3
 
 [node name="Stage" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 28
@@ -134,6 +138,51 @@ theme_override_constants/margin_bottom = 16
 [node name="CombatArea" type="Control" parent="Zones/MiddleZone/CombatMargin"]
 unique_name_in_owner = true
 layout_mode = 2
+script = ExtResource("2_combat")
+
+[node name="BossWarning" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 2.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.3, 0.12, 1)
+theme_override_font_sizes/font_size = 28
+text = "⚠ BOSS BATTLE ⚠"
+horizontal_alignment = 1
+
+[node name="BossCountdown" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_top = 44.0
+offset_bottom = 86.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 0.92, 0.65, 1)
+theme_override_font_sizes/font_size = 25
+text = "30.0s"
+horizontal_alignment = 1
+
+[node name="RetryBoss" type="Button" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -48.0
+offset_right = 150.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 24
+text = "Retry Boss"
+visible = false
 
 [node name="Falcon" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
 unique_name_in_owner = true
@@ -203,6 +252,17 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
+[node name="DamageNumberPool" type="Control" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("3_damage_pool")
+
 [node name="BottomZone" type="Control" parent="Zones"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -243,6 +303,7 @@ layout_mode = 2
 theme_override_constants/separation = 8
 
 [node name="TapDamage" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/UpgradeMargin/UpgradeRow"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
