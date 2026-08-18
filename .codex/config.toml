@@ -2,7 +2,9 @@
 # scripts/setup-codex.sh copies this to ~/.codex/config.toml.
 # Docs: https://github.com/openai/codex/blob/main/docs/config.md
 
-model = "gpt-5-codex"
+# Model is intentionally left unset so Codex uses its own current default.
+# Override per-run with `codex exec -m <model>` if needed.
+
 model_reasoning_effort = "medium"
 
 # Non-interactive / CI-friendly defaults for this sandboxed container.

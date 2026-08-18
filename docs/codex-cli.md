@@ -29,25 +29,59 @@ To have it run automatically at the start of every web session, add a
 
 ## Authentication
 
-**API key only.** Set `OPENAI_API_KEY` in the Claude Code environment's
-variables (Environment settings → Environment variables), then start a new
-session.
+Two options. **Both were tested in this container; only the API-key path
+currently produces working Codex runs.**
 
-Interactive `codex login` does **not** work here: the environment's network
-policy blocks `chatgpt.com` (HTTP 403), so the browser OAuth flow cannot
-complete. `api.openai.com` *is* reachable, which is why key-based auth works.
+### API key (recommended)
 
-Verified from inside this container:
+Set `OPENAI_API_KEY` in the environment's variables (Environment settings →
+Environment variables), then start a new session. This persists across
+sessions.
+
+### ChatGPT account login (works, but the account is not entitled)
+
+Device-code login succeeds:
+
+```bash
+codex login --device-auth
+```
+
+It prints a URL (`https://auth.openai.com/codex/device`) and a one-time code
+valid for 15 minutes. `codex login status` then reports
+`Logged in using ChatGPT`, and credentials land in `~/.codex/auth.json`.
+
+**However**, every subsequent request is rejected by
+`chatgpt.com/backend-api/codex/responses` with HTTP 400:
+
+```
+The '<model>' model is not supported when using Codex with a ChatGPT account.
+```
+
+This is *not* a model-name problem. The same message comes back for names that
+do not exist at all (e.g. `gpt-6-codex`), so the backend is refusing Codex for
+the account rather than validating the model. The token's claims show
+`chatgpt_plan_type: plus` with an active subscription, so the plan looks right;
+the account most likely still needs Codex enabled/onboarded on OpenAI's side.
+
+Note also that `~/.codex/auth.json` is outside the repo and is destroyed when
+the container is reclaimed, so a ChatGPT login would have to be repeated every
+session even once it works.
+
+## Network policy
+
+Measured from inside this container:
 
 | Host | Result |
 | --- | --- |
-| `api.openai.com` | 401 — reachable, awaiting credentials |
-| `chatgpt.com` | 403 — blocked by network policy |
+| `api.openai.com` | reachable (401 unauthenticated) |
+| `auth.openai.com` | reachable — device login works |
+| `chatgpt.com/backend-api/codex` | reachable (405 to GET) |
+| `platform.openai.com` | **blocked** by the egress gateway (CONNECT 403) |
 
-If `api.openai.com` becomes unreachable, the environment's network policy is
-too restrictive; it must allow that host. See
-https://code.claude.com/docs/en/claude-code-on-the-web for how network
-policies are configured.
+A bare `curl https://auth.openai.com/` or `https://chatgpt.com/` returns 403,
+but that is OpenAI's own bot protection, not the gateway — the real API paths
+work. See https://code.claude.com/docs/en/claude-code-on-the-web for how
+network policies are configured.
 
 ## Usage
 
