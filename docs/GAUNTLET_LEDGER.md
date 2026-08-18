@@ -21,10 +21,12 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 
 | Gate 1 requirement | Status |
 | --- | --- |
-| Portrait boot works | NOT STARTED (project.godot configured 1080x1920 portrait; no boot scene yet) |
-| Architecture documented | PARTIAL (folders scaffolded; ARCHITECTURE.md pending) |
-| BigNumber tests pass | **PASS** |
-| Save recovery from damaged primary | NOT STARTED |
+| Portrait boot works | **PASS** — real captures at 720x1280, 1080x1920, 1080x2400 |
+| Architecture documented | **PASS** — docs/ARCHITECTURE.md |
+| BigNumber tests pass | **PASS** — 36 own + 12 independent adversarial |
+| Save recovery from damaged primary | **PASS** — 36 own + 17 independent adversarial |
+
+**GATE 1 PASSED** (2026-08-18).
 
 ## Completed
 
@@ -44,6 +46,11 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C1 | Codex authored both impl and its tests — passing them is weak evidence | P1 | RESOLVED — independent adversarial suite added |
 | C2 | Spec asked for `OS.exit_code`, which does not exist in Godot 4.3 | P2 | RESOLVED — Codex used `quit(code)`; spec practice noted |
 | C3 | A stray `.pyc` from an earlier smoke test was committed | P2 | RESOLVED — removed, .gitignore extended |
+| C4 | Screenshot tooling was fake: `--resolution` did not change the render, so all three "resolutions" were the same 1080x1920 image | **P0** | RESOLVED — shot.sh patches the project viewport per run; dimensions asserted |
+| C5 | At 720x1280 the hero, enemy, HP bar, upgrade labels and skill buttons were clipped off-screen | P1 | RESOLVED — layout made proportional; re-verified by capture |
+| C6 | Gold icon label overflowed its box at 720 wide | P2 | RESOLVED — clip_text |
+| C7 | Faint ghost text from a stale framebuffer in the tall capture | P3 | MITIGATED — extra frame before capture; re-check next capture |
+| C8 | Combat area has large empty upper region; actors sit low | P2 | OPEN — revisit during Gate 2 composition |
 
 ## Blockers
 
@@ -58,11 +65,12 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 
 ## Next highest-priority action
 
-1. Boot scene + portrait layout blockout → first real screenshot evidence.
-2. Versioned atomic save system with backup/recovery/migration + tests (Gate 1).
-3. Then Gate 2 combat vertical slice.
+**Gate 2 — combat vertical slice.** Tap input, damage types (normal / critical /
+falcon), pooled damage numbers, enemy recoil + flash + death, gold, hero upgrade,
+stage progression, boss every 10 stages with a 30s timer, boss failure and Retry,
+save/reload.
 
 ## Placeholders
 
-Count: 0 (no art assets yet). `docs/ASSET_MANIFEST.md` to be created before the
-first asset lands.
+6 placeholder categories, 0 asset files — all drawn in-engine as labelled
+rectangles. Recorded in `docs/ASSET_MANIFEST.md`.

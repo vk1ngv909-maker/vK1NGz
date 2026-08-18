@@ -9,6 +9,7 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 
 [autoload]
 EventBus="*res://autoload/event_bus.gd"
+SaveManager="*res://autoload/save_manager.gd"
 
 [display]
 window/size/viewport_width=1080
