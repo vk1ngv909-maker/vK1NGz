@@ -9,6 +9,11 @@ export XDG_CONFIG_HOME=/tmp/godot-test-config
 export XDG_RUNTIME_DIR=/tmp/godot-test-runtime
 fail=0
 
+echo "--- string guard"
+bash scripts/check_strings.sh || fail=1
+echo "--- translation freshness guard"
+bash scripts/check_translations.sh || fail=1
+
 # Parse guard: a syntax error in a class_name script fails NO logic test but
 # silently breaks every scene that instantiates it. Boot the game headlessly
 # first and treat any parse error as a hard failure.

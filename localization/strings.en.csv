@@ -40,19 +40,19 @@ ui.salvage.permanent,This action is permanent.
 ui.salvage.warning,Salvage %s? This action is permanent and cannot be undone.
 ui.salvage.favorite_warning,Favorite item: confirm that you really want to salvage it.
 ui.salvage.confirm,Confirm Salvage
-ui.salvage.success,Salvaged for %d Gold.
+ui.salvage.success,Salvaged for %s Gold.
 ui.salvage.blocked.equipped,Equipped items cannot be salvaged.
 ui.salvage.blocked.locked,Unlock this item before salvaging it.
 ui.salvage.blocked.unknown,This item is no longer available.
 ui.offline.title,WELCOME BACK
 ui.offline.time,Time away: %s
-ui.offline.gold,Gold earned: %d
+ui.offline.gold,Gold earned: %s
 ui.offline.capped,Reward capped at 8 hours
 ui.offline.collect,Collect
 ui.offline.collected,Rewards collected! Come back soon.
-ui.duration.hours_minutes,%d h %d min
-ui.duration.minutes,%d min
-ui.duration.seconds,%d sec
+ui.duration.hours_minutes,%s h %s min
+ui.duration.minutes,%s min
+ui.duration.seconds,%s sec
 ui.settings.title,SETTINGS
 ui.settings.master,Master volume
 ui.settings.music,Music volume
@@ -62,9 +62,12 @@ ui.settings.vibration,Vibration
 ui.settings.reduced_flashing,Reduced flashing
 ui.settings.damage_numbers,Damage numbers
 ui.settings.language,Language
+ui.settings.numeral_style,Numerals
 ui.settings.reset_tutorial,Reset tutorial
 ui.language.en,English (en)
 ui.language.ar,Arabic (ar)
+ui.numerals.western,Western (0123)
+ui.numerals.arabic_indic,Arabic-Indic (٠١٢٣)
 ui.tutorial.tap_enemy,Tap the enemy to deal damage.
 ui.tutorial.upgrade_hero,Upgrade your hero's tap damage.
 ui.tutorial.support_dps,Use support heroes for automatic DPS.
@@ -74,9 +77,9 @@ ui.tutorial.boss_retry,Retry the boss when you are stronger.
 ui.tutorial.prestige_intro,Prestige is unlocked. Reset your run for permanent power.
 ui.tutorial.skip,Skip tutorial
 hud.gold,%s Gold
-hud.stage,Stage %d
-hud.stage_boss,Stage %d — BOSS
-hud.tap_upgrade,TAP Lv.%d — %s dmg | Cost: %s Gold
+hud.stage,Stage %s
+hud.stage_boss,Stage %s — BOSS
+hud.tap_upgrade,TAP Lv.%s — %s dmg | Cost: %s Gold
 hud.boss_failed,BOSS FAILED
 hud.boss_battle,⚠ BOSS BATTLE ⚠
 hud.time_up,TIME UP
@@ -85,8 +88,8 @@ hud.enemy_hp,%s / %s HP
 hud.ready,READY
 hud.active,ACTIVE
 hud.cooldown,COOLDOWN
-hud.seconds_short,%d s
-hud.seconds_decimal,%.1f s
+hud.seconds_short,%s s
+hud.seconds_decimal,%s s
 hud.battle,Battle
 hud.heroes,Heroes
 hud.skills,Skills
@@ -126,3 +129,33 @@ equipment.falcon_bell.name,Falcon Bell
 equipment.moon_fox_talisman.name,Moon Fox Talisman
 equipment.phoenix_signet.name,Phoenix Signet
 ui.inventory.same,SAME — NO CHANGE
+ui.cancel,Cancel
+debug.balance_data_invalid,INVALID BALANCE DATA — SAFE DEFAULTS ACTIVE
+ui.prestige.title,PRESTIGE
+ui.prestige.explanation,Trade this run for permanent Relic Currency and grow stronger every ascent.
+ui.prestige.will_reset,WILL RESET
+ui.prestige.will_keep,WILL KEEP
+ui.prestige.you_receive,YOU RECEIVE
+ui.prestige.currency,RELIC CURRENCY
+ui.prestige.requirement,Reach a higher stage first
+ui.prestige.confirm,Confirm Prestige
+ui.prestige.entry_line,• %s
+ui.prestige.entry.stage,Stage
+ui.prestige.entry.gold,Gold
+ui.prestige.entry.tap_level,Tap Level
+ui.prestige.entry.support_hero_levels,Support Heroes
+ui.prestige.entry.active_skills,Active Skills
+ui.prestige.entry.skill_timestamps,Skill Timers
+ui.prestige.entry.temporary_buffs,Temporary Buffs
+ui.prestige.entry.boss_time_left,Boss Timer
+ui.prestige.entry.awaiting_retry,Boss Retry State
+ui.prestige.entry.max_stage,Max Stage
+ui.prestige.entry.prestige_currency,Relic Currency
+ui.prestige.entry.relic_levels,Relics
+ui.prestige.entry.equipment,Equipment
+ui.prestige.entry.achievements,Achievements
+ui.prestige.entry.settings,Settings
+ui.prestige.entry.statistics,Statistics
+ui.prestige.entry.last_seen_utc,Last Seen Time
+ui.prestige.entry.offline_claimed_utc,Offline Reward State
+ui.prestige.entry.tutorial,Tutorial

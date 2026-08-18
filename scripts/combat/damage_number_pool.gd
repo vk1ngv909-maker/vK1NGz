@@ -2,6 +2,7 @@ class_name DamageNumberPool
 extends Control
 
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
+const Settings = preload("res://autoload/settings.gd")
 
 const POOL_SIZE: int = 32
 const FLOAT_DISTANCE: float = 90.0
@@ -37,7 +38,7 @@ func show_damage(amount: BigNumber, kind: String, origin: Vector2) -> void:
 	_next_index = (_next_index + 1) % POOL_SIZE
 	if _tweens.has(label):
 		(_tweens[label] as Tween).kill()
-	label.text = amount.format()
+	label.text = Settings.format_big_number(amount)
 	label.modulate = Color.WHITE
 	# Scatter each number so rapid taps stay individually readable instead of
 	# stacking into an illegible pile at one point.

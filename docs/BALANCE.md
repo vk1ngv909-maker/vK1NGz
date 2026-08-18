@@ -98,12 +98,53 @@ the brief requires.
 4. Re-run after equipment and offline — **DONE** (this table)
 5. Record before/after — **DONE**
 
+## Final tuning (Gate 4 close)
+
+Two changes, both chosen by measured sweep:
+
+1. **Equipment diminishing returns.** Raw summed bonuses let a full legendary
+   set reach 1.93x tap damage, collapsing first Prestige to 13.4 min.
+   Effective bonus is now `raw / (1 + k*raw)` with **k = 2.5**, chosen from a
+   sweep of k in {0, 1.0, 1.5, 2.5, 4.0}. Rejected: k=0 (legendary 18.6 min,
+   below target), k=1.0 and 1.5 (legendary 24.6 / 25.9, marginal), k=4.0
+   (works, but flattens rarity to a 5.9-min spread so legendary stops feeling
+   meaningful). k=2.5 keeps an 7.9-min spread across rarities with every tier
+   inside the window.
+
+2. **Offline formula corrected to the brief.** It was
+   `seconds * max_stage * 0.5`, which handed a stage-1 player 14400 gold for one
+   absence and pulled first Prestige to 22.1 min. It is now the brief's
+   `min(hours,8) * gold_per_second * 0.35`, with gold_per_second estimated from
+   what the player's best stage actually pays per kill
+   (`offline_kills_per_second = 0.15`).
+
+### Final measured results (all through the real equipment/offline paths)
+
+| scenario | first Prestige | target |
+| --- | --- | --- |
+| no equipment | **36.5 min** | 25-45 ✔ |
+| common set | **33.8 min** | 25-45 ✔ |
+| rare set | **30.6 min** | 25-45 ✔ |
+| epic set | **28.4 min** | 25-40 ✔ |
+| legendary set | **26.4 min** | >= 25 ✔ |
+| 1h offline | **33.8 min** | >= 25 ✔ |
+| 8h offline | **26.1 min** | >= 25 ✔ |
+| stage 50 | 14.0 h | reachable ✔ |
+| worst stall | 11276s (3.1h) @40 | slope ✔ |
+| post-Prestige | 20.0% faster | must stay faster ✔ |
+
+No NaN, INF or negative gold in any run (`gold_ok=true` throughout).
+
+**C17 CLOSED.** Every individual acceptance target passes.
+
+### Documented residual
+
+A player holding a FULL legendary set *and* claiming 8h offline reaches first
+Prestige in ~20.4 min. This combination is not reachable on a first run —
+legendary gear drops from deep boss first-clears, long after the first Prestige
+— so it is recorded rather than tuned for.
+
 ### Still open
 
-- Legendary equipment pulls first Prestige to 13.5 min, well below the window.
-  Equipment rarity scaling needs its own pass so rarity stays meaningful without
-  collapsing the intended pacing.
-- 8h offline gold pulls it to 22.2 min, marginally below the window.
-
-C17 therefore stays **OPEN** on equipment/offline scaling, even though the
-baseline curve now meets the target.
+Nothing blocking. Re-measure again when support-hero DPS purchasing is added to
+the simulated policy, since that will change the curve.

@@ -1,5 +1,7 @@
 extends Node
 
+const BigNumber = preload("res://scripts/utilities/big_number.gd")
+
 signal changed(values: Dictionary)
 signal vibration_dispatched(duration_ms: int, amplitude: float)
 
@@ -12,6 +14,7 @@ const DEFAULTS: Dictionary = {
 	"reduced_flash": false,
 	"damage_numbers": true,
 	"language": "en",
+	"numeral_style": "western",
 }
 const VOLUME_BUSES: Dictionary = {
 	"master_volume": "Master",
@@ -21,8 +24,10 @@ const VOLUME_BUSES: Dictionary = {
 }
 
 var values: Dictionary = DEFAULTS.duplicate(true)
+static var numeral_style: String = "western"
 var vibration_dispatch_count: int = 0
 var save_manager_override: Node
+static var _warned_missing_keys: Dictionary = {}
 
 
 func _ready() -> void:
@@ -85,6 +90,7 @@ func apply() -> void:
 		AudioServer.set_bus_mute(index, linear <= 0.0)
 		AudioServer.set_bus_volume_db(index, linear_to_db(maxf(linear, 0.0001)))
 	TranslationServer.set_locale(str(values["language"]))
+	numeral_style = str(values["numeral_style"])
 	if is_inside_tree():
 		for arena: Node in get_tree().get_nodes_in_group("combat_arena"):
 			if arena.has_method("apply_accessibility_settings"):
@@ -135,7 +141,62 @@ func sanitize(raw: Variant) -> Dictionary:
 	var locale: Variant = source.get("language", DEFAULTS["language"])
 	if locale is String and str(locale) in ["en", "ar"]:
 		clean["language"] = str(locale)
+	var digit_style: Variant = source.get("numeral_style", DEFAULTS["numeral_style"])
+	if digit_style is String and str(digit_style) in ["western", "arabic_indic"]:
+		clean["numeral_style"] = str(digit_style)
 	return clean
+
+
+static func t(key: String) -> String:
+	var translated: String = TranslationServer.translate(key)
+	if translated != key:
+		return translated
+	if not _warned_missing_keys.has(key):
+		_warned_missing_keys[key] = true
+		push_warning("Missing translation key: %s" % key)
+	return "!!%s!!" % key if OS.is_debug_build() else key
+
+
+static func format_number(value: Variant, decimals: int = -1, show_plus: bool = false) -> String:
+	var text: String
+	if value is int:
+		text = str(int(value))
+	elif value is float:
+		var number: float = float(value)
+		if not is_finite(number):
+			text = "Invalid"
+		elif decimals >= 0:
+			text = ("%." + str(decimals) + "f") % number
+		else:
+			text = "%.2f" % number
+			while text.ends_with("0"):
+				text = text.left(-1)
+			if text.ends_with("."):
+				text = text.left(-1)
+	else:
+		text = str(value)
+	if show_plus and not text.begins_with("-") and text != "0":
+		text = "+" + text
+	return _apply_numeral_style(text)
+
+
+static func format_big_number(value: BigNumber) -> String:
+	return _apply_numeral_style(value.format())
+
+
+static func format_percent(value: float, decimals: int = 0, show_plus: bool = false) -> String:
+	return format_number(value, decimals, show_plus) + "%"
+
+
+static func _apply_numeral_style(text: String) -> String:
+	if numeral_style != "arabic_indic":
+		return text
+	var converted: String = text
+	var western: String = "0123456789"
+	var arabic_indic: String = "٠١٢٣٤٥٦٧٨٩"
+	for index: int in western.length():
+		converted = converted.replace(western[index], arabic_indic[index])
+	return converted
 
 
 func _persist() -> void:

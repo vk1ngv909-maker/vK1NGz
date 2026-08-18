@@ -40,19 +40,19 @@ ui.salvage.permanent,هذا الإجراء دائم.
 ui.salvage.warning,تفكيك %s؟ هذا الإجراء دائم ولا يمكن التراجع عنه.
 ui.salvage.favorite_warning,الغرض مفضل: أكد أنك تريد تفكيكه فعلًا.
 ui.salvage.confirm,تأكيد التفكيك
-ui.salvage.success,تم التفكيك مقابل %d ذهب.
+ui.salvage.success,تم التفكيك مقابل %s ذهب.
 ui.salvage.blocked.equipped,لا يمكن تفكيك الأغراض المجهزة.
 ui.salvage.blocked.locked,افتح قفل الغرض قبل تفكيكه.
 ui.salvage.blocked.unknown,هذا الغرض لم يعد متاحًا.
 ui.offline.title,مرحبًا بعودتك
 ui.offline.time,مدة الغياب: %s
-ui.offline.gold,الذهب المكتسب: %d
+ui.offline.gold,الذهب المكتسب: %s
 ui.offline.capped,المكافأة محدودة بثماني ساعات
 ui.offline.collect,جمع
 ui.offline.collected,تم جمع المكافآت! عد قريبًا.
-ui.duration.hours_minutes,%d س %d د
-ui.duration.minutes,%d د
-ui.duration.seconds,%d ث
+ui.duration.hours_minutes,%s س %s د
+ui.duration.minutes,%s د
+ui.duration.seconds,%s ث
 ui.settings.title,الإعدادات
 ui.settings.master,الصوت الرئيسي
 ui.settings.music,صوت الموسيقى
@@ -62,9 +62,12 @@ ui.settings.vibration,الاهتزاز
 ui.settings.reduced_flashing,تقليل الوميض
 ui.settings.damage_numbers,أرقام الضرر
 ui.settings.language,اللغة
+ui.settings.numeral_style,نمط الأرقام
 ui.settings.reset_tutorial,إعادة ضبط البرنامج التعليمي
 ui.language.en,الإنجليزية (en)
 ui.language.ar,العربية (ar)
+ui.numerals.western,غربية (0123)
+ui.numerals.arabic_indic,عربية هندية (٠١٢٣)
 ui.tutorial.tap_enemy,اضغط على العدو لإلحاق الضرر.
 ui.tutorial.upgrade_hero,طور ضرر لمس بطلك.
 ui.tutorial.support_dps,استخدم أبطال الدعم للضرر التلقائي.
@@ -74,9 +77,9 @@ ui.tutorial.boss_retry,أعد محاولة الزعيم عندما تصبح أق
 ui.tutorial.prestige_intro,تم فتح الهيبة. أعد الجولة للحصول على قوة دائمة.
 ui.tutorial.skip,تخطي البرنامج التعليمي
 hud.gold,%s ذهب
-hud.stage,المرحلة %d
-hud.stage_boss,المرحلة %d — زعيم
-hud.tap_upgrade,لمس مستوى %d — ضرر %s | التكلفة: %s ذهب
+hud.stage,المرحلة %s
+hud.stage_boss,المرحلة %s — زعيم
+hud.tap_upgrade,لمس مستوى %s — ضرر %s | التكلفة: %s ذهب
 hud.boss_failed,فشلت معركة الزعيم
 hud.boss_battle,⚠ معركة الزعيم ⚠
 hud.time_up,انتهى الوقت
@@ -85,20 +88,20 @@ hud.enemy_hp,%s / %s صحة
 hud.ready,جاهز
 hud.active,نشط
 hud.cooldown,إعادة شحن
-hud.seconds_short,%d ث
-hud.seconds_decimal,%.1f ث
+hud.seconds_short,%s ث
+hud.seconds_decimal,%s ث
 hud.battle,المعركة
 hud.heroes,الأبطال
 hud.skills,المهارات
 hud.inventory,المخزون
 hud.relics,الآثار
 hud.shop,المتجر
-hud.hero_dps_placeholder,AR:HERO DPS — PLACEHOLDER
-hud.desert_placeholder,AR:DESERT BACKGROUND — PLACEHOLDER
-hud.gold_placeholder,AR:GOLD PLACEHOLDER
-hud.hero_placeholder,AR:HERO — PLACEHOLDER
-hud.enemy_placeholder,AR:ENEMY — PLACEHOLDER
-hud.falcon_placeholder,AR:FALCON — PLACEHOLDER
+hud.hero_dps_placeholder,ضرر الأبطال — PLACEHOLDER
+hud.desert_placeholder,خلفية الصحراء — PLACEHOLDER
+hud.gold_placeholder,الذهب — PLACEHOLDER
+hud.hero_placeholder,البطل — PLACEHOLDER
+hud.enemy_placeholder,العدو — PLACEHOLDER
+hud.falcon_placeholder,الصقر — PLACEHOLDER
 skill.sand_fury,غضب الرمال
 skill.falcon_storm,عاصفة الصقر
 skill.golden_wind,الريح الذهبية
@@ -126,3 +129,33 @@ equipment.falcon_bell.name,جرس الصقر
 equipment.moon_fox_talisman.name,طلسم ثعلب القمر
 equipment.phoenix_signet.name,خاتم العنقاء
 ui.inventory.same,نفس المستوى
+ui.cancel,إلغاء
+debug.balance_data_invalid,بيانات التوازن غير صالحة — القيم الآمنة مفعّلة
+ui.prestige.title,الهيبة
+ui.prestige.explanation,استبدل هذه الجولة بعملة آثار دائمة وازدد قوة مع كل صعود.
+ui.prestige.will_reset,سيُعاد ضبطه
+ui.prestige.will_keep,سيبقى
+ui.prestige.you_receive,ستحصل على
+ui.prestige.currency,عملة الآثار
+ui.prestige.requirement,بلّغ مرحلة أعلى أولًا
+ui.prestige.confirm,تأكيد الهيبة
+ui.prestige.entry_line,• %s
+ui.prestige.entry.stage,المرحلة
+ui.prestige.entry.gold,الذهب
+ui.prestige.entry.tap_level,مستوى اللمس
+ui.prestige.entry.support_hero_levels,أبطال الدعم
+ui.prestige.entry.active_skills,المهارات النشطة
+ui.prestige.entry.skill_timestamps,مؤقتات المهارات
+ui.prestige.entry.temporary_buffs,التعزيزات المؤقتة
+ui.prestige.entry.boss_time_left,مؤقت الزعيم
+ui.prestige.entry.awaiting_retry,حالة إعادة الزعيم
+ui.prestige.entry.max_stage,أعلى مرحلة
+ui.prestige.entry.prestige_currency,عملة الآثار
+ui.prestige.entry.relic_levels,الآثار
+ui.prestige.entry.equipment,المعدات
+ui.prestige.entry.achievements,الإنجازات
+ui.prestige.entry.settings,الإعدادات
+ui.prestige.entry.statistics,الإحصاءات
+ui.prestige.entry.last_seen_utc,وقت آخر ظهور
+ui.prestige.entry.offline_claimed_utc,حالة مكافأة الغياب
+ui.prestige.entry.tutorial,البرنامج التعليمي

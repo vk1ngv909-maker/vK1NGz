@@ -1,6 +1,8 @@
 class_name Tutorial
 extends Control
 
+const Settings = preload("res://autoload/settings.gd")
+
 const STEPS: Array[String] = [
 	"tap_enemy",
 	"upgrade_hero",
@@ -23,6 +25,7 @@ const TARGET_NAMES: Dictionary = {
 @onready var instruction: PanelContainer = %Instruction
 @onready var instruction_text: Label = %InstructionText
 @onready var skip_button: Button = %Skip
+@onready var skip_safe_area: MarginContainer = %SkipSafeArea
 
 var current_step: int = 0
 var completed: bool = false
@@ -119,13 +122,14 @@ func _refresh_display() -> void:
 	visible = not completed
 	if completed:
 		return
-	skip_button.text = tr("ui.tutorial.skip")
+	skip_button.text = Settings.t("ui.tutorial.skip")
+	_update_skip_safe_area()
 	var gated: bool = step_name() == "prestige_intro" and not _prestige_unlocked()
 	_target = _find_target(step_name())
 	var can_show_instruction: bool = not gated and _target != null and _target.is_visible_in_tree()
 	instruction.visible = can_show_instruction
 	if can_show_instruction:
-		instruction_text.text = tr("ui.tutorial.%s" % step_name())
+		instruction_text.text = Settings.t("ui.tutorial.%s" % step_name())
 		_position_instruction()
 	queue_redraw()
 
@@ -153,7 +157,23 @@ func _position_instruction() -> void:
 	var target_center_y: float = _target.get_global_rect().get_center().y
 	var viewport_height: float = get_viewport_rect().size.y
 	var panel_height: float = maxf(instruction.size.y, 150.0)
-	instruction.position.y = 100.0 if target_center_y > viewport_height * 0.5 else viewport_height - panel_height - 130.0
+	var skip_top: float = skip_button.get_global_rect().position.y
+	var bottom_position: float = skip_top - panel_height - 20.0
+	instruction.position.y = 100.0 if target_center_y > viewport_height * 0.5 else maxf(100.0, bottom_position)
+
+
+func _update_skip_safe_area() -> void:
+	var viewport_height: float = get_viewport_rect().size.y
+	var bottom_margin: float = 24.0
+	var bottom_controls: Control = get_tree().current_scene.find_child("BottomZone", true, false) as Control
+	if bottom_controls != null and bottom_controls.is_visible_in_tree():
+		bottom_margin = maxf(bottom_margin, viewport_height - bottom_controls.get_global_rect().position.y + 12.0)
+	var display_safe_rect: Rect2i = DisplayServer.get_display_safe_area()
+	var window_size: Vector2i = DisplayServer.window_get_size()
+	if window_size.y > 0 and display_safe_rect.size.y > 0:
+		var safe_bottom_pixels: int = window_size.y - display_safe_rect.end.y
+		bottom_margin = maxf(bottom_margin, float(safe_bottom_pixels) * viewport_height / float(window_size.y) + 12.0)
+	skip_safe_area.add_theme_constant_override("margin_bottom", int(ceil(bottom_margin)))
 
 
 func _draw() -> void:

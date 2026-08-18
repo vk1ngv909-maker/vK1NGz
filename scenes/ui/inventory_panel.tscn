@@ -114,12 +114,13 @@ theme_override_constants/separation = 8
 custom_minimum_size = Vector2(0, 88)
 layout_mode = 2
 
-[node name="Title" type="Label" parent="SafeMargin/Panel/Margin/Content/Header"]
+[node name="InventoryTitle" type="Label" parent="SafeMargin/Panel/Margin/Content/Header"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(1, 0.78, 0.25, 1)
 theme_override_font_sizes/font_size = 32
-text = "ui.inventory.title"
+text = ""
 vertical_alignment = 1
 
 [node name="Close" type="Button" parent="SafeMargin/Panel/Margin/Content/Header"]
@@ -173,9 +174,10 @@ layout_mode = 2
 theme_override_constants/separation = 4
 
 [node name="CompareTitle" type="Label" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
-text = "ui.inventory.compare"
+text = ""
 horizontal_alignment = 1
 
 [node name="Items" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content/ComparePanel/Margin/Column"]
@@ -327,11 +329,12 @@ layout_mode = 2
 theme_override_constants/separation = 18
 alignment = 1
 
-[node name="Title" type="Label" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]
+[node name="SalvageTitle" type="Label" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.72, 0.58, 1)
 theme_override_font_sizes/font_size = 30
-text = "ui.salvage.title"
+text = ""
 horizontal_alignment = 1
 
 [node name="Warning" type="Label" parent="Confirmation/SafeMargin/Center/Dialog/Margin/Content"]

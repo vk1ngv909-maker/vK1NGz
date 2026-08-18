@@ -206,6 +206,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 20
 
+[node name="NumeralStyleRow" type="HBoxContainer" parent="SafeMargin/Panel/Margin/Content"]
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+
+[node name="NumeralStyleLabel" type="Label" parent="SafeMargin/Panel/Margin/Content/NumeralStyleRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(210, 0)
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+vertical_alignment = 1
+
+[node name="NumeralStyle" type="OptionButton" parent="SafeMargin/Panel/Margin/Content/NumeralStyleRow"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 88)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+
 [node name="ResetTutorial" type="Button" parent="SafeMargin/Panel/Margin/Content"]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(0, 88)

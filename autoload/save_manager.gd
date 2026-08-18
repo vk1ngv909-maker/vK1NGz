@@ -129,6 +129,7 @@ static func default_permanent_state() -> Dictionary:
 			"reduced_flash": false,
 			"damage_numbers": true,
 			"language": "en",
+			"numeral_style": "western",
 		},
 		"tutorial": {"completed": false, "current_step": 0},
 		"statistics": {},

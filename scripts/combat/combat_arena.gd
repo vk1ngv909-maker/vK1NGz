@@ -50,7 +50,7 @@ func _process(delta: float) -> void:
 	if timer_result.get("boss_failed", false):
 		_refresh_hud()
 	elif combat.is_boss and not combat.awaiting_retry:
-		boss_countdown.text = tr("hud.seconds_decimal") % combat.boss_time_left
+		boss_countdown.text = Settings.t("hud.seconds_decimal") % Settings.format_number(combat.boss_time_left, 1)
 	var dps_result: Dictionary = combat.dps_tick(delta)
 	if dps_result.has("damage") and (dps_result["damage"] as BigNumber).mantissa > 0.0:
 		_react_to_attack(dps_result)
@@ -84,8 +84,14 @@ func debug_tap() -> void:
 
 
 func debug_flash(reduced: bool) -> void:
+	## Test-only: apply the flash colour and HOLD it, so a screenshot can capture
+	## the peak. The real flash decays in 35ms, far faster than a capture frame,
+	## which made a normal-vs-reduced comparison look identical.
 	apply_accessibility_settings({"reduced_flash": reduced, "damage_numbers": true})
 	debug_tap()
+	if is_instance_valid(_flash_tween):
+		_flash_tween.kill()
+	enemy.color = _enemy_color.lerp(Color.WHITE, 0.25 if _reduced_flashing else 1.0)
 
 
 func debug_open_prestige(max_stage: int) -> void:
@@ -352,22 +358,22 @@ func _save_combat() -> void:
 
 
 func _refresh_hud() -> void:
-	gold_label.text = tr("hud.gold") % combat.gold.format()
-	stage_label.text = tr("hud.stage_boss" if combat.is_boss else "hud.stage") % combat.stage
+	gold_label.text = Settings.t("hud.gold") % Settings.format_big_number(combat.gold)
+	stage_label.text = Settings.t("hud.stage_boss" if combat.is_boss else "hud.stage") % Settings.format_number(combat.stage)
 	var cost: BigNumber = combat.get_upgrade_cost()
-	tap_upgrade_button.text = tr("hud.tap_upgrade") % [combat.tap_level, combat.get_tap_damage().format(), cost.format()]
+	tap_upgrade_button.text = Settings.t("hud.tap_upgrade") % [Settings.format_number(combat.tap_level), Settings.format_big_number(combat.get_tap_damage()), Settings.format_big_number(cost)]
 	tap_upgrade_button.disabled = combat.gold.compare(cost) < 0
 	boss_warning.visible = combat.is_boss
 	boss_countdown.visible = combat.is_boss
 	retry_button.visible = combat.awaiting_retry
-	boss_warning.text = tr("hud.boss_failed" if combat.awaiting_retry else "hud.boss_battle")
-	boss_countdown.text = tr("hud.time_up") if combat.awaiting_retry else tr("hud.seconds_decimal") % combat.boss_time_left
-	retry_button.text = tr("hud.retry_boss")
+	boss_warning.text = Settings.t("hud.boss_failed" if combat.awaiting_retry else "hud.boss_battle")
+	boss_countdown.text = Settings.t("hud.time_up") if combat.awaiting_retry else Settings.t("hud.seconds_decimal") % Settings.format_number(combat.boss_time_left, 1)
+	retry_button.text = Settings.t("hud.retry_boss")
 	_refresh_hp()
 
 
 func _refresh_hp() -> void:
-	enemy_hp_label.text = tr("hud.enemy_hp") % [combat.enemy_hp.format(), combat.enemy_max_hp.format()]
+	enemy_hp_label.text = Settings.t("hud.enemy_hp") % [Settings.format_big_number(combat.enemy_hp), Settings.format_big_number(combat.enemy_max_hp)]
 	var ratio: BigNumber = combat.enemy_hp.div(combat.enemy_max_hp)
 	enemy_hp_bar.value = clampf(ratio.mantissa * pow(10.0, ratio.exponent) * 100.0, 0.0, 100.0)
 

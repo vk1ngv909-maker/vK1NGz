@@ -9,6 +9,7 @@ extends Control
 @onready var reduced_flashing: CheckButton = %ReducedFlashing
 @onready var damage_numbers: CheckButton = %DamageNumbers
 @onready var language: OptionButton = %Language
+@onready var numeral_style: OptionButton = %NumeralStyle
 
 var _loading: bool = false
 
@@ -22,7 +23,10 @@ func _ready() -> void:
 	for toggle: CheckButton in [vibration, reduced_flashing, damage_numbers]:
 		toggle.toggled.connect(_on_setting_changed.unbind(1))
 	language.item_selected.connect(_on_language_selected)
+	numeral_style.item_selected.connect(_on_numeral_style_selected)
 	_build_language_options()
+	_build_numeral_options()
+	refresh_localized_text()
 
 
 func open_panel() -> void:
@@ -38,18 +42,20 @@ func debug_set_language(code: String) -> void:
 
 
 func refresh_localized_text() -> void:
-	%Title.text = tr("ui.settings.title")
-	%Close.text = tr("ui.close")
-	%MasterLabel.text = tr("ui.settings.master")
-	%MusicLabel.text = tr("ui.settings.music")
-	%SfxLabel.text = tr("ui.settings.sfx")
-	%UiVolumeLabel.text = tr("ui.settings.ui_volume")
-	vibration.text = tr("ui.settings.vibration")
-	reduced_flashing.text = tr("ui.settings.reduced_flashing")
-	damage_numbers.text = tr("ui.settings.damage_numbers")
-	%LanguageLabel.text = tr("ui.settings.language")
-	%ResetTutorial.text = tr("ui.settings.reset_tutorial")
+	%Title.text = Settings.t("ui.settings.title")
+	%Close.text = Settings.t("ui.close")
+	%MasterLabel.text = Settings.t("ui.settings.master")
+	%MusicLabel.text = Settings.t("ui.settings.music")
+	%SfxLabel.text = Settings.t("ui.settings.sfx")
+	%UiVolumeLabel.text = Settings.t("ui.settings.ui_volume")
+	vibration.text = Settings.t("ui.settings.vibration")
+	reduced_flashing.text = Settings.t("ui.settings.reduced_flashing")
+	damage_numbers.text = Settings.t("ui.settings.damage_numbers")
+	%LanguageLabel.text = Settings.t("ui.settings.language")
+	%NumeralStyleLabel.text = Settings.t("ui.settings.numeral_style")
+	%ResetTutorial.text = Settings.t("ui.settings.reset_tutorial")
 	_build_language_options()
+	_build_numeral_options()
 
 
 func _load_values() -> void:
@@ -64,6 +70,7 @@ func _load_values() -> void:
 	reduced_flashing.button_pressed = bool(current["reduced_flash"])
 	damage_numbers.button_pressed = bool(current["damage_numbers"])
 	_select_language(str(current["language"]))
+	_select_numeral_style(str(current["numeral_style"]))
 	_loading = false
 	refresh_localized_text()
 
@@ -80,6 +87,7 @@ func _on_setting_changed() -> void:
 		"reduced_flash": reduced_flashing.button_pressed,
 		"damage_numbers": damage_numbers.button_pressed,
 		"language": str(language.get_item_metadata(language.selected)) if language.selected >= 0 else "en",
+		"numeral_style": str(numeral_style.get_item_metadata(numeral_style.selected)) if numeral_style.selected >= 0 else "western",
 	}, true)
 
 
@@ -90,6 +98,13 @@ func _on_language_selected(index: int) -> void:
 	_refresh_all_localized_ui()
 
 
+func _on_numeral_style_selected(index: int) -> void:
+	if _loading:
+		return
+	Settings.set_value("numeral_style", str(numeral_style.get_item_metadata(index)))
+	_refresh_all_localized_ui()
+
+
 func _on_reset_tutorial() -> void:
 	Settings.reset_tutorial()
 
@@ -97,11 +112,21 @@ func _on_reset_tutorial() -> void:
 func _build_language_options() -> void:
 	var current: String = str(Settings.values.get("language", "en"))
 	language.clear()
-	language.add_item(tr("ui.language.en"))
+	language.add_item(Settings.t("ui.language.en"))
 	language.set_item_metadata(0, "en")
-	language.add_item(tr("ui.language.ar"))
+	language.add_item(Settings.t("ui.language.ar"))
 	language.set_item_metadata(1, "ar")
 	_select_language(current)
+
+
+func _build_numeral_options() -> void:
+	var current: String = str(Settings.values.get("numeral_style", "western"))
+	numeral_style.clear()
+	numeral_style.add_item(Settings.t("ui.numerals.western"))
+	numeral_style.set_item_metadata(0, "western")
+	numeral_style.add_item(Settings.t("ui.numerals.arabic_indic"))
+	numeral_style.set_item_metadata(1, "arabic_indic")
+	_select_numeral_style(current)
 
 
 func _select_language(code: String) -> void:
@@ -111,8 +136,15 @@ func _select_language(code: String) -> void:
 			return
 
 
+func _select_numeral_style(style: String) -> void:
+	for index: int in numeral_style.item_count:
+		if str(numeral_style.get_item_metadata(index)) == style:
+			numeral_style.select(index)
+			return
+
+
 func _refresh_all_localized_ui() -> void:
-	for group_name: String in ["hud", "settings_panel", "inventory_panel", "offline_rewards_dialog", "tutorial"]:
+	for group_name: String in ["hud", "settings_panel", "inventory_panel", "offline_rewards_dialog", "prestige_dialog", "tutorial"]:
 		for node: Node in get_tree().get_nodes_in_group(group_name):
 			if node.has_method("refresh_localized_text"):
 				node.call("refresh_localized_text")

@@ -138,11 +138,14 @@ func _test_combat_integration() -> void:
 	inventory.equip(charm)
 	var state: CombatState = CombatState.new(1, BigNumber.new(), 1, {"support_hero_levels": {"dune_scout": 1}})
 	state.set_inventory(inventory)
-	_check(_approx_number(state.get_tap_damage(), 5.35), "tap damage reads equipped tap multiplier")
+	var expected_tap: float = float(CombatState.balance()["tap_damage_per_level"]) * (1.0 + CombatState._diminished(inventory.total_stat("tap_damage_mult")))
+	_check(_approx_number(state.get_tap_damage(), expected_tap), "tap damage reads equipped tap multiplier")
+	var base_dps: float = state.support_total_dps.mantissa * pow(10.0, state.support_total_dps.exponent)
+	var expected_dps: float = base_dps * (1.0 + CombatState._diminished(inventory.total_stat("dps_mult")))
 	var dps: Dictionary = state.dps_tick(1.0)
-	_check(_approx_number(dps["damage"], 2.18), "DPS reads equipped DPS multiplier")
+	_check(_approx_number(dps["damage"], expected_dps), "DPS reads equipped DPS multiplier")
 	var restored_state: CombatState = CombatState.new(1, null, 1, {}, {"equipment": inventory.to_dict()})
-	_check(_approx_number(restored_state.get_tap_damage(), 5.35), "combat constructor restores permanent equipment")
+	_check(_approx_number(restored_state.get_tap_damage(), expected_tap), "combat constructor restores permanent equipment")
 
 
 func _approx_number(value: BigNumber, expected: float) -> bool:

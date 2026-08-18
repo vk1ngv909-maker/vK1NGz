@@ -7,8 +7,6 @@ const Inventory = preload("res://scripts/progression/inventory.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
-const BALANCE_PATH: String = "res://resources/balance.json"
-
 ## Balance lives in data, per the master brief. `BALANCE_OVERRIDE` exists only
 ## so the balance simulation can sweep candidate values without editing the file.
 static var BALANCE_OVERRIDE: Dictionary = {}
@@ -18,12 +16,15 @@ static func balance() -> Dictionary:
 	if not BALANCE_OVERRIDE.is_empty():
 		return BALANCE_OVERRIDE
 	if _balance_cache.is_empty():
-		var f: FileAccess = FileAccess.open(BALANCE_PATH, FileAccess.READ)
-		if f != null:
-			var parsed: Variant = JSON.parse_string(f.get_as_text())
-			f.close()
-			if parsed is Dictionary:
-				_balance_cache = parsed
+		var loop: MainLoop = Engine.get_main_loop()
+		if loop is SceneTree:
+			var loader: Node = (loop as SceneTree).root.get_node_or_null("BalanceData")
+			if loader != null:
+				_balance_cache = (loader.call("data") as Dictionary).duplicate(true)
+		if _balance_cache.is_empty():
+			var standalone_loader: Node = preload("res://autoload/balance_data.gd").new()
+			_balance_cache = (standalone_loader.call("load_from_path", "res://resources/balance.json") as Dictionary).duplicate(true)
+			standalone_loader.free()
 	return _balance_cache
 
 var stage: int = 1
@@ -92,7 +93,7 @@ func dps_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	var combined_dps: BigNumber = support_total_dps.add(falcon_dps)
-	var equipment_mult: float = 1.0 + inventory.total_stat("dps_mult")
+	var equipment_mult: float = 1.0 + _diminished(inventory.total_stat("dps_mult"))
 	var damage: BigNumber = combined_dps.mul_float(maxf(0.0, delta) * _relic_damage_mult * equipment_mult)
 	return _apply_damage(damage, "dps")
 
@@ -134,7 +135,7 @@ func spawn_enemy() -> void:
 
 
 func get_tap_damage() -> BigNumber:
-	var equipment_mult: float = 1.0 + inventory.total_stat("tap_damage_mult")
+	var equipment_mult: float = 1.0 + _diminished(inventory.total_stat("tap_damage_mult"))
 	# The master brief defines tap damage as base x hero_level_MULTIPLIER, i.e. it
 	# grows multiplicatively with level. It was implemented linearly, which cannot
 	# keep pace with exponential enemy HP and guarantees an impassable wall.
@@ -142,6 +143,17 @@ func get_tap_damage() -> BigNumber:
 	var per_level: float = float(balance()["tap_damage_per_level"])
 	var scaled: BigNumber = BigNumber.from_float(per_level).mul(BigNumber.from_float(growth).pow_float(float(maxi(0, tap_level - 1))))
 	return scaled.mul_float(_relic_damage_mult * equipment_mult)
+
+
+static func _diminished(raw: float) -> float:
+	## Diminishing returns on summed equipment bonuses. Raw sums let a full
+	## legendary set nearly double early damage, which collapsed first-Prestige
+	## pacing to 13.5 min. This keeps rarity meaningful while stopping the
+	## early game from being skipped. k is tuned by measured sweep, not guessed.
+	if raw <= 0.0:
+		return 0.0
+	var k: float = float(balance().get("equipment_diminishing_k", 1.5))
+	return raw / (1.0 + k * raw)
 
 
 func set_inventory(value: Inventory) -> void:

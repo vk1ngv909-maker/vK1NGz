@@ -54,17 +54,33 @@ horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Skip" type="Button" parent="."]
+[node name="SkipSafeArea" type="MarginContainer" parent="."]
 unique_name_in_owner = true
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -220.0
-offset_top = 48.0
-offset_right = -24.0
-offset_bottom = 120.0
-grow_horizontal = 0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 24
+theme_override_constants/margin_top = 48
+theme_override_constants/margin_right = 24
+theme_override_constants/margin_bottom = 140
+
+[node name="BottomAlign" type="VBoxContainer" parent="SkipSafeArea"]
+layout_mode = 2
+mouse_filter = 2
+alignment = 2
+
+[node name="Center" type="CenterContainer" parent="SkipSafeArea/BottomAlign"]
+layout_mode = 2
+mouse_filter = 2
+
+[node name="Skip" type="Button" parent="SkipSafeArea/BottomAlign/Center"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(260, 72)
+layout_mode = 2
 mouse_filter = 0
 theme_override_font_sizes/font_size = 20
-text = "ui.tutorial.skip"
+text = ""

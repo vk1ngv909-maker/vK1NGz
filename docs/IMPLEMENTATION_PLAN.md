@@ -5,8 +5,8 @@
 | 1 | Portrait boot, BigNumber, save recovery | **PASSED** |
 | 2 | Combat vertical slice | **PASSED** |
 | 3 | Progression loop: support DPS, skills, Prestige, Relics | **PASSED** |
-| 4 | MVP systems: inventory, equipment, offline rewards, settings, localization, tutorial | NEXT |
-| 5 | Content expansion (only after 1-4) | not started |
+| 4 | MVP systems: inventory, equipment, offline rewards, settings, localization, tutorial | **PASSED** |
+| 5 | Content expansion (only after 1-4) | NEXT |
 | 6 | Release candidate | blocked — no Android SDK/device in this environment |
 
 ## Gate 4 entry criteria (next session)

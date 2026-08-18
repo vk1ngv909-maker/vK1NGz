@@ -1,5 +1,18 @@
 # Changelog
 
+## Gate 4 close (2026-08-18)
+
+- Equipment diminishing returns (k=2.5) and the brief's offline formula, both
+  tuned by measured sweep. Every C17 pacing target now passes; C17 closed.
+- Balance data validated with a schema version; invalid data fails loudly and
+  falls back to safe defaults instead of corrupting progression silently.
+- Guards added to run-tests.sh: hardcoded player-facing strings, stale compiled
+  translations, and script parse errors all fail the suite.
+- Salvage button state derives from one pure preview function (C20).
+- Settings verified against real AudioServer buses; reduced flashing measured at
+  45% dimmer with recoil and HP feedback retained.
+- Tutorial Skip moved out of the settings gear; single numeral policy.
+
 ## Gate 3 — Progression loop (2026-08-18)
 
 **Structural**

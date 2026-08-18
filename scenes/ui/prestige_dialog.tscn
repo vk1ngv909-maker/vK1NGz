@@ -128,17 +128,19 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="Title" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.77, 0.25, 1)
 theme_override_font_sizes/font_size = 34
-text = "PRESTIGE"
+text = ""
 horizontal_alignment = 1
 
 [node name="Explanation" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.92, 0.9, 0.85, 1)
 theme_override_font_sizes/font_size = 16
-text = "Trade this run for permanent Relic Currency and grow stronger every ascent."
+text = ""
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -165,11 +167,12 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin/Column"]
+[node name="ResetHeading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.62, 0.62, 1)
 theme_override_font_sizes/font_size = 19
-text = "WILL RESET"
+text = ""
 horizontal_alignment = 1
 
 [node name="ResetList" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin/Column"]
@@ -178,7 +181,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(1, 0.87, 0.87, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Stage\n• Gold\n• Tap Level"
+text = ""
 autowrap_mode = 2
 
 [node name="KeepBlock" type="PanelContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns"]
@@ -197,11 +200,12 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 theme_override_constants/separation = 6
 
-[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin/Column"]
+[node name="KeepHeading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(0.65, 1, 0.76, 1)
 theme_override_font_sizes/font_size = 19
-text = "WILL KEEP"
+text = ""
 horizontal_alignment = 1
 
 [node name="KeepList" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin/Column"]
@@ -210,7 +214,7 @@ layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.87, 1, 0.91, 1)
 theme_override_font_sizes/font_size = 14
-text = "• Relic Currency\n• Relics\n• Max Stage"
+text = ""
 autowrap_mode = 2
 
 [node name="RewardBlock" type="PanelContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns"]
@@ -230,11 +234,12 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+[node name="RewardHeading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.86, 0.48, 1)
 theme_override_font_sizes/font_size = 19
-text = "YOU RECEIVE"
+text = ""
 horizontal_alignment = 1
 
 [node name="RewardAmount" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
@@ -246,10 +251,11 @@ text = "0"
 horizontal_alignment = 1
 
 [node name="CurrencyLabel" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
 theme_override_font_sizes/font_size = 17
-text = "RELIC CURRENCY"
+text = ""
 horizontal_alignment = 1
 autowrap_mode = 2
 
@@ -259,7 +265,7 @@ visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.55, 0.45, 1)
 theme_override_font_sizes/font_size = 17
-text = "Reach a higher stage first"
+text = ""
 horizontal_alignment = 1
 
 [node name="Actions" type="HBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
@@ -273,7 +279,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("StyleCancel")
-text = "Cancel"
+text = ""
 
 [node name="ConfirmPrestige" type="Button" parent="SafeMargin/Center/Panel/PanelMargin/Content/Actions"]
 unique_name_in_owner = true
@@ -282,4 +288,4 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 19
 theme_override_styles/normal = SubResource("StyleConfirm")
-text = "Confirm Prestige"
+text = ""

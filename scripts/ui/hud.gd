@@ -111,24 +111,29 @@ func _refresh_skill_buttons(now_ms: int) -> void:
 	for index: int in skill_buttons.size():
 		var id: String = SKILL_IDS[index]
 		var button: Button = skill_buttons[index]
-		var state_text: String = tr("hud.ready")
+		var state_text: String = Settings.t("hud.ready")
 		if skill_system.is_active(id):
 			var definition: Dictionary = skill_system.skills.get(id, {})
 			var active_until_ms: int = int(skill_system.activated_at_ms[id]) + int(definition.get("duration_ms", 0))
-			state_text = "%s\n%s" % [tr("hud.active"), tr("hud.seconds_short") % _remaining_seconds(active_until_ms, now_ms)]
+			state_text = "%s\n%s" % [Settings.t("hud.active"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(active_until_ms, now_ms))]
 		elif skill_system.is_on_cooldown(id):
-			state_text = "%s\n%s" % [tr("hud.cooldown"), tr("hud.seconds_short") % _remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms)]
-		button.text = "%s\n%s" % [tr("skill.%s" % id), state_text]
-		button.disabled = state_text != tr("hud.ready")
+			state_text = "%s\n%s" % [Settings.t("hud.cooldown"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms))]
+		button.text = "%s\n%s" % [Settings.t("skill.%s" % id), state_text]
+		button.disabled = state_text != Settings.t("hud.ready")
 
 
 func refresh_localized_text() -> void:
-	%Battle.text = tr("hud.battle")
-	%Heroes.text = tr("hud.heroes")
-	%Skills.text = tr("hud.skills")
-	%Inventory.text = tr("hud.inventory")
-	%Relics.text = tr("hud.relics")
-	%Shop.text = tr("hud.shop")
+	%Battle.text = Settings.t("hud.battle")
+	%Heroes.text = Settings.t("hud.heroes")
+	%Skills.text = Settings.t("hud.skills")
+	%Inventory.text = Settings.t("hud.inventory")
+	%Relics.text = Settings.t("hud.relics")
+	%Shop.text = Settings.t("hud.shop")
+	%HeroDPS.text = Settings.t("hud.hero_dps_placeholder")
+	%GoldPlaceholder.text = Settings.t("hud.gold_placeholder")
+	%BackgroundLabel.text = Settings.t("hud.desert_placeholder")
+	%BalanceDataInvalid.visible = OS.is_debug_build() and BalanceData.balance_data_invalid
+	%BalanceDataInvalid.text = Settings.t("debug.balance_data_invalid")
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	if skill_system != null:
 		_refresh_skill_buttons(now_ms)

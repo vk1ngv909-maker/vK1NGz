@@ -61,13 +61,17 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C20 | The inventory UI offers a Salvage button on an equipped item | P2 | RESOLVED — button state derives from `salvage_refusal_preview()`, one source of truth |
 | C21 | Tap damage was implemented LINEARLY while enemy HP grows exponentially, guaranteeing an impassable wall — and deviating from the brief's `base_tap x hero_level_multiplier` | **P1** | RESOLVED — multiplicative growth (1.06), chosen by measured sweep; first Prestige 9.6 -> 35.7 min, worst stall 86h -> 3.1h |
 | C22 | Compiled `.translation` files were stale, so newly added Arabic keys rendered as raw `ui.tutorial.*` identifiers in the running game | P2 | RESOLVED — reimported; keys now render |
-| C23 | Some production-facing strings are still English under Arabic (e.g. "HERO DPS — PLACEHOLDER", "Cost: 250 Gold") | P2 | OPEN |
-| C24 | Tutorial Skip button overlaps the settings gear at top-left | P2 | OPEN |
-| C25 | Mixed numeral systems under Arabic: HP shows "10 / 10" but percentage shows "٪١٠٠" | P3 | OPEN |
+| C23 | Some production-facing strings were still English under Arabic | P2 | RESOLVED — `check_strings.sh` guard added so regressions fail the suite |
+| C24 | Tutorial Skip button overlapped the settings gear | P2 | RESOLVED — anchored to the overlay bottom, safe-area aware |
+| C25 | Mixed numeral systems under Arabic | P3 | RESOLVED — single formatter, western digits default under Arabic, `numeral_style` setting for the alternative |
+| C27 | Offline formula was `seconds * max_stage * 0.5`, not the brief's `min(hours,8) * gold_per_second * 0.35`; it handed a stage-1 player 14400 gold and pulled first Prestige to 22.1 min | P2 | RESOLVED — brief formula implemented, measured at 26.1 min for an 8h absence |
+| C28 | Equipment bonuses summed raw, so a full legendary set nearly doubled early damage (first Prestige 13.4 min) | P2 | RESOLVED — diminishing returns `raw/(1+2.5*raw)`, chosen by sweep |
+| C29 | `sim_balance_c17.gd` passed raw multipliers straight to `set_relic_bonuses`, bypassing the diminishing-returns curve, so it reported equipment numbers players would never experience | P2 | RESOLVED — the sim now goes through the real curve |
+| C30 | At 1080x2400 the gold label is clipped at the right edge under Arabic ("الذهب — ACEHOLDER") | P2 | OPEN |
 | C26 | A unit test hardcoded a number derived from a balance value, so retuning balance failed a correctness test | P2 | RESOLVED — expectation now derived from `balance()` |
 | C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | **RESOLVED** — save split into run_state/permanent_state; apply() rebuilds run_state from the canonical factory |
 | C16 | `SkillSystem.from_dict` coerced saved timestamps without type checks, raising engine errors on a corrupt save | P2 | RESOLVED — non-numeric values dropped, negatives clamped |
-| C17 | First-Prestige pacing is OFF TARGET: ~10.3 min to stage 25 versus the brief's 25-45 min, and the curve then jumps to ~56h for stage 50 — a cliff, not a slope. An earlier entry called 10 min "close to target"; that assessment was wrong and is corrected in docs/BALANCE.md | P2 | OPEN — acceptance criteria and baseline recorded in `docs/BALANCE.md`; re-measure after Gate 4 equipment + offline land |
+| C17 | **CLOSED** — every acceptance target now measured and passing (see docs/BALANCE.md). Was: First-Prestige pacing OFF TARGET: ~10.3 min to stage 25 versus the brief's 25-45 min, and the curve then jumps to ~56h for stage 50 — a cliff, not a slope. An earlier entry called 10 min "close to target"; that assessment was wrong and is corrected in docs/BALANCE.md | P2 | OPEN — acceptance criteria and baseline recorded in `docs/BALANCE.md`; re-measure after Gate 4 equipment + offline land |
 | C15 | `scripts/shot.sh` dropped forwarded game args (my `shift 3` conflicted with Codex's `${@:4}`), so the prestige dialog never opened and the first capture looked like a plain HUD | P2 | RESOLVED — args forwarded correctly; Codex's claim of having inspected the dialog did not hold up |
 
 ## Blockers
@@ -151,7 +155,7 @@ Upgrades and final gold are identical by design: both runs kill the same number
 of enemies to reach stage 50, so they earn the same gold and can afford the same
 upgrades. Only elapsed time differs, which is exactly what relics should change.
 
-## Gate 4 — MVP systems (checkpoint, NOT closed)
+## Gate 4 — MVP systems — **PASSED** (2026-08-18)
 
 | Requirement | Status | Evidence |
 | --- | --- | --- |
@@ -166,17 +170,23 @@ upgrades. Only elapsed time differs, which is exactly what relics should change.
 | Localization en/ar | DONE | 127 keys in both files |
 | Arabic RTL visual evidence | DONE | `rtl_ar_inventory.png`, `rtl_ar_tutorial.png` — RTL flow, correct shaping, translated rarities and badges |
 | Tutorial | DONE | 9 assertions; `rtl_ar_tutorial.png` shows step text and Skip |
-| Balance re-simulation | DONE | see docs/BALANCE.md — C17 criterion 1 now MET (35.7 min) |
+| Balance re-simulation | DONE | see docs/BALANCE.md — every C17 target now passes |
+| Balance data validated | DONE | `balance_data.gd` + `test_balance_validation.gd`; schema_version added; invalid data fails loudly and falls back to safe defaults |
+| Settings verified independently | DONE | `test_settings_adversarial.gd` — 18 assertions reading real `AudioServer` bus state back, including after a simulated restart |
+| Reduced flashing verified visually | DONE | `flash_normal.png` vs `flash_reduced.png` — enemy region 238.1 vs 130.6 mean brightness, **45% dimmer**, recoil and HP response retained |
+| Vibration | DONE (scoped) | gated through `Settings.vibrate()`; dispatch counter proves no request is issued when disabled. **No physical device available — device vibration is NOT claimed** |
+| C23 hardcoded English | RESOLVED | `check_strings.sh` guard in run-tests.sh; Arabic captures show localized HUD |
+| C24 Skip overlap | RESOLVED | Skip anchored to the bottom of the overlay; `rtl_ar_1080x2400.png` |
+| C25 numeral policy | RESOLVED | one formatter, `numeral_style` setting, western digits default under Arabic |
 
 Independent adversarial totals this gate: inventory 23, offline 13.
 Full suite: 16 suites, `ALL SUITES PASSED`, plus a new parse guard.
 
 ## Next highest-priority action
 
-Close the remaining Gate 4 P2s (C23 English strings under Arabic, C24 overlap),
-independently verify the reduced-flash and audio-bus behaviour with captures
-rather than relying on Codex's assertions, then tune equipment rarity scaling so
-legendary gear stops pulling first Prestige to 13.5 min (C17 remainder).
+**Gate 5 — content expansion.** Only now permitted: 8 support heroes, 6 skills,
+15 relics, 12 enemies, 4 bosses, 3 worlds, 20 equipment items, 100 stages.
+Fix C30 (Arabic gold-label clipping at 1080x2400) first.
 
 ## Placeholders
 

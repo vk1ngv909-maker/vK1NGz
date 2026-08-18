@@ -69,10 +69,11 @@ theme_override_constants/separation = 16
 alignment = 1
 
 [node name="Title" type="Label" parent="SafeMargin/Center/Panel/Margin/Content"]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.78, 0.28, 1)
 theme_override_font_sizes/font_size = 34
-text = "ui.offline.title"
+text = ""
 horizontal_alignment = 1
 
 [node name="TimeAway" type="Label" parent="SafeMargin/Center/Panel/Margin/Content"]

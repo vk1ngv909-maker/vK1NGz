@@ -11,6 +11,7 @@ config/features=PackedStringArray("4.3", "GL Compatibility")
 EventBus="*res://autoload/event_bus.gd"
 SaveManager="*res://autoload/save_manager.gd"
 Settings="*res://autoload/settings.gd"
+BalanceData="*res://autoload/balance_data.gd"
 
 [display]
 window/size/viewport_width=1080

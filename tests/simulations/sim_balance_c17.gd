@@ -53,21 +53,25 @@ func _init() -> void:
 	print("")
 	var base := run_to(PRESTIGE_STAGE, 1.0, 1.0)
 	row("no equipment", base)
-	# representative equipment multipliers taken from equipment.json rarity tiers
-	var common := run_to(PRESTIGE_STAGE, 1.05, 1.0)
-	var rare := run_to(PRESTIGE_STAGE, 1.25, 1.05)
-	var epic := run_to(PRESTIGE_STAGE, 1.60, 1.15)
-	var legend := run_to(PRESTIGE_STAGE, 2.20, 1.30)
+	# Raw summed tap_damage_mult for a full 5-slot set of each rarity, taken from
+	# equipment.json, then passed through the SAME diminishing-returns curve the
+	# game uses. Passing raw multipliers here would bypass that curve and report
+	# numbers the player will never experience.
+	var common := run_to(PRESTIGE_STAGE, 1.0 + CS._diminished(0.09), 1.0)
+	var rare := run_to(PRESTIGE_STAGE, 1.0 + CS._diminished(0.29), 1.0)
+	var epic := run_to(PRESTIGE_STAGE, 1.0 + CS._diminished(0.51), 1.0)
+	var legend := run_to(PRESTIGE_STAGE, 1.0 + CS._diminished(0.93), 1.0)
 	row("common equipment", common)
 	row("rare equipment", rare)
 	row("epic equipment", epic)
 	row("legendary equipment", legend)
 	print("")
 	print("=== offline gold effect (does it bypass the wall?) ===")
-	var one_h := run_to(PRESTIGE_STAGE, 1.0, 1.0, 3600.0 * 1.0)
-	var eight_h := run_to(PRESTIGE_STAGE, 1.0, 1.0, 14400.0)
-	row("start with ~1h offline gold", one_h)
-	row("start with ~8h offline gold", eight_h)
+	# Real grants from the brief-conformant offline formula for a stage-1 player.
+	var one_h := run_to(PRESTIGE_STAGE, 1.0, 1.0, 945.0)
+	var eight_h := run_to(PRESTIGE_STAGE, 1.0, 1.0, 7560.0)
+	row("1h offline (945g)", one_h)
+	row("8h offline (7560g)", eight_h)
 	print("")
 	print("=== wall depth: stage 49 ===")
 	var deep := run_to(50, 1.0, 1.0)
