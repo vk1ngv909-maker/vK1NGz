@@ -2,9 +2,14 @@
 # scripts/setup-codex.sh copies this to ~/.codex/config.toml.
 # Docs: https://github.com/openai/codex/blob/main/docs/config.md
 
-# Model is intentionally left unset so Codex uses its own current default.
-# Override per-run with `codex exec -m <model>` if needed.
-
+# Model slugs for ChatGPT-account auth are NOT the public API names -- Codex's
+# own built-in default ("gpt-5.1-codex") is rejected by the ChatGPT backend.
+# Query the authoritative list with:
+#   curl -H "Authorization: Bearer $TOKEN" -H "chatgpt-account-id: $ACCT" \
+#     "https://chatgpt.com/backend-api/codex/models?client_version=$(codex --version | awk '{print $2}')"
+# As of 2026-08: gpt-5.6-sol, gpt-5.6-terra, gpt-5.6-luna, gpt-5.5, gpt-5.4,
+# gpt-5.4-mini. See scripts/codex-models.sh.
+model = "gpt-5.6-sol"
 model_reasoning_effort = "medium"
 
 # Non-interactive / CI-friendly defaults for this sandboxed container.

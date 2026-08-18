@@ -22,10 +22,15 @@ else
 fi
 
 if [ -z "${OPENAI_API_KEY:-}" ]; then
-  echo "[codex] WARNING: OPENAI_API_KEY is not set."
-  echo "[codex] Add it to this environment's variables, then re-run this script."
-  echo "[codex] Note: interactive 'codex login' does NOT work here -- the network"
-  echo "[codex] policy blocks chatgpt.com. API-key auth is the supported path."
+  if codex login status 2>&1 | grep -q "Logged in"; then
+    echo "[codex] $(codex login status 2>&1 | head -1) -- ready."
+  else
+    echo "[codex] Not logged in. Authenticate with your ChatGPT account:"
+    echo "[codex]     codex login --device-auth"
+    echo "[codex] Then open the printed URL and enter the one-time code."
+    echo "[codex] (Credentials live in ~/.codex/auth.json and do not survive"
+    echo "[codex]  this container, so repeat this in each new session.)"
+  fi
 else
   echo "[codex] OPENAI_API_KEY detected -- ready."
 fi

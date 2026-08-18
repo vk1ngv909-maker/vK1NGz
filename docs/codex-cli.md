@@ -29,43 +29,54 @@ To have it run automatically at the start of every web session, add a
 
 ## Authentication
 
-Two options. **Both were tested in this container; only the API-key path
-currently produces working Codex runs.**
-
-### API key (recommended)
-
-Set `OPENAI_API_KEY` in the environment's variables (Environment settings →
-Environment variables), then start a new session. This persists across
-sessions.
-
-### ChatGPT account login (works, but the account is not entitled)
-
-Device-code login succeeds:
+Codex here is authenticated with a **ChatGPT account** (Plus). Verified working
+end to end.
 
 ```bash
 codex login --device-auth
 ```
 
-It prints a URL (`https://auth.openai.com/codex/device`) and a one-time code
-valid for 15 minutes. `codex login status` then reports
-`Logged in using ChatGPT`, and credentials land in `~/.codex/auth.json`.
+This prints `https://auth.openai.com/codex/device` and a one-time code valid for
+15 minutes. Open the URL, sign in, enter the code. `codex login status` should
+then report `Logged in using ChatGPT`.
 
-**However**, every subsequent request is rejected by
-`chatgpt.com/backend-api/codex/responses` with HTTP 400:
+Credentials are written to `~/.codex/auth.json`, which is **outside the repo**
+and is destroyed when the container is reclaimed — so the device login must be
+repeated in each new session.
+
+An `OPENAI_API_KEY` in the environment variables is the alternative; it
+persists across sessions and routes via `api.openai.com` instead.
+
+### Model slugs (important)
+
+ChatGPT-account auth uses **different model slugs than the public API**, and
+Codex's own built-in default (`gpt-5.1-codex`) is rejected by the backend:
 
 ```
-The '<model>' model is not supported when using Codex with a ChatGPT account.
+The 'gpt-5.1-codex' model is not supported when using Codex with a ChatGPT account.
 ```
 
-This is *not* a model-name problem. The same message comes back for names that
-do not exist at all (e.g. `gpt-6-codex`), so the backend is refusing Codex for
-the account rather than validating the model. The token's claims show
-`chatgpt_plan_type: plus` with an active subscription, so the plan looks right;
-the account most likely still needs Codex enabled/onboarded on OpenAI's side.
+That message is returned for *any* unaccepted slug — including names that do
+not exist at all — so it says nothing about whether a particular model is real.
+Do not try to guess slugs from it. Query the authoritative list instead:
 
-Note also that `~/.codex/auth.json` is outside the repo and is destroyed when
-the container is reclaimed, so a ChatGPT login would have to be repeated every
-session even once it works.
+```bash
+bash scripts/codex-models.sh
+```
+
+Available to this account as of 2026-08:
+
+| Slug | Name | Default effort |
+| --- | --- | --- |
+| `gpt-5.6-sol` | GPT-5.6-Sol | low |
+| `gpt-5.6-terra` | GPT-5.6-Terra | medium |
+| `gpt-5.6-luna` | GPT-5.6-Luna | medium |
+| `gpt-5.5` | GPT-5.5 | medium |
+| `gpt-5.4` | GPT-5.4 | medium |
+| `gpt-5.4-mini` | GPT-5.4-Mini | medium |
+
+`.codex/config.toml` pins `gpt-5.6-sol`. Re-run the helper if a model stops
+being accepted — the list changes over time.
 
 ## Network policy
 
