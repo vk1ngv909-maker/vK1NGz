@@ -1,0 +1,20 @@
+; Desert Ascendant — portrait mobile idle/action RPG
+config_version=5
+
+[application]
+config/name="Desert Ascendant"
+config/description="Original Arabian-fantasy portrait idle/action RPG"
+run/main_scene="res://scenes/boot/boot.tscn"
+config/features=PackedStringArray("4.3", "GL Compatibility")
+
+[display]
+window/size/viewport_width=1080
+window/size/viewport_height=1920
+window/handheld/orientation=1
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
+[rendering]
+renderer/rendering_method="gl_compatibility"
+renderer/rendering_method.mobile="gl_compatibility"
+textures/vram_compression/import_etc2_astc=true

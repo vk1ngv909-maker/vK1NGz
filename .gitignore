@@ -1,1 +1,4 @@
 codex-reports/
+__pycache__/
+*.pyc
+.godot/
