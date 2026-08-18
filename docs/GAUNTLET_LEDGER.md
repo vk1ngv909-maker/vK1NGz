@@ -56,6 +56,8 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C11 | Falcon attack and boss-failure/Retry states not yet visually captured | P2 | RESOLVED — both captured |
 | C12 | Falcon dealt damage but never visibly moved, so it did not appear to own its damage | P2 | RESOLVED — lunge tween fires on the same frame as the cyan number |
 | C13 | Retry Boss button sits between hero and enemy inside the combat area | P3 | OPEN — acceptable in blockout, revisit in UI polish |
+| C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | OPEN — every new temporary save field MUST be added to `apply()`; consider a classification guard |
+| C15 | `scripts/shot.sh` dropped forwarded game args (my `shift 3` conflicted with Codex's `${@:4}`), so the prestige dialog never opened and the first capture looked like a plain HUD | P2 | RESOLVED — args forwarded correctly; Codex's claim of having inspected the dialog did not hold up |
 
 ## Blockers
 
@@ -95,11 +97,29 @@ adversarial, 23 combat + 13 adversarial). `ALL SUITES PASSED`.
 
 Evidence: `docs/evidence/combat_motion.png`, `combat_boss.png`, `combat_idle.png`
 
+## Gate 3 — progression loop (checkpoint, not yet closed)
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Prestige refused when reward is 0 | PASS | logic + `prestige_zero.png` (confirm disabled, "Reach a higher stage first") |
+| Player sees exactly what resets / keeps | PASS | `prestige_dialog.png` — WILL RESET (8) / WILL KEEP (8) / YOU RECEIVE 30 |
+| Save immediately after prestige | PASS | `test_prestige_reload.gd` — reload source is `primary` |
+| Close and reopen after prestige | PASS | fresh SaveManager instance reloads correct state |
+| Relics / equipment / max_stage preserved | PASS | adversarial + reload tests |
+| Gold / hero levels / temp buffs wiped | PASS | adversarial + reload tests |
+| Skill double-activation blocked | PASS | re-activating while active returns false and does not raise the multiplier |
+| Skills stack across kinds, never with themselves | PASS | adversarial test |
+| Cooldowns survive close/reopen | PASS | absolute UTC ms timestamps; verified across a to_dict/from_dict cycle |
+| 8 support heroes, 6 skills, 15 relics, data-driven | PASS | JSON under `resources/` |
+| Dialog fits all portrait sizes | PASS | `prestige_dialog.png` (720x1280), `prestige_dialog_tall.png` (1080x2400) |
+
+Test totals: 8 suites, `ALL SUITES PASSED`.
+
 ## Next highest-priority action
 
-**Gate 3 — progression loop.** Support-hero DPS, falcon as a real damage source
-over time, active skills with distinct durations/cooldowns, the progression wall,
-Prestige with reset/preserve rules, and permanent Relics — all surviving reload.
+Close Gate 3: wire support-hero DPS into live combat, verify the progression
+wall and the "new run is faster" property with a deterministic simulation, and
+capture skills in ACTIVE and COOLDOWN states (currently only READY is evidenced).
 
 ## Placeholders
 

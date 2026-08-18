@@ -1,0 +1,17 @@
+[
+	{"id":"sun_blade","name_key":"relic.sun_blade","category":"damage","level":0,"max_level":50,"base_effect":0.10,"growth":0.02,"cost":1,"unlock_condition":{"max_stage":25}},
+	{"id":"lion_seal","name_key":"relic.lion_seal","category":"damage","level":0,"max_level":40,"base_effect":0.15,"growth":0.025,"cost":2,"unlock_condition":{"max_stage":50}},
+	{"id":"storm_eye","name_key":"relic.storm_eye","category":"damage","level":0,"max_level":30,"base_effect":0.25,"growth":0.04,"cost":4,"unlock_condition":{"max_stage":100}},
+	{"id":"merchant_scale","name_key":"relic.merchant_scale","category":"gold","level":0,"max_level":50,"base_effect":0.10,"growth":0.02,"cost":1,"unlock_condition":{"max_stage":25}},
+	{"id":"gilded_scarab","name_key":"relic.gilded_scarab","category":"gold","level":0,"max_level":40,"base_effect":0.15,"growth":0.03,"cost":2,"unlock_condition":{"max_stage":60}},
+	{"id":"sultans_coin","name_key":"relic.sultans_coin","category":"gold","level":0,"max_level":25,"base_effect":0.30,"growth":0.05,"cost":5,"unlock_condition":{"max_stage":125}},
+	{"id":"falcon_feather","name_key":"relic.falcon_feather","category":"speed","level":0,"max_level":30,"base_effect":0.05,"growth":0.01,"cost":2,"unlock_condition":{"max_stage":40}},
+	{"id":"hourglass_shard","name_key":"relic.hourglass_shard","category":"speed","level":0,"max_level":25,"base_effect":0.08,"growth":0.015,"cost":3,"unlock_condition":{"max_stage":80}},
+	{"id":"desert_wind","name_key":"relic.desert_wind","category":"speed","level":0,"max_level":20,"base_effect":0.12,"growth":0.02,"cost":5,"unlock_condition":{"max_stage":140}},
+	{"id":"ember_rune","name_key":"relic.ember_rune","category":"skills","level":0,"max_level":30,"base_effect":0.05,"growth":0.01,"cost":2,"unlock_condition":{"max_stage":50}},
+	{"id":"moon_dial","name_key":"relic.moon_dial","category":"skills","level":0,"max_level":25,"base_effect":0.08,"growth":0.015,"cost":4,"unlock_condition":{"max_stage":100}},
+	{"id":"djinn_lamp","name_key":"relic.djinn_lamp","category":"skills","level":0,"max_level":15,"base_effect":0.15,"growth":0.025,"cost":8,"unlock_condition":{"max_stage":175}},
+	{"id":"oasis_charm","name_key":"relic.oasis_charm","category":"utility","level":0,"max_level":40,"base_effect":0.05,"growth":0.01,"cost":1,"unlock_condition":{"max_stage":25}},
+	{"id":"map_of_stars","name_key":"relic.map_of_stars","category":"utility","level":0,"max_level":25,"base_effect":0.10,"growth":0.02,"cost":3,"unlock_condition":{"max_stage":75}},
+	{"id":"phoenix_ankh","name_key":"relic.phoenix_ankh","category":"utility","level":0,"max_level":10,"base_effect":0.25,"growth":0.05,"cost":10,"unlock_condition":{"max_stage":200}}
+]

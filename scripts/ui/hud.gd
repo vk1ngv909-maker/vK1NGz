@@ -1,10 +1,28 @@
 extends Control
 
+const SkillSystemLogic = preload("res://scripts/progression/skill_system.gd")
+
 const SAFE_TOP: int = 48
 const SAFE_BOTTOM: int = 24
 const ACTOR_WIDTH_RATIO: float = 0.20
 const ACTOR_HEIGHT_RATIO: float = 0.26
 const FALCON_SCALE: float = 0.60
+const SKILL_IDS: Array[String] = [
+	"sand_fury",
+	"falcon_storm",
+	"golden_wind",
+	"time_fracture",
+	"ancestor_call",
+	"critical_eclipse",
+]
+const SKILL_NAMES: Dictionary = {
+	"sand_fury": "SAND FURY",
+	"falcon_storm": "FALCON STORM",
+	"golden_wind": "GOLDEN WIND",
+	"time_fracture": "TIME FRACTURE",
+	"ancestor_call": "ANCESTOR CALL",
+	"critical_eclipse": "CRITICAL ECLIPSE",
+}
 
 @onready var safe_area: MarginContainer = %SafeArea
 @onready var bottom_margin: MarginContainer = %BottomMargin
@@ -14,13 +32,82 @@ const FALCON_SCALE: float = 0.60
 @onready var enemy: ColorRect = %Enemy
 @onready var enemy_hp_label: Label = %EnemyHPLabel
 @onready var enemy_hp: ProgressBar = %EnemyHP
+@onready var skill_buttons: Array[Button] = [
+	%Skill1,
+	%Skill2,
+	%Skill3,
+	%Skill4,
+	%Skill5,
+	%Skill6,
+]
+
+var skill_system: SkillSystem
 
 
 func _ready() -> void:
 	safe_area.add_theme_constant_override("margin_top", SAFE_TOP)
 	bottom_margin.add_theme_constant_override("margin_bottom", SAFE_BOTTOM)
 	combat_area.resized.connect(_layout_combat)
+	_setup_skills()
 	_layout_combat.call_deferred()
+
+
+func _process(_delta: float) -> void:
+	if skill_system == null:
+		return
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	skill_system.tick(now_ms)
+	_refresh_skill_buttons(now_ms)
+
+
+func _setup_skills() -> void:
+	skill_system = SkillSystemLogic.new()
+	var loaded: Dictionary = SaveManager.data
+	if loaded.is_empty():
+		loaded = SaveManager.load()
+	var timestamps: Variant = loaded.get("skill_timestamps", {})
+	if timestamps is Dictionary:
+		skill_system.from_dict(timestamps as Dictionary)
+	for index: int in skill_buttons.size():
+		skill_buttons[index].pressed.connect(_on_skill_pressed.bind(SKILL_IDS[index]))
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	skill_system.tick(now_ms)
+	_refresh_skill_buttons(now_ms)
+
+
+func _on_skill_pressed(id: String) -> void:
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	if skill_system.activate(id, now_ms):
+		_save_skills()
+	_refresh_skill_buttons(now_ms)
+
+
+func _refresh_skill_buttons(now_ms: int) -> void:
+	for index: int in skill_buttons.size():
+		var id: String = SKILL_IDS[index]
+		var button: Button = skill_buttons[index]
+		var state_text: String = "READY"
+		if skill_system.is_active(id):
+			var definition: Dictionary = skill_system.skills.get(id, {})
+			var active_until_ms: int = int(skill_system.activated_at_ms[id]) + int(definition.get("duration_ms", 0))
+			state_text = "ACTIVE\n%ds" % _remaining_seconds(active_until_ms, now_ms)
+		elif skill_system.is_on_cooldown(id):
+			state_text = "COOLDOWN\n%ds" % _remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms)
+		button.text = "%s\n%s" % [SKILL_NAMES.get(id, id.to_upper()), state_text]
+		button.disabled = state_text != "READY"
+
+
+func _remaining_seconds(until_ms: int, now_ms: int) -> int:
+	return maxi(0, int(ceil(float(until_ms - now_ms) / 1000.0)))
+
+
+func _save_skills() -> void:
+	var save_data: Dictionary = SaveManager.data.duplicate(true)
+	if save_data.is_empty():
+		save_data = SaveManager.default_data()
+	save_data["skill_timestamps"] = skill_system.to_dict()
+	save_data["last_seen_utc"] = int(Time.get_unix_time_from_system())
+	SaveManager.save(save_data)
 
 
 func _layout_combat() -> void:

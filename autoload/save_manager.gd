@@ -79,6 +79,14 @@ func validate(value: Variant) -> bool:
 		if candidate.has(timestamp_field):
 			if not _is_integer_number(candidate[timestamp_field]) or int(candidate[timestamp_field]) < 0:
 				return false
+	if candidate.has("prestige_currency"):
+		if not _is_integer_number(candidate["prestige_currency"]) or int(candidate["prestige_currency"]) < 0:
+			return false
+	for levels_field: String in ["support_hero_levels", "relic_levels"]:
+		if candidate.has(levels_field) and not _valid_level_dictionary(candidate[levels_field]):
+			return false
+	if candidate.has("skill_timestamps") and not _valid_skill_timestamps(candidate["skill_timestamps"]):
+		return false
 	return true
 
 
@@ -104,6 +112,10 @@ func default_data() -> Dictionary:
 		"stage": 1,
 		"max_stage": 1,
 		"tap_level": 1,
+		"support_hero_levels": {},
+		"skill_timestamps": {"activated_at_ms": {}, "cooldown_until_ms": {}},
+		"prestige_currency": 0,
+		"relic_levels": {},
 		"last_seen_utc": now_utc,
 		"offline_claimed_utc": 0,
 	}
@@ -177,6 +189,28 @@ func _is_integer_number(value: Variant) -> bool:
 	if value is float:
 		return is_finite(float(value)) and float(value) == floor(float(value))
 	return false
+
+
+func _valid_level_dictionary(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	for level: Variant in (value as Dictionary).values():
+		if not _is_integer_number(level) or int(level) < 0:
+			return false
+	return true
+
+
+func _valid_skill_timestamps(value: Variant) -> bool:
+	if not value is Dictionary:
+		return false
+	var timestamps: Dictionary = value as Dictionary
+	for field: String in ["activated_at_ms", "cooldown_until_ms"]:
+		if not timestamps.has(field) or not timestamps[field] is Dictionary:
+			return false
+		for timestamp: Variant in (timestamps[field] as Dictionary).values():
+			if not _is_integer_number(timestamp) or int(timestamp) < 0:
+				return false
+	return true
 
 
 func _write_verified_temp(save_data: Dictionary) -> bool:

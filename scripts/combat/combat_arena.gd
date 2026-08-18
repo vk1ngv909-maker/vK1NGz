@@ -35,6 +35,7 @@ func _ready() -> void:
 	resized.connect(_update_facing)
 	_update_facing.call_deferred()
 	_refresh_hud()
+	_open_debug_prestige_from_command_line.call_deferred()
 
 
 func _process(delta: float) -> void:
@@ -73,6 +74,24 @@ func debug_tap() -> void:
 	## Test-only hook so automated capture can drive real taps through the same
 	## path as a player touch, giving genuine in-motion visual evidence.
 	_react_to_attack(combat.tap())
+
+
+func debug_open_prestige(max_stage: int) -> void:
+	## Test-only hook for portrait captures of the real Prestige preview.
+	var dialog: Node = get_tree().get_first_node_in_group("prestige_dialog")
+	if dialog == null:
+		dialog = get_tree().current_scene.find_child("PrestigeDialog", true, false)
+	if dialog != null and dialog.has_method("debug_open"):
+		dialog.call("debug_open", max_stage)
+
+
+func _open_debug_prestige_from_command_line() -> void:
+	var args: PackedStringArray = OS.get_cmdline_args()
+	args.append_array(OS.get_cmdline_user_args())
+	for index: int in args.size():
+		if args[index] == "--debug-prestige" and index + 1 < args.size():
+			debug_open_prestige(int(args[index + 1]))
+			return
 
 
 func _gui_input(event: InputEvent) -> void:

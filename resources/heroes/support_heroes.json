@@ -1,0 +1,10 @@
+[
+	{"id":"dune_scout","name_key":"hero.dune_scout","role":"ranged","base_dps":2.0,"base_cost":25.0,"cost_growth":1.08,"unlock_stage":1,"milestones":[10,25,50,100,200]},
+	{"id":"oasis_guard","name_key":"hero.oasis_guard","role":"tank","base_dps":8.0,"base_cost":150.0,"cost_growth":1.09,"unlock_stage":5,"milestones":[10,25,50,100,200]},
+	{"id":"sun_priestess","name_key":"hero.sun_priestess","role":"support","base_dps":30.0,"base_cost":900.0,"cost_growth":1.10,"unlock_stage":12,"milestones":[10,25,50,100,200]},
+	{"id":"falconer","name_key":"hero.falconer","role":"ranged","base_dps":110.0,"base_cost":5400.0,"cost_growth":1.11,"unlock_stage":25,"milestones":[10,25,50,100,200]},
+	{"id":"scarab_knight","name_key":"hero.scarab_knight","role":"tank","base_dps":420.0,"base_cost":32000.0,"cost_growth":1.12,"unlock_stage":45,"milestones":[10,25,50,100,200]},
+	{"id":"mirage_weaver","name_key":"hero.mirage_weaver","role":"mage","base_dps":1600.0,"base_cost":190000.0,"cost_growth":1.13,"unlock_stage":70,"milestones":[10,25,50,100,200]},
+	{"id":"djinn_binder","name_key":"hero.djinn_binder","role":"mage","base_dps":6200.0,"base_cost":1150000.0,"cost_growth":1.14,"unlock_stage":100,"milestones":[10,25,50,100,200]},
+	{"id":"star_vizier","name_key":"hero.star_vizier","role":"support","base_dps":25000.0,"base_cost":7000000.0,"cost_growth":1.15,"unlock_stage":150,"milestones":[10,25,50,100,200]}
+]

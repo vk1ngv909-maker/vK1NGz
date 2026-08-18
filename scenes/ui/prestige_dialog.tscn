@@ -1,0 +1,285 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://scripts/ui/prestige_dialog.gd" id="1_dialog"]
+
+[sub_resource type="StyleBoxFlat" id="StylePanel"]
+bg_color = Color(0.075, 0.055, 0.09, 0.98)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.82, 0.61, 0.2, 1)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[sub_resource type="StyleBoxFlat" id="StyleReset"]
+bg_color = Color(0.28, 0.07, 0.08, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.85, 0.25, 0.27, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleKeep"]
+bg_color = Color(0.055, 0.24, 0.14, 0.96)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.25, 0.78, 0.48, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleReward"]
+bg_color = Color(0.22, 0.14, 0.035, 0.98)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.76, 0.22, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+
+[sub_resource type="StyleBoxFlat" id="StyleConfirm"]
+bg_color = Color(0.72, 0.18, 0.1, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 0.68, 0.24, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[sub_resource type="StyleBoxFlat" id="StyleCancel"]
+bg_color = Color(0.16, 0.2, 0.3, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.66, 0.75, 0.92, 1)
+corner_radius_top_left = 7
+corner_radius_top_right = 7
+corner_radius_bottom_right = 7
+corner_radius_bottom_left = 7
+
+[node name="PrestigeDialog" type="Control"]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 0
+z_index = 100
+script = ExtResource("1_dialog")
+
+[node name="Scrim" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.015, 0.01, 0.025, 0.82)
+
+[node name="SafeMargin" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="Center" type="CenterContainer" parent="SafeMargin"]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="SafeMargin/Center"]
+custom_minimum_size = Vector2(640, 0)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StylePanel")
+
+[node name="PanelMargin" type="MarginContainer" parent="SafeMargin/Center/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 14
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 14
+
+[node name="Content" type="VBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.77, 0.25, 1)
+theme_override_font_sizes/font_size = 34
+text = "PRESTIGE"
+horizontal_alignment = 1
+
+[node name="Explanation" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.92, 0.9, 0.85, 1)
+theme_override_font_sizes/font_size = 16
+text = "Trade this run for permanent Relic Currency and grow stronger every ascent."
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="Divider" type="HSeparator" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+layout_mode = 2
+
+[node name="PreviewColumns" type="HBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResetBlock" type="PanelContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleReset")
+
+[node name="Margin" type="MarginContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Column" type="VBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.62, 0.62, 1)
+theme_override_font_sizes/font_size = 19
+text = "WILL RESET"
+horizontal_alignment = 1
+
+[node name="ResetList" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/ResetBlock/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.87, 0.87, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Stage\n• Gold\n• Tap Level"
+autowrap_mode = 2
+
+[node name="KeepBlock" type="PanelContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleKeep")
+
+[node name="Margin" type="MarginContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Column" type="VBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.65, 1, 0.76, 1)
+theme_override_font_sizes/font_size = 19
+text = "WILL KEEP"
+horizontal_alignment = 1
+
+[node name="KeepList" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/KeepBlock/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.87, 1, 0.91, 1)
+theme_override_font_sizes/font_size = 14
+text = "• Relic Currency\n• Relics\n• Max Stage"
+autowrap_mode = 2
+
+[node name="RewardBlock" type="PanelContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("StyleReward")
+
+[node name="Margin" type="MarginContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock"]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="Column" type="VBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Heading" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.86, 0.48, 1)
+theme_override_font_sizes/font_size = 19
+text = "YOU RECEIVE"
+horizontal_alignment = 1
+
+[node name="RewardAmount" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.78, 0.2, 1)
+theme_override_font_sizes/font_size = 52
+text = "0"
+horizontal_alignment = 1
+
+[node name="CurrencyLabel" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content/PreviewColumns/RewardBlock/Margin/Column"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.92, 0.7, 1)
+theme_override_font_sizes/font_size = 17
+text = "RELIC CURRENCY"
+horizontal_alignment = 1
+autowrap_mode = 2
+
+[node name="RequirementMessage" type="Label" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.55, 0.45, 1)
+theme_override_font_sizes/font_size = 17
+text = "Reach a higher stage first"
+horizontal_alignment = 1
+
+[node name="Actions" type="HBoxContainer" parent="SafeMargin/Center/Panel/PanelMargin/Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="Cancel" type="Button" parent="SafeMargin/Center/Panel/PanelMargin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleCancel")
+text = "Cancel"
+
+[node name="ConfirmPrestige" type="Button" parent="SafeMargin/Center/Panel/PanelMargin/Content/Actions"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 19
+theme_override_styles/normal = SubResource("StyleConfirm")
+text = "Confirm Prestige"

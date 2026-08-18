@@ -37,6 +37,15 @@ func _ready() -> void:
 		if ab != null and ab.has_method("debug_fail_boss"):
 			ab.debug_fail_boss()
 		await get_tree().process_frame
+	if "--demo-prestige" in args:
+		var ap: Node = get_tree().get_first_node_in_group("combat_arena")
+		var ms: int = 200
+		for i in args.size():
+			if args[i] == "--demo-prestige" and i + 1 < args.size():
+				ms = int(args[i + 1])
+		if ap != null and ap.has_method("debug_open_prestige"):
+			ap.debug_open_prestige(ms)
+		await get_tree().process_frame
 	if "--demo-retry" in args:
 		var ar2: Node = get_tree().get_first_node_in_group("combat_arena")
 		if ar2 != null and ar2.has_method("debug_retry"):
