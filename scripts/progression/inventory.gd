@@ -6,12 +6,17 @@ const SLOTS: Array[String] = ["weapon", "head", "outfit", "aura", "companion_cha
 const STAT_NAMES: Array[String] = ["tap_damage_mult", "dps_mult", "gold_mult", "crit_chance_add"]
 const RARITY_SCORE: Dictionary = {"common": 0.0, "rare": 25.0, "epic": 60.0, "legendary": 120.0}
 const RARITY_SALVAGE: Dictionary = {"common": 0.4, "rare": 0.55, "epic": 0.75, "legendary": 1.0}
+const MAX_OWNED_ITEMS: int = 100
 
 var definitions: Dictionary = {}
 var owned_items: Dictionary = {}
 var equipped_slots: Dictionary = {}
+## Unknown or malformed ownership records are preserved verbatim. They are not
+## usable, but a later catalog/migration can recover them instead of a load
+## silently destroying player property.
+var quarantined: Array = []
+var capacity: int = MAX_OWNED_ITEMS
 var _next_uid: int = 1
-
 
 func _init(saved: Dictionary = {}) -> void:
 	_load_data()
@@ -24,27 +29,79 @@ func _init(saved: Dictionary = {}) -> void:
 ## before the first Prestige" an enforced invariant rather than an assumption.
 var max_stage_reached: int = 1
 
+func acquire(item_id: String, max_stage: int) -> String:
+	if not definitions.has(item_id):
+		push_warning("Inventory.acquire: unknown item id '%s'" % item_id)
+		return ""
+	if max_stage < unlock_stage_for(item_id):
+		push_warning("Inventory: '%s' is locked until stage %d (reached %d)" % [item_id, unlock_stage_for(item_id), max_stage])
+		return ""
+	if is_full():
+		return ""
+	return _insert_owned(item_id)
+
+func load_owned(item_id: String, uid: String = "", saved_flags: Dictionary = {}) -> String:
+	## Loading established ownership deliberately has no unlock-stage check.
+	if not definitions.has(item_id):
+		_quarantine(saved_flags if not saved_flags.is_empty() else {"uid": uid, "item_id": item_id})
+		push_warning("Inventory.load_owned: quarantined unknown item id '%s'" % item_id)
+		return ""
+	if not uid.is_empty() and owned_items.has(uid):
+		push_warning("Inventory.load_owned: rejecting duplicate uid '%s'" % uid)
+		return ""
+	return _insert_owned(item_id, uid, saved_flags)
+
+func migrate_owned(value: Variant) -> String:
+	## Legacy migrations receive the same leniency as load_owned().
+	if value is String:
+		return load_owned(value as String)
+	if not value is Dictionary:
+		_quarantine(value)
+		push_warning("Inventory.migrate_owned: quarantined malformed record")
+		return ""
+	var item: Dictionary = value as Dictionary
+	var item_id: String = str(item.get("item_id", item.get("id", "")))
+	if item_id.is_empty():
+		_quarantine(item)
+		push_warning("Inventory.migrate_owned: quarantined record without item id")
+		return ""
+	return load_owned(item_id, str(item.get("uid", "")), item)
+
+func debug_add(item_id: String) -> String:
+	if not OS.is_debug_build() or not _has_debug_grant_flag():
+		return ""
+	return load_owned(item_id)
 
 func add(item_id: String) -> String:
-	if not is_unlocked(item_id):
-		push_warning("Inventory: '%s' is locked until stage %d (reached %d)" % [item_id, unlock_stage_for(item_id), max_stage_reached])
-		return ""
-	if not definitions.has(item_id):
-		return ""
-	var uid: String = "owned_%d" % _next_uid
-	while owned_items.has(uid):
-		_next_uid += 1
+	## Compatibility for existing gameplay/UI callers. New acquisition code must
+	## pass its explicit progression boundary to acquire().
+	return acquire(item_id, max_stage_reached)
+
+func is_full() -> bool:
+	return owned_items.size() >= maxi(0, capacity)
+
+func owns_item(item_id: String) -> bool:
+	for owned_value: Variant in owned_items.values():
+		if str((owned_value as Dictionary).get("item_id", "")) == item_id:
+			return true
+	return false
+
+func _insert_owned(item_id: String, requested_uid: String = "", flags: Dictionary = {}) -> String:
+	var uid: String = requested_uid
+	if uid.is_empty():
 		uid = "owned_%d" % _next_uid
-	_next_uid += 1
+		while owned_items.has(uid):
+			_next_uid += 1
+			uid = "owned_%d" % _next_uid
+		_next_uid += 1
 	owned_items[uid] = {
 		"uid": uid,
 		"item_id": item_id,
-		"locked": false,
-		"favorite": false,
+		"locked": bool(flags.get("locked", false)),
+		"favorite": bool(flags.get("favorite", false)),
 		"equipped": false,
 	}
 	return uid
-
 
 func unlock_stage_for(item_id: String) -> int:
 	var def: Variant = definitions.get(item_id)
@@ -52,12 +109,10 @@ func unlock_stage_for(item_id: String) -> int:
 		return int((def as Dictionary).get("unlock_stage", 1))
 	return 1
 
-
 func is_unlocked(item_id: String) -> bool:
 	if not definitions.has(item_id):
 		return false
 	return max_stage_reached >= unlock_stage_for(item_id)
-
 
 func remove(uid: String) -> bool:
 	if not owned_items.has(uid):
@@ -70,7 +125,6 @@ func remove(uid: String) -> bool:
 			equipped_slots.erase(slot)
 	owned_items.erase(uid)
 	return true
-
 
 func equip(uid: String) -> bool:
 	if not owned_items.has(uid):
@@ -87,7 +141,6 @@ func equip(uid: String) -> bool:
 	owned["equipped"] = true
 	return true
 
-
 func unequip(slot: String) -> bool:
 	if slot not in SLOTS or not equipped_slots.has(slot):
 		return false
@@ -96,7 +149,6 @@ func unequip(slot: String) -> bool:
 		(owned_items[uid] as Dictionary)["equipped"] = false
 	equipped_slots.erase(slot)
 	return true
-
 
 func score(uid: String) -> float:
 	var definition: Dictionary = _definition_for_uid(uid)
@@ -109,7 +161,6 @@ func score(uid: String) -> float:
 	stat_score += float(stats["gold_mult"]) * 80.0
 	stat_score += float(stats["crit_chance_add"]) * 200.0
 	return float(definition["item_level"]) * 10.0 + float(RARITY_SCORE[definition["rarity"]]) + stat_score
-
 
 func compare(uid: String) -> Dictionary:
 	var definition: Dictionary = _definition_for_uid(uid)
@@ -133,13 +184,11 @@ func compare(uid: String) -> Dictionary:
 		"is_upgrade": equipped_uid.is_empty() or score_delta > 0.0,
 	}
 
-
 func auto_equip(uid: String) -> bool:
 	var comparison: Dictionary = compare(uid)
 	if comparison.is_empty() or not bool(comparison["is_upgrade"]):
 		return false
 	return equip(uid)
-
 
 func set_locked(uid: String, value: bool) -> bool:
 	if not owned_items.has(uid):
@@ -147,25 +196,20 @@ func set_locked(uid: String, value: bool) -> bool:
 	(owned_items[uid] as Dictionary)["locked"] = value
 	return true
 
-
 func set_favorite(uid: String, value: bool) -> bool:
 	if not owned_items.has(uid):
 		return false
 	(owned_items[uid] as Dictionary)["favorite"] = value
 	return true
 
-
 func is_locked(uid: String) -> bool:
 	return owned_items.has(uid) and bool((owned_items[uid] as Dictionary).get("locked", false))
-
 
 func is_favorite(uid: String) -> bool:
 	return owned_items.has(uid) and bool((owned_items[uid] as Dictionary).get("favorite", false))
 
-
 func is_equipped(uid: String) -> bool:
 	return owned_items.has(uid) and bool((owned_items[uid] as Dictionary).get("equipped", false))
-
 
 func total_stat(name: String) -> float:
 	if name not in STAT_NAMES:
@@ -177,7 +221,6 @@ func total_stat(name: String) -> float:
 			total += float((definition["stats"] as Dictionary)[name])
 	return total
 
-
 func salvage(uid: String, confirmed_rarity: bool = false, confirmed_favorite: bool = false) -> Dictionary:
 	var refusal: Dictionary = _salvage_refusal(uid, confirmed_rarity, confirmed_favorite)
 	if not refusal.is_empty():
@@ -187,7 +230,6 @@ func salvage(uid: String, confirmed_rarity: bool = false, confirmed_favorite: bo
 	# No mutation occurs before every guard and the award have been calculated.
 	owned_items.erase(uid)
 	return {"ok": true, "reason": "", "gold_awarded": gold_awarded, "needs": []}
-
 
 func salvage_refusal_preview(uid: String) -> Dictionary:
 	## Pure preview used by every caller that needs to explain salvage safety.
@@ -209,7 +251,6 @@ func salvage_refusal_preview(uid: String) -> Dictionary:
 		needs.append("favorite")
 	return {"ok": true, "reason": "", "needs": needs}
 
-
 func salvage_batch(uids: Array, confirmed_rarity: bool, confirmed_favorite: bool) -> Dictionary:
 	var results: Dictionary = {}
 	var total: float = 0.0
@@ -221,34 +262,56 @@ func salvage_batch(uids: Array, confirmed_rarity: bool, confirmed_favorite: bool
 			total += float(result["gold_awarded"])
 	return {"results": results, "total": total, "gold_awarded": total}
 
-
 func to_dict() -> Dictionary:
 	var serialized_items: Array = []
+	var owned_by_uid: Dictionary = {}
 	for uid_value: Variant in owned_items:
-		serialized_items.append((owned_items[uid_value] as Dictionary).duplicate(true))
+		var serialized: Dictionary = (owned_items[uid_value] as Dictionary).duplicate(true)
+		serialized_items.append(serialized)
+		owned_by_uid[str(uid_value)] = serialized.duplicate(true)
 	return {
 		"owned_items": serialized_items,
+		# Compatibility view for v1/v2 migrations and older callers. from_dict()
+		# reads owned_items first, so this does not duplicate ownership on reload.
+		"owned": owned_by_uid,
 		"equipped_slots": equipped_slots.duplicate(true),
 		"next_uid": _next_uid,
+		"quarantined": quarantined.duplicate(true),
 	}
-
 
 func from_dict(saved: Dictionary) -> void:
 	owned_items.clear()
 	equipped_slots.clear()
+	quarantined.clear()
 	_next_uid = maxi(1, int(saved.get("next_uid", 1)))
+	var saved_quarantine: Variant = saved.get("quarantined", [])
+	if saved_quarantine is Array:
+		quarantined = (saved_quarantine as Array).duplicate(true)
 	var serialized: Variant = saved.get("owned_items", saved.get("owned", []))
 	if serialized is Dictionary:
-		serialized = (serialized as Dictionary).values()
+		var migrated_records: Array = []
+		for legacy_uid: Variant in serialized:
+			var legacy_value: Variant = (serialized as Dictionary)[legacy_uid]
+			if legacy_value is Dictionary:
+				var record: Dictionary = (legacy_value as Dictionary).duplicate(true)
+				record["uid"] = str(record.get("uid", legacy_uid))
+				migrated_records.append(record)
+			else:
+				migrated_records.append(legacy_value)
+		serialized = migrated_records
 	if not serialized is Array:
-		push_warning("Inventory: dropping malformed owned-items save data")
+		_quarantine(serialized)
+		push_warning("Inventory: quarantined malformed owned-items save data")
 		return
+	var legacy_equipped_uids: Array[String] = []
 	for value: Variant in serialized as Array:
-		_load_owned_item(value)
-	var saved_slots: Variant = saved.get("equipped_slots", {})
+		var loaded_uid: String = migrate_owned(value)
+		if value is Dictionary and bool((value as Dictionary).get("equipped", false)) and not loaded_uid.is_empty():
+			legacy_equipped_uids.append(loaded_uid)
+	var saved_slots: Variant = saved.get("equipped_slots", saved.get("equipped", {}))
 	if not saved_slots is Dictionary:
-		push_warning("Inventory: dropping malformed equipped-slots save data")
-		return
+		push_warning("Inventory: ignoring malformed equipped-slots save data")
+		saved_slots = {}
 	for slot_value: Variant in saved_slots:
 		var slot: String = str(slot_value)
 		var uid: String = str((saved_slots as Dictionary)[slot_value])
@@ -256,9 +319,13 @@ func from_dict(saved: Dictionary) -> void:
 			var definition: Dictionary = _definition_for_uid(uid)
 			if str(definition.get("slot", "")) == slot:
 				equipped_slots[slot] = uid
+	for uid: String in legacy_equipped_uids:
+		var definition: Dictionary = _definition_for_uid(uid)
+		var slot: String = str(definition.get("slot", ""))
+		if slot in SLOTS and not equipped_slots.has(slot):
+			equipped_slots[slot] = uid
 	for uid_value: Variant in owned_items:
 		(owned_items[uid_value] as Dictionary)["equipped"] = equipped_slots.values().has(str(uid_value))
-
 
 func _salvage_refusal(uid: String, confirmed_rarity: bool, confirmed_favorite: bool) -> Dictionary:
 	var preview: Dictionary = salvage_refusal_preview(uid)
@@ -271,34 +338,18 @@ func _salvage_refusal(uid: String, confirmed_rarity: bool, confirmed_favorite: b
 		return {"ok": false, "reason": "needs_confirmation", "gold_awarded": 0.0, "needs": ["favorite"]}
 	return {}
 
-
 func _definition_for_uid(uid: String) -> Dictionary:
 	if not owned_items.has(uid):
 		return {}
 	return definitions.get(str((owned_items[uid] as Dictionary).get("item_id", "")), {})
 
+func _quarantine(value: Variant) -> void:
+	quarantined.append(value.duplicate(true) if value is Dictionary or value is Array else value)
 
-func _load_owned_item(value: Variant) -> void:
-	if not value is Dictionary:
-		push_warning("Inventory: dropping malformed owned item")
-		return
-	var item: Dictionary = value as Dictionary
-	var uid: String = str(item.get("uid", ""))
-	var item_id: String = str(item.get("item_id", ""))
-	if uid.is_empty() or not definitions.has(item_id):
-		push_warning("Inventory: dropping owned item with unknown or malformed id '%s'" % item_id)
-		return
-	if owned_items.has(uid):
-		push_warning("Inventory: rejecting duplicate uid '%s'" % uid)
-		return
-	owned_items[uid] = {
-		"uid": uid,
-		"item_id": item_id,
-		"locked": bool(item.get("locked", false)),
-		"favorite": bool(item.get("favorite", false)),
-		"equipped": false,
-	}
-
+func _has_debug_grant_flag() -> bool:
+	var args: PackedStringArray = OS.get_cmdline_args()
+	args.append_array(OS.get_cmdline_user_args())
+	return args.has("--debug-grant")
 
 func _load_data() -> void:
 	var file: FileAccess = FileAccess.open(DATA_PATH, FileAccess.READ)
@@ -318,7 +369,6 @@ func _load_data() -> void:
 				push_error("Inventory: duplicate equipment id '%s'" % id)
 			else:
 				definitions[id] = definition
-
 
 func _valid_definition(value: Variant) -> bool:
 	if not value is Dictionary:

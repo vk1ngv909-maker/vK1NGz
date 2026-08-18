@@ -9,6 +9,7 @@ const RESET_FIELDS: Array[String] = [
 const KEEP_FIELDS: Array[String] = [
 	"max_stage", "prestige_currency", "relic_levels", "equipment", "achievements",
 	"settings", "statistics", "last_seen_utc", "offline_claimed_utc", "tutorial",
+	"boss_first_clears",
 ]
 
 var save_manager: Node

@@ -3,6 +3,7 @@ extends Control
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const CombatState = preload("res://scripts/combat/combat_state.gd")
 const Relics = preload("res://scripts/progression/relics.gd")
+const RewardSystem = preload("res://scripts/progression/reward_system.gd")
 
 @onready var hero: ColorRect = %Hero
 @onready var falcon: ColorRect = %Falcon
@@ -18,6 +19,7 @@ const Relics = preload("res://scripts/progression/relics.gd")
 @onready var damage_pool: DamageNumberPool = %DamageNumberPool
 
 var combat: CombatState
+var reward_system: RewardSystem = RewardSystem.new(0x5EED)
 var _falcon_tween: Tween
 var _enemy_tween: Tween
 var _flash_tween: Tween
@@ -247,7 +249,17 @@ func _react_to_attack(result: Dictionary) -> void:
 	if result.get("killed", false):
 		_death_in_progress = true
 		if result.get("stage_advanced", false):
-			_save_combat()
+			var boss_stage: int = int(result.get("boss_stage", 0))
+			if boss_stage > 0:
+				var reward: Dictionary = _commit_boss_first_clear(boss_stage)
+				if not bool(reward.get("granted", false)) and str(reward.get("reason", "")) != "already_cleared":
+					# Saving is part of the boss-death transaction. Put the run back
+					# on the boss so a later unrelated save cannot persist a half-clear.
+					combat.stage = boss_stage
+					combat.gold = combat.gold.sub(result["gold_awarded"] as BigNumber)
+					result["stage_advanced"] = false
+			else:
+				_save_combat()
 		_play_death_reaction()
 
 
@@ -346,7 +358,7 @@ func _load_combat() -> void:
 	combat.awaiting_retry = bool(run_state.get("awaiting_retry", false))
 
 
-func _save_combat() -> void:
+func _save_combat() -> bool:
 	var save_data: Dictionary = SaveManager.data.duplicate(true)
 	if save_data.is_empty():
 		save_data = SaveManager.default_data()
@@ -359,8 +371,24 @@ func _save_combat() -> void:
 	run_state["awaiting_retry"] = combat.awaiting_retry
 	permanent_state["max_stage"] = maxi(int(permanent_state.get("max_stage", 1)), combat.stage)
 	permanent_state["equipment"] = combat.inventory.to_dict()
+	permanent_state["boss_first_clears"] = combat.boss_first_clears.duplicate(true)
 	permanent_state["last_seen_utc"] = int(Time.get_unix_time_from_system())
-	SaveManager.save(save_data)
+	return SaveManager.save(save_data)
+
+
+func _commit_boss_first_clear(boss_stage: int) -> Dictionary:
+	var transaction: Dictionary = combat.begin_boss_first_clear(boss_stage, reward_system)
+	var reason: String = str(transaction.get("reason", "invalid"))
+	if not bool(transaction.get("granted", false)):
+		# A durable prior clear is safe to save normally; all other failures leave
+		# the clear and inventory untouched so retry/reload cannot half-commit it.
+		if reason == "already_cleared":
+			_save_combat()
+		return transaction
+	if not _save_combat():
+		combat.rollback_boss_first_clear(transaction)
+		return {"granted": false, "item_id": "", "rarity": "", "reason": "save_failed"}
+	return transaction
 
 
 func _refresh_hud() -> void:

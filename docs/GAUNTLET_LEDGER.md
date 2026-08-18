@@ -183,11 +183,34 @@ upgrades. Only elapsed time differs, which is exactly what relics should change.
 Independent adversarial totals this gate: inventory 23, offline 13.
 Full suite: 16 suites, `ALL SUITES PASSED`, plus a new parse guard.
 
+## Gate 5 — content expansion (in progress)
+
+### Group 1 — acquisition + inventory safety (DONE)
+
+| Requirement | Status | Evidence |
+| --- | --- | --- |
+| Deterministic seeded reward generator | DONE | same seed -> same item, verified across seeds |
+| Rewards never exceed unlock_stage | DONE | 4 stages x 40 seeds, zero violations |
+| Legendary never granted below stage 50 | DONE | 200 seeds, zero occurrences |
+| Boss first-clear grants exactly once | DONE | 25 farming repeats grant nothing |
+| Reload cannot repeat a first clear | DONE | saved first-clear map refuses on reconstruct |
+| Rollback leaves no partial state | DONE | item removed, stage retryable |
+| Loading must not delete owned gear | DONE | a legendary item survives a load at max_stage 1, while *acquiring* one is still refused |
+| Unknown ids quarantined, not deleted | DONE | documented policy, preserved in save |
+| Invalid reward table refuses safely | DONE | reason "invalid" |
+
+Four separate doors now exist where one used to: `acquire()` enforces the gate,
+`load_owned()` and `migrate_owned()` never delete gear for being "too rare", and
+`debug_add()` is isolated. `from_dict()` uses the lenient path — that separation
+is what stops a balance-data change from confiscating a player's equipment.
+
+Independent adversarial totals this group: rewards 9, first-clear 9.
+
 ## Next highest-priority action
 
-**Gate 5 — content expansion.** Only now permitted: 8 support heroes, 6 skills,
-15 relics, 12 enemies, 4 bosses, 3 worlds, 20 equipment items, 100 stages.
-Fix C30 (Arabic gold-label clipping at 1080x2400) first.
+Gate 5 group 2: content schemas and validators, then three worlds and the
+stage-to-world progression, then enemies, bosses, heroes, skills, relics and the
+full 20-item equipment set — each connected to live gameplay and evidenced.
 
 ## Placeholders
 

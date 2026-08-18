@@ -1,0 +1,24 @@
+[
+	{
+		"id": "boss_first_clear_default",
+		"source": "boss_first_clear",
+		"boss_id": "any",
+		"eligible_rarities": ["common", "rare", "epic", "legendary"],
+		"slot_weights": {
+			"weapon": 20,
+			"head": 20,
+			"outfit": 20,
+			"aura": 20,
+			"companion_charm": 20
+		},
+		"drop_weights": {
+			"common": 60,
+			"rare": 27,
+			"epic": 10,
+			"legendary": 3
+		},
+		"min_unlock_stage": 1,
+		"duplicate_policy": "reroll",
+		"pity": 10
+	}
+]

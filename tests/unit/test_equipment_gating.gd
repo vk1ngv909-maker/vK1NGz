@@ -58,15 +58,15 @@ func _init() -> void:
 	inv.max_stage_reached = 50
 	ck("allowed once the unlock stage is reached", inv.add(legendary_id) != "")
 
-	# --- a corrupt save cannot smuggle one in ---
+	# --- save loading preserves established ownership across balance/reset gates ---
 	var inv2 = INV.new()
 	inv2.max_stage_reached = 1
 	inv2.from_dict({"owned": {"hacked": {"item_id": legendary_id, "locked": false, "favorite": false}}, "equipped": {}})
 	var owned_ids: Array = []
 	for uid: Variant in inv2.to_dict().get("owned", {}):
 		owned_ids.append(str((inv2.to_dict()["owned"][uid] as Dictionary).get("item_id", "")))
-	ck("locked-rarity item from a save is not usable by a fresh player",
-		not owned_ids.has(legendary_id) or inv2.max_stage_reached >= 50,
+	ck("already-owned locked-rarity item survives a load for a fresh run",
+		owned_ids.has(legendary_id),
 		"owned=%s" % str(owned_ids))
 
 	print("EQUIPMENT GATING: FAIL %d" % failed if failed > 0 else "EQUIPMENT GATING: all passed")

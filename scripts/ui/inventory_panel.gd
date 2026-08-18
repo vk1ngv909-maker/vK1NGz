@@ -80,6 +80,8 @@ func debug_open_empty() -> void:
 
 
 func debug_open_populated(select_compare: bool = false) -> void:
+	if not _debug_grants_enabled():
+		return
 	_debug_fixture = true
 	inventory = _make_debug_inventory()
 	_selected_uid = ""
@@ -92,6 +94,8 @@ func debug_open_populated(select_compare: bool = false) -> void:
 
 
 func debug_open_salvage_confirmation() -> void:
+	if not _debug_grants_enabled():
+		return
 	debug_open_populated(false)
 	inventory.set_favorite("owned_2", true)
 	_refresh()
@@ -100,10 +104,12 @@ func debug_open_salvage_confirmation() -> void:
 
 
 func debug_open_salvage_state(kind: String) -> void:
+	if not _debug_grants_enabled():
+		return
 	_debug_fixture = true
 	inventory = InventoryLogic.new()
 	var item_id: String = "sunsteel_sabre" if kind == "rare" else "dune_knife"
-	var uid: String = inventory.add(item_id)
+	var uid: String = inventory.debug_add(item_id)
 	if kind == "equipped":
 		inventory.equip(uid)
 	elif kind == "locked":
@@ -148,11 +154,19 @@ func refresh_localized_text() -> void:
 func _make_debug_inventory() -> Inventory:
 	var result: Inventory = InventoryLogic.new()
 	for item_id: String in DEBUG_ITEMS:
-		result.add(item_id)
+		result.debug_add(item_id)
 	result.equip("owned_2")
 	result.set_locked("owned_4", true)
 	result.set_favorite("owned_5", true)
 	return result
+
+
+func _debug_grants_enabled() -> bool:
+	if not OS.is_debug_build():
+		return false
+	var args: PackedStringArray = OS.get_cmdline_args()
+	args.append_array(OS.get_cmdline_user_args())
+	return args.has("--debug-grant")
 
 
 func _refresh() -> void:

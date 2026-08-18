@@ -14,6 +14,7 @@ const RUN_STATE_KEYS: Array[String] = [
 const PERMANENT_STATE_KEYS: Array[String] = [
 	"max_stage", "prestige_currency", "relic_levels", "equipment", "achievements",
 	"settings", "statistics", "last_seen_utc", "offline_claimed_utc", "tutorial",
+	"boss_first_clears",
 ]
 
 var last_load_source: String = "default"
@@ -119,6 +120,7 @@ static func default_permanent_state() -> Dictionary:
 		"prestige_currency": 0,
 		"relic_levels": {},
 		"equipment": {"owned_items": [], "equipped_slots": {}, "next_uid": 1},
+		"boss_first_clears": {},
 		"achievements": [],
 		"settings": {
 			"master_volume": 1.0,

@@ -4,6 +4,7 @@ extends RefCounted
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const SupportHeroes = preload("res://scripts/progression/support_heroes.gd")
 const Inventory = preload("res://scripts/progression/inventory.gd")
+const RewardSystem = preload("res://scripts/progression/reward_system.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
@@ -39,6 +40,8 @@ var support_heroes: SupportHeroes
 var support_total_dps: BigNumber = BigNumber.new()
 var falcon_dps: BigNumber = BigNumber.new()
 var inventory: Inventory
+var boss_first_clears: Dictionary = {}
+var max_stage_reached: int = 1
 
 var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
@@ -59,9 +62,12 @@ func _init(
 	support_heroes = SupportHeroes.new()
 	set_support_hero_levels(run_state.get("support_hero_levels", {}))
 	inventory = Inventory.new()
+	max_stage_reached = maxi(stage, int(permanent_state.get("max_stage", stage)))
+	inventory.max_stage_reached = max_stage_reached
 	var saved_equipment: Variant = permanent_state.get("equipment", {})
 	if saved_equipment is Dictionary:
 		inventory.from_dict(saved_equipment as Dictionary)
+	_load_boss_first_clears(permanent_state.get("boss_first_clears", {}))
 	_rng.randomize()
 	spawn_enemy()
 
@@ -158,6 +164,58 @@ static func _diminished(raw: float) -> float:
 
 func set_inventory(value: Inventory) -> void:
 	inventory = value if value != null else Inventory.new()
+	inventory.max_stage_reached = max_stage_reached
+
+
+func begin_boss_first_clear(boss_stage: int, rewards: RewardSystem) -> Dictionary:
+	## This is the reversible in-memory half of the transaction. The arena only
+	## finalizes it by saving; a failed save calls rollback_boss_first_clear().
+	if boss_stage < 1 or rewards == null:
+		return {"granted": false, "reason": "invalid"}
+	var stage_key: String = str(boss_stage)
+	if bool(boss_first_clears.get(stage_key, false)):
+		return {"granted": false, "reason": "already_cleared"}
+	var table_id: String = rewards.table_id_for_boss(boss_stage)
+	if table_id.is_empty():
+		push_error("CombatState: no first-clear reward table for boss %d" % boss_stage)
+		return {"granted": false, "reason": "invalid"}
+	var reward: Dictionary = rewards.roll(table_id, maxi(max_stage_reached, boss_stage), inventory)
+	if not bool(reward.get("granted", false)):
+		return reward
+	var uid: String = inventory.acquire(str(reward["item_id"]), maxi(max_stage_reached, boss_stage))
+	if uid.is_empty():
+		return {"granted": false, "item_id": "", "rarity": "", "reason": "inventory_full" if inventory.is_full() else "invalid"}
+	boss_first_clears[stage_key] = true
+	reward["previous_max_stage"] = max_stage_reached
+	max_stage_reached = maxi(max_stage_reached, boss_stage + 1)
+	inventory.max_stage_reached = max_stage_reached
+	reward["uid"] = uid
+	reward["boss_stage"] = boss_stage
+	return reward
+
+
+func rollback_boss_first_clear(transaction: Dictionary) -> void:
+	if not bool(transaction.get("granted", false)):
+		return
+	var uid: String = str(transaction.get("uid", ""))
+	var boss_stage: int = int(transaction.get("boss_stage", 0))
+	if not uid.is_empty():
+		inventory.remove(uid)
+	if boss_stage > 0:
+		boss_first_clears.erase(str(boss_stage))
+	max_stage_reached = int(transaction.get("previous_max_stage", max_stage_reached))
+	inventory.max_stage_reached = max_stage_reached
+
+
+func _load_boss_first_clears(value: Variant) -> void:
+	boss_first_clears.clear()
+	if not value is Dictionary:
+		push_warning("CombatState: ignoring malformed boss_first_clears")
+		return
+	for stage_value: Variant in value:
+		var boss_stage: int = int(stage_value)
+		if boss_stage > 0 and bool((value as Dictionary)[stage_value]):
+			boss_first_clears[str(boss_stage)] = true
 
 
 func set_support_hero_levels(saved_levels: Variant) -> void:
@@ -195,6 +253,8 @@ func _cannot_attack() -> bool:
 
 
 func _apply_damage(damage: BigNumber, kind: String) -> Dictionary:
+	var defeated_stage: int = stage
+	var defeated_boss: bool = is_boss
 	var hp_before: BigNumber = enemy_hp
 	enemy_hp = enemy_hp.sub(damage)
 	var killed: bool = hp_before.mantissa > 0.0 and enemy_hp.mantissa == 0.0
@@ -211,4 +271,5 @@ func _apply_damage(damage: BigNumber, kind: String) -> Dictionary:
 		"killed": killed,
 		"gold_awarded": gold_awarded,
 		"stage_advanced": stage_advanced,
+		"boss_stage": defeated_stage if killed and defeated_boss else 0,
 	}

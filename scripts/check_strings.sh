@@ -6,7 +6,7 @@ fail=0
 while IFS= read -r finding; do
   literal=${finding#*:*:}
   case "$literal" in
-    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'screenshot failed'*|*'SHOT_SAVED'*)
+    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'screenshot failed'*|*'SHOT_SAVED'*)
       continue
       ;;
   esac
