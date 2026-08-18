@@ -137,12 +137,33 @@ No NaN, INF or negative gold in any run (`gold_ok=true` throughout).
 
 **C17 CLOSED.** Every individual acceptance target passes.
 
-### Documented residual
+### The legendary + offline combination — claim retracted, then made true
 
-A player holding a FULL legendary set *and* claiming 8h offline reaches first
-Prestige in ~20.4 min. This combination is not reachable on a first run —
-legendary gear drops from deep boss first-clears, long after the first Prestige
-— so it is recorded rather than tuned for.
+An earlier note claimed the ~20.4 min "full legendary set + 8h offline" case was
+unreachable because "legendary gear drops from deep boss first-clears". **That
+was wrong.** Inspection found there was no drop system at all, and
+`equipment.json` had no unlock field: nothing prevented a fresh player from
+holding legendary gear. The invariant was asserted, not implemented.
+
+It is now enforced and tested. Every item declares `unlock_stage`, gated by
+rarity:
+
+| rarity | unlock_stage |
+| --- | --- |
+| common | 1 |
+| rare | 10 |
+| epic | 25 |
+| legendary | **50** |
+
+`Inventory.add()` refuses any item whose `unlock_stage` exceeds the player's
+`max_stage_reached`, so legendary equipment cannot exist before stage 50 — well
+past the first Prestige at stage 25. `tests/unit/test_equipment_gating.gd`
+proves it: a fresh player is refused, is still refused at stage 25, and is only
+allowed at stage 50. It also checks that unlock stages never decrease as rarity
+rises, so future content cannot reopen the hole.
+
+With the gate in place the 20.4 min combination is mechanically unreachable
+before the first Prestige, and C17's targets stand.
 
 ### Still open
 

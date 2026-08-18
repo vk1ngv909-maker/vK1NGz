@@ -26,6 +26,7 @@ func _init() -> void:
 
 func _check_combination(equipped: bool, locked: bool, favorite: bool, rarity: String) -> void:
 	var inventory: Inventory = InventoryLogic.new()
+	inventory.max_stage_reached = 999
 	var uid: String = inventory.add(str(ITEMS_BY_RARITY[rarity]))
 	if equipped:
 		inventory.equip(uid)

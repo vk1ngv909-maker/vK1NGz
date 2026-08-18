@@ -130,7 +130,11 @@ func refresh_localized_text() -> void:
 	%Relics.text = Settings.t("hud.relics")
 	%Shop.text = Settings.t("hud.shop")
 	%HeroDPS.text = Settings.t("hud.hero_dps_placeholder")
-	%GoldPlaceholder.text = Settings.t("hud.gold_placeholder")
+	# The gold icon is placeholder ART, not placeholder TEXT. Rendering a
+	# localized sentence inside a 72px swatch clipped it — and under RTL the clip
+	# falls on the left, which produced the confusing "الذهب — ACEHOLDER".
+	# Placeholder status is recorded in docs/ASSET_MANIFEST.md instead.
+	%GoldPlaceholder.text = ""
 	%BackgroundLabel.text = Settings.t("hud.desert_placeholder")
 	%BalanceDataInvalid.visible = OS.is_debug_build() and BalanceData.balance_data_invalid
 	%BalanceDataInvalid.text = Settings.t("debug.balance_data_invalid")

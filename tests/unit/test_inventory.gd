@@ -31,6 +31,7 @@ func _check(condition: bool, message: String) -> void:
 
 func _test_catalog_and_owned_uids() -> void:
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	_check(inventory.definitions.size() == 20, "catalog loads twenty equipment definitions")
 	var first: String = inventory.add("dune_knife")
 	var second: String = inventory.add("dune_knife")
@@ -41,6 +42,7 @@ func _test_catalog_and_owned_uids() -> void:
 
 func _test_equip_compare_and_stats() -> void:
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	var common: String = inventory.add("dune_knife")
 	var legendary: String = inventory.add("blade_of_high_noon")
 	var head: String = inventory.add("wanderer_wrap")
@@ -59,6 +61,7 @@ func _test_equip_compare_and_stats() -> void:
 
 func _test_safe_salvage_order_and_once() -> void:
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	var common: String = inventory.add("dune_knife")
 	var rare: String = inventory.add("sunsteel_sabre")
 	_check(inventory.salvage("missing")["reason"] == "unknown", "salvage checks unknown uid first")
@@ -83,6 +86,7 @@ func _test_safe_salvage_order_and_once() -> void:
 
 func _test_batch_salvage() -> void:
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	var safe: String = inventory.add("dune_knife")
 	var locked: String = inventory.add("traveler_robes")
 	var rare: String = inventory.add("scarab_circlet")
@@ -97,6 +101,7 @@ func _test_batch_salvage() -> void:
 
 func _test_persistence_and_bad_data() -> void:
 	var original: Inventory = Inventory.new()
+	original.max_stage_reached = 999
 	var weapon: String = original.add("ifrit_fang")
 	var charm: String = original.add("falcon_bell")
 	original.set_locked(weapon, true)
@@ -118,6 +123,7 @@ func _test_persistence_and_bad_data() -> void:
 func _test_save_manager_and_prestige_shape() -> void:
 	var manager: Node = SaveManagerScript.new()
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	var uid: String = inventory.add("crown_of_stars")
 	inventory.set_favorite(uid, true)
 	var state: Dictionary = manager.default_data()
@@ -132,6 +138,7 @@ func _test_save_manager_and_prestige_shape() -> void:
 
 func _test_combat_integration() -> void:
 	var inventory: Inventory = Inventory.new()
+	inventory.max_stage_reached = 999
 	var weapon: String = inventory.add("dune_knife")
 	var charm: String = inventory.add("falcon_bell")
 	inventory.equip(weapon)

@@ -1,5 +1,15 @@
 # Changelog
 
+## Gate 4 corrective checkpoint (2026-08-18)
+
+- C30 root-caused: a localized "PLACEHOLDER" sentence rendered inside a 72px
+  icon swatch, clipped from the left under RTL. The swatch renders no text now,
+  the key is gone from both CSVs, and `test_hud_layout.gd` guards the top HUD
+  against any label overflowing for any BigNumber magnitude.
+- C31: equipment `unlock_stage` gating added and enforced. Legendary gear is
+  locked until stage 50, so it cannot exist before the first Prestige at 25 —
+  previously this was only assumed, with no mechanism behind it.
+
 ## Gate 4 close (2026-08-18)
 
 - Equipment diminishing returns (k=2.5) and the brief's offline formula, both

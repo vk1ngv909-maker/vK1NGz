@@ -196,6 +196,12 @@ func _open_debug_panels_from_command_line() -> void:
 		if args[index] == "--debug-flash-reduced":
 			debug_flash(true)
 			return
+		if args[index] == "--debug-no-tutorial":
+			var overlay: Node = get_tree().get_first_node_in_group("tutorial_overlay")
+			if overlay == null:
+				overlay = get_tree().current_scene.find_child("TutorialOverlay", true, false)
+			if overlay is CanvasItem:
+				(overlay as CanvasItem).hide()
 		if args[index] == "--debug-tutorial" and index + 1 < args.size():
 			var tutorial: Node = get_tree().get_first_node_in_group("tutorial")
 			if tutorial != null:

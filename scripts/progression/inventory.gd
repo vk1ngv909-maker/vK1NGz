@@ -19,7 +19,16 @@ func _init(saved: Dictionary = {}) -> void:
 		from_dict(saved)
 
 
+## Highest stage the player has reached. Equipment cannot enter the inventory
+## before its rarity's unlock_stage, which is what makes "no legendary gear
+## before the first Prestige" an enforced invariant rather than an assumption.
+var max_stage_reached: int = 1
+
+
 func add(item_id: String) -> String:
+	if not is_unlocked(item_id):
+		push_warning("Inventory: '%s' is locked until stage %d (reached %d)" % [item_id, unlock_stage_for(item_id), max_stage_reached])
+		return ""
 	if not definitions.has(item_id):
 		return ""
 	var uid: String = "owned_%d" % _next_uid
@@ -35,6 +44,19 @@ func add(item_id: String) -> String:
 		"equipped": false,
 	}
 	return uid
+
+
+func unlock_stage_for(item_id: String) -> int:
+	var def: Variant = definitions.get(item_id)
+	if def is Dictionary:
+		return int((def as Dictionary).get("unlock_stage", 1))
+	return 1
+
+
+func is_unlocked(item_id: String) -> bool:
+	if not definitions.has(item_id):
+		return false
+	return max_stage_reached >= unlock_stage_for(item_id)
 
 
 func remove(uid: String) -> bool:

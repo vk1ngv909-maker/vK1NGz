@@ -28,6 +28,7 @@ func _init() -> void:
 
 	# ---------- salvage exactly once ----------
 	var inv = INV.new()
+	inv.max_stage_reached = 999
 	var uid: String = inv.add(common_id)
 	var r1: Dictionary = inv.salvage(uid)
 	ck("common salvage succeeds without confirmation", r1.get("ok", false), str(r1))
@@ -39,6 +40,7 @@ func _init() -> void:
 
 	# ---------- rapid tapping cannot double-salvage ----------
 	var inv2 = INV.new()
+	inv2.max_stage_reached = 999
 	var uid2: String = inv2.add(common_id)
 	var successes: int = 0
 	var total_gold: float = 0.0
@@ -52,6 +54,7 @@ func _init() -> void:
 
 	# ---------- locked items are protected ----------
 	var inv3 = INV.new()
+	inv3.max_stage_reached = 999
 	var uid3: String = inv3.add(common_id)
 	inv3.set_locked(uid3, true)
 	var rl: Dictionary = inv3.salvage(uid3)
@@ -61,6 +64,7 @@ func _init() -> void:
 
 	# ---------- equipped items are protected ----------
 	var inv4 = INV.new()
+	inv4.max_stage_reached = 999
 	var uid4: String = inv4.add(common_id)
 	inv4.equip(uid4)
 	var re: Dictionary = inv4.salvage(uid4)
@@ -69,6 +73,7 @@ func _init() -> void:
 	# ---------- rare+ needs confirmation ----------
 	if rare_id != "":
 		var inv5 = INV.new()
+		inv5.max_stage_reached = 999
 		var uid5: String = inv5.add(rare_id)
 		var rr: Dictionary = inv5.salvage(uid5)
 		ck("rare+ refused without confirmation",
@@ -77,6 +82,7 @@ func _init() -> void:
 
 	# ---------- favorite needs its own confirmation ----------
 	var inv6 = INV.new()
+	inv6.max_stage_reached = 999
 	var uid6: String = inv6.add(common_id)
 	inv6.set_favorite(uid6, true)
 	var rf: Dictionary = inv6.salvage(uid6)
@@ -86,6 +92,7 @@ func _init() -> void:
 
 	# ---------- wrong slot cannot be equipped ----------
 	var inv7 = INV.new()
+	inv7.max_stage_reached = 999
 	var weapon_uid: String = ""
 	var head_uid: String = ""
 	for it: Variant in items:
@@ -99,6 +106,7 @@ func _init() -> void:
 
 	# ---------- malformed / unknown data is rejected safely ----------
 	var inv8 = INV.new()
+	inv8.max_stage_reached = 999
 	ck("unknown item id rejected", inv8.add("no_such_item_zzz") == "")
 	ck("salvaging unknown uid is safe", not inv8.salvage("not_a_uid").get("ok", true))
 	inv8.from_dict({"owned": "not_a_dictionary", "equipped": 12345})
@@ -106,10 +114,12 @@ func _init() -> void:
 
 	# ---------- persistence round trip ----------
 	var inv9 = INV.new()
+	inv9.max_stage_reached = 999
 	var a: String = inv9.add(common_id)
 	inv9.set_locked(a, true); inv9.set_favorite(a, true); inv9.equip(a)
 	var snap: Dictionary = inv9.to_dict()
 	var inv10 = INV.new()
+	inv10.max_stage_reached = 999
 	inv10.from_dict(snap)
 	ck("locked survived round trip", inv10.is_locked(a), str(inv10.is_locked(a)))
 	ck("favorite survived round trip", inv10.is_favorite(a))
