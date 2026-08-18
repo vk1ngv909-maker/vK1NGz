@@ -189,6 +189,53 @@ hero.mirage_weaver,Mirage Weaver
 hero.djinn_binder,Djinn Binder
 hero.sun_priestess,Sun Priestess
 hero.star_vizier,Star Vizier
+hero.dune_scout.desc,A keen-eyed scout whose signals strengthen every ally.
+hero.oasis_guard.desc,A steadfast blade who turns close combat into stronger taps.
+hero.sun_priestess.desc,A radiant guide who improves gold and lasting skill power.
+hero.falconer.desc,A precision hunter who raises the company critical chance.
+hero.scarab_knight.desc,A heavy striker who reinforces direct attacks.
+hero.mirage_weaver.desc,A spellcaster whose mirages amplify the whole roster.
+hero.djinn_binder.desc,A master of magic who empowers allies and shortens recovery.
+hero.star_vizier.desc,A celestial adviser who bends skill time and fortune.
+skill.sand_fury.desc,A burst of force behind every tap.
+skill.sand_fury.effect,Tap damage x3
+skill.falcon_storm.desc,The falcon dives more often while the storm lasts.
+skill.falcon_storm.effect,Falcon attack rate x4
+skill.golden_wind.desc,Enemy rewards are multiplied once when awarded.
+skill.golden_wind.effect,Gold awards x2.5
+skill.time_fracture.desc,Adds time to the current boss battle once.
+skill.time_fracture.effect,Boss timer +10s once — maximum 60s
+skill.ancestor_call.desc,Ancestors empower support-hero attacks.
+skill.ancestor_call.effect,Support hero DPS x3
+skill.critical_eclipse.desc,Critical strikes become likelier and more powerful.
+skill.critical_eclipse.effect,Crit chance +40% — cap 95% — crit damage x2
+ui.heroes.title,SUPPORT HEROES
+ui.heroes.buy_quantity,BUY QUANTITY
+ui.heroes.current_dps,Current DPS
+ui.heroes.next_gain,Next-level gain
+ui.heroes.milestone_progress,Milestone %s / %s
+ui.heroes.milestones_complete,All milestones reached
+ui.heroes.hire,Hire
+ui.heroes.level_up,Level Up
+ui.heroes.cost,Cost %s gold
+ui.skills.title,COMBAT SKILLS
+ui.skills.duration,Duration
+ui.skills.cooldown,Cooldown
+ui.skills.active_remaining,Active seconds remaining
+ui.skills.cooldown_remaining,Cooldown seconds remaining
+ui.skills.activate,Activate
+ui.level,Level
+ui.unlock_stage,Unlock at stage %s
+ui.state.locked,LOCKED
+ui.state.ready,READY
+ui.state.active,ACTIVE
+ui.state.cooldown,COOLDOWN
+ui.state.available_affordable,AVAILABLE — AFFORDABLE
+ui.state.available_unaffordable,AVAILABLE — NOT AFFORDABLE
+ui.role.melee,Melee
+ui.role.ranged,Ranged
+ui.role.magic,Magic
+ui.role.support,Support
 relic.sun_blade,Sun Blade
 relic.falcon_feather,Falcon Feather
 relic.gilded_scarab,Gilded Scarab

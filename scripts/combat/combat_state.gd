@@ -60,6 +60,12 @@ var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
 var _relic_damage_mult: float = 1.0
 var _relic_gold_mult: float = 1.0
+var _skill_tap_mult: float = 1.0
+var _skill_falcon_rate_mult: float = 1.0
+var _skill_gold_mult: float = 1.0
+var _skill_support_dps_mult: float = 1.0
+var _skill_crit_chance_add: float = 0.0
+var _skill_crit_damage_mult: float = 1.0
 var _death_processed: bool = false
 var _enemy_pool: EnemyPool
 var _boss_pool: BossPool
@@ -97,11 +103,12 @@ func _init(
 func tap() -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
-	var critical: bool = _rng.randf() < float(balance()["critical_chance"])
-	var damage: BigNumber = get_tap_damage()
+	var critical_chance: float = clampf(float(balance()["critical_chance"]) + _skill_crit_chance_add, 0.0, 0.95)
+	var critical: bool = _rng.randf() < critical_chance
+	var damage: BigNumber = get_tap_damage().mul_float(_skill_tap_mult)
 	var kind: String = "normal"
 	if critical:
-		damage = damage.mul_float(float(balance()["critical_multiplier"]))
+		damage = damage.mul_float(float(balance()["critical_multiplier"]) * _skill_crit_damage_mult)
 		kind = "critical"
 	return _apply_damage(damage, kind)
 
@@ -110,9 +117,10 @@ func falcon_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	_falcon_elapsed += maxf(0.0, delta)
-	if _falcon_elapsed < float(balance()["falcon_interval"]):
+	var interval: float = float(balance()["falcon_interval"]) / maxf(0.001, _skill_falcon_rate_mult)
+	if _falcon_elapsed < interval:
 		return {"attacked": false}
-	_falcon_elapsed = fmod(_falcon_elapsed, float(balance()["falcon_interval"]))
+	_falcon_elapsed = fmod(_falcon_elapsed, interval)
 	var damage: BigNumber = get_tap_damage().mul_float(float(balance()["falcon_damage_multiplier"]))
 	return _apply_damage(damage, "falcon")
 
@@ -120,7 +128,7 @@ func falcon_tick(delta: float) -> Dictionary:
 func dps_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
-	var combined_dps: BigNumber = support_total_dps.add(falcon_dps)
+	var combined_dps: BigNumber = support_total_dps.mul_float(_skill_support_dps_mult).add(falcon_dps)
 	var equipment_mult: float = 1.0 + _diminished(inventory.total_stat("dps_mult"))
 	var damage: BigNumber = combined_dps.mul_float(maxf(0.0, delta) * _relic_damage_mult * equipment_mult)
 	return _apply_damage(damage, "dps")
@@ -281,6 +289,7 @@ func save_into(base: Dictionary) -> Dictionary:
 	run_state["boss_time_left"] = boss_time_left
 	run_state["awaiting_retry"] = awaiting_retry
 	run_state["enemy_seed"] = enemy_seed
+	run_state["support_hero_levels"] = support_heroes.levels.duplicate(true)
 	permanent_state["max_stage"] = maxi(maxi(int(permanent_state.get("max_stage", 1)), max_stage_reached), stage)
 	permanent_state["equipment"] = inventory.to_dict()
 	permanent_state["boss_first_clears"] = boss_first_clears.duplicate(true)
@@ -330,6 +339,44 @@ func set_support_hero_levels(saved_levels: Variant) -> void:
 func set_relic_bonuses(damage_mult: float, gold_mult: float) -> void:
 	_relic_damage_mult = maxf(0.0, damage_mult) if is_finite(damage_mult) else 1.0
 	_relic_gold_mult = maxf(0.0, gold_mult) if is_finite(gold_mult) else 1.0
+
+
+func set_skill_modifiers(
+	tap_mult: float,
+	falcon_rate_mult: float,
+	gold_mult: float,
+	support_dps_mult: float,
+	crit_chance_add: float,
+	crit_damage_mult: float
+) -> void:
+	_skill_tap_mult = maxf(0.0, tap_mult) if is_finite(tap_mult) else 1.0
+	_skill_falcon_rate_mult = maxf(0.001, falcon_rate_mult) if is_finite(falcon_rate_mult) else 1.0
+	_skill_gold_mult = maxf(0.0, gold_mult) if is_finite(gold_mult) else 1.0
+	_skill_support_dps_mult = maxf(0.0, support_dps_mult) if is_finite(support_dps_mult) else 1.0
+	_skill_crit_chance_add = clampf(crit_chance_add, 0.0, 0.95) if is_finite(crit_chance_add) else 0.0
+	_skill_crit_damage_mult = maxf(0.0, crit_damage_mult) if is_finite(crit_damage_mult) else 1.0
+
+
+func add_boss_time_once(seconds: float) -> void:
+	if not is_boss or not is_finite(seconds):
+		return
+	boss_time_left = clampf(boss_time_left + seconds, 0.0, 60.0)
+
+
+func debug_spawn_boss(archetype_id: String) -> bool:
+	var selected: Dictionary = _boss_pool.select_by_id(archetype_id, stage)
+	if selected.is_empty():
+		return false
+	is_boss = true
+	current_enemy = selected
+	enemy_max_hp = get_enemy_hp(stage).mul_float(float(balance()["boss_hp_multiplier"]) * float(current_enemy.get("hp_modifier", 1.0)))
+	enemy_hp = enemy_max_hp._copy_normalized()
+	boss_time_left = clampf(float(current_enemy.get("timer_seconds", balance()["boss_duration"])), 0.0, 60.0)
+	_falcon_elapsed = 0.0
+	_death_processed = false
+	encounter_state = EncounterState.ACTIVE
+	awaiting_retry = false
+	return true
 
 
 func get_upgrade_cost() -> BigNumber:
@@ -395,7 +442,7 @@ func _process_death_once(damage: BigNumber, kind: String, defeated_stage: int, d
 	_death_processed = true
 	encounter_state = EncounterState.VICTORY
 	var gold_modifier: float = 1.0 if defeated_boss else float(current_enemy.get("gold_modifier", 1.0))
-	var gold_awarded: BigNumber = get_enemy_gold(defeated_stage).mul_float(_relic_gold_mult * gold_modifier)
+	var gold_awarded: BigNumber = get_enemy_gold(defeated_stage).mul_float(_relic_gold_mult * gold_modifier * _skill_gold_mult)
 	gold = gold.add(gold_awarded)
 	stage += 1
 	return {

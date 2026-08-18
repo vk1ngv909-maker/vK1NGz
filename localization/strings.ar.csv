@@ -189,6 +189,53 @@ hero.mirage_weaver,ناسج السراب
 hero.djinn_binder,مروض الجان
 hero.sun_priestess,كاهنة الشمس
 hero.star_vizier,وزير النجوم
+hero.dune_scout.desc,كشاف حاد البصر تقوي إشاراته جميع الحلفاء.
+hero.oasis_guard.desc,مبارز صامد يحول القتال القريب إلى لمسات أقوى.
+hero.sun_priestess.desc,مرشدة مشعة تعزز الذهب ومدة المهارات.
+hero.falconer.desc,صياد دقيق يرفع فرصة الضربة الحرجة للفريق.
+hero.scarab_knight.desc,مقاتل ثقيل يعزز الهجمات المباشرة.
+hero.mirage_weaver.desc,ساحر تضخم سراباته قوة جميع الأبطال.
+hero.djinn_binder.desc,سيد سحر يقوي الحلفاء ويقصر وقت الاستعادة.
+hero.star_vizier.desc,مستشار سماوي يطوع زمن المهارات والحظ.
+skill.sand_fury.desc,دفعة قوة خلف كل لمسة.
+skill.sand_fury.effect,ضرر اللمس ×3
+skill.falcon_storm.desc,ينقض الصقر بوتيرة أسرع أثناء العاصفة.
+skill.falcon_storm.effect,معدل هجوم الصقر ×4
+skill.golden_wind.desc,تتضاعف مكافآت الأعداء مرة واحدة عند منحها.
+skill.golden_wind.effect,مكافآت الذهب ×2.5
+skill.time_fracture.desc,تضيف وقتًا إلى معركة الزعيم الحالية مرة واحدة.
+skill.time_fracture.effect,مؤقت الزعيم +10 ث مرة واحدة — الحد 60 ث
+skill.ancestor_call.desc,يقوي الأسلاف هجمات أبطال الدعم.
+skill.ancestor_call.effect,ضرر أبطال الدعم ×3
+skill.critical_eclipse.desc,تصبح الضربات الحرجة أرجح وأقوى.
+skill.critical_eclipse.effect,فرصة حرجة +40٪ — حد 95٪ — ضرر حرج ×2
+ui.heroes.title,أبطال الدعم
+ui.heroes.buy_quantity,كمية الشراء
+ui.heroes.current_dps,الضرر الحالي في الثانية
+ui.heroes.next_gain,زيادة المستوى التالي
+ui.heroes.milestone_progress,المعلم %s / %s
+ui.heroes.milestones_complete,اكتملت جميع المعالم
+ui.heroes.hire,توظيف
+ui.heroes.level_up,رفع المستوى
+ui.heroes.cost,التكلفة %s ذهب
+ui.skills.title,مهارات القتال
+ui.skills.duration,المدة
+ui.skills.cooldown,إعادة الشحن
+ui.skills.active_remaining,الثواني النشطة المتبقية
+ui.skills.cooldown_remaining,ثواني إعادة الشحن المتبقية
+ui.skills.activate,تفعيل
+ui.level,المستوى
+ui.unlock_stage,تفتح عند المرحلة %s
+ui.state.locked,مقفلة
+ui.state.ready,جاهزة
+ui.state.active,نشطة
+ui.state.cooldown,إعادة شحن
+ui.state.available_affordable,متاحة — يمكن شراؤها
+ui.state.available_unaffordable,متاحة — لا يكفي الذهب
+ui.role.melee,قتال قريب
+ui.role.ranged,بعيد المدى
+ui.role.magic,سحري
+ui.role.support,دعم
 relic.sun_blade,نصل الشمس
 relic.falcon_feather,ريشة الصقر
 relic.gilded_scarab,الجعران المذهب

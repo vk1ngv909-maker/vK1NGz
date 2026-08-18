@@ -30,6 +30,7 @@ var _reduced_flashing: bool = false
 var _damage_numbers_enabled: bool = true
 var worlds: RefCounted = WorldsLogic.new()
 var current_world_id: String = ""
+var _debug_boss_id: String = ""
 
 
 func _ready() -> void:
@@ -145,6 +146,35 @@ func debug_open_settings() -> void:
 		panel.call("open_panel")
 
 
+func debug_open_heroes(locked_only: bool = false) -> void:
+	var panel: Node = get_tree().get_first_node_in_group("heroes_panel")
+	if panel != null:
+		panel.call("debug_open", locked_only)
+
+
+func debug_open_skills_panel() -> void:
+	var panel: Node = get_tree().get_first_node_in_group("skills_panel")
+	if panel != null:
+		panel.call("debug_open")
+
+
+func apply_skill_modifiers(skill_system: RefCounted) -> void:
+	if combat == null or skill_system == null:
+		return
+	combat.set_skill_modifiers(
+		float(skill_system.call("tap_damage_multiplier")),
+		float(skill_system.call("falcon_rate_multiplier")),
+		float(skill_system.call("gold_multiplier")),
+		float(skill_system.call("support_dps_multiplier")),
+		float(skill_system.call("bonus_for", "crit_chance")),
+		float(skill_system.call("crit_damage_multiplier"))
+	)
+	var before: float = combat.boss_time_left
+	var after: float = float(skill_system.call("apply_time_fracture", before))
+	if not is_equal_approx(before, after):
+		combat.add_boss_time_once(after - before)
+
+
 func debug_set_language(code: String) -> void:
 	var panel: Node = get_tree().get_first_node_in_group("settings_panel")
 	if panel != null:
@@ -180,6 +210,15 @@ func _open_debug_panels_from_command_line() -> void:
 			return
 		if args[index] == "--debug-settings":
 			debug_open_settings()
+			return
+		if args[index] == "--debug-heroes":
+			debug_open_heroes(false)
+			return
+		if args[index] == "--debug-heroes-locked":
+			debug_open_heroes(true)
+			return
+		if args[index] == "--debug-skills-panel":
+			debug_open_skills_panel()
 			return
 		if args[index] == "--debug-salvage-equipped":
 			_debug_open_salvage_state("equipped")
@@ -360,6 +399,9 @@ func _load_combat() -> void:
 			start_stage = maxi(1, int(cli[i + 1]))
 		if cli[i] == "--debug-world" and i + 1 < cli.size() and OS.is_debug_build():
 			start_stage = maxi(1, int(cli[i + 1]))
+		if cli[i] == "--debug-boss" and i + 1 < cli.size() and OS.is_debug_build():
+			_debug_boss_id = cli[i + 1]
+			start_stage = 10
 	var permanent_state: Dictionary = loaded["permanent_state"]
 	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state, permanent_state)
 	var relics: Relics = Relics.new(int(permanent_state.get("prestige_currency", 0)))
@@ -370,6 +412,10 @@ func _load_combat() -> void:
 	combat.set_relic_bonuses(1.0 + relics.total_bonus("damage"), 1.0 + relics.total_bonus("gold"))
 	combat.boss_time_left = maxf(0.0, float(run_state.get("boss_time_left", combat.boss_time_left)))
 	combat.awaiting_retry = bool(run_state.get("awaiting_retry", false))
+	# Debug boss selection is applied last so stale saved timer/retry state cannot
+	# overwrite the requested live archetype before the capture frame.
+	if not _debug_boss_id.is_empty() and not combat.debug_spawn_boss(_debug_boss_id):
+		push_warning("BossPool: unknown --debug-boss archetype '%s'" % _debug_boss_id)
 
 
 func _save_combat() -> bool:

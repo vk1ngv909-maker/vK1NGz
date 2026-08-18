@@ -37,6 +37,8 @@ const SKILL_IDS: Array[String] = [
 @onready var relics_button: Button = %Relics
 @onready var inventory_panel: InventoryPanel = %InventoryPanel
 @onready var settings_panel: SettingsPanel = %SettingsPanel
+@onready var heroes_panel: HeroesPanel = %HeroesPanel
+@onready var skills_panel: SkillsPanel = %SkillsPanel
 @onready var combat_background: ColorRect = %DesertBackground
 @onready var world_name: Label = %WorldName
 
@@ -53,6 +55,8 @@ func _ready() -> void:
 	_setup_skills()
 	settings_button.pressed.connect(settings_panel.open_panel)
 	inventory_button.pressed.connect(inventory_panel.open_panel)
+	%Heroes.pressed.connect(heroes_panel.open_panel)
+	%Skills.pressed.connect(skills_panel.open_panel)
 	support_dps_button.pressed.connect(_on_support_dps_pressed)
 	relics_button.pressed.connect(_on_relics_pressed)
 	refresh_localized_text()
@@ -64,6 +68,7 @@ func _process(_delta: float) -> void:
 		return
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	skill_system.tick(now_ms)
+	sync_skill_effects()
 	_refresh_skill_buttons(now_ms)
 
 
@@ -105,7 +110,8 @@ func debug_force_cooldown(ids: PackedStringArray) -> void:
 
 func _on_skill_pressed(id: String) -> void:
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
-	if skill_system.activate(id, now_ms):
+	if skill_system.activate(id, now_ms, _max_stage()):
+		sync_skill_effects()
 		_save_skills()
 		EventBus.tutorial_action.emit("activate_skill")
 	_refresh_skill_buttons(now_ms)
@@ -116,7 +122,10 @@ func _refresh_skill_buttons(now_ms: int) -> void:
 		var id: String = SKILL_IDS[index]
 		var button: Button = skill_buttons[index]
 		var state_text: String = Settings.t("hud.ready")
-		if skill_system.is_active(id):
+		if not skill_system.is_unlocked(id, _max_stage()):
+			var requirement: int = int(((skill_system.skills[id] as Dictionary).get("unlock_condition", {}) as Dictionary).get("max_stage", 1))
+			state_text = "%s\n%s" % [Settings.t("ui.state.locked"), Settings.t("ui.unlock_stage") % requirement]
+		elif skill_system.is_active(id):
 			var definition: Dictionary = skill_system.skills.get(id, {})
 			var active_until_ms: int = int(skill_system.activated_at_ms[id]) + int(definition.get("duration_ms", 0))
 			state_text = "%s\n%s" % [Settings.t("hud.active"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(active_until_ms, now_ms))]
@@ -124,6 +133,16 @@ func _refresh_skill_buttons(now_ms: int) -> void:
 			state_text = "%s\n%s" % [Settings.t("hud.cooldown"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms))]
 		button.text = "%s\n%s" % [Settings.t("skill.%s" % id), state_text]
 		button.disabled = state_text != Settings.t("hud.ready")
+
+
+func sync_skill_effects() -> void:
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	if arena != null and arena.has_method("apply_skill_modifiers"):
+		arena.call("apply_skill_modifiers", skill_system)
+
+
+func _max_stage() -> int:
+	return maxi(1, int((SaveManager.data.get("permanent_state", {}) as Dictionary).get("max_stage", 1)))
 
 
 func refresh_localized_text() -> void:
@@ -139,7 +158,9 @@ func refresh_localized_text() -> void:
 	# falls on the left, which produced the confusing "الذهب — ACEHOLDER".
 	# Placeholder status is recorded in docs/ASSET_MANIFEST.md instead.
 	%GoldPlaceholder.text = ""
-	%BackgroundLabel.text = Settings.t("hud.desert_placeholder")
+	# WorldName presents the active localized world. Do not expose the art
+	# placeholder label, which incorrectly called every later world a desert.
+	%BackgroundLabel.text = ""
 	if not current_world.is_empty():
 		world_name.text = Settings.t(str(current_world.get("name_key", "")))
 	%BalanceDataInvalid.visible = OS.is_debug_build() and BalanceData.balance_data_invalid
@@ -166,6 +187,7 @@ func apply_world(world: Dictionary) -> void:
 	if Color.html_is_valid(accent_html):
 		world_name.add_theme_color_override("font_color", Color.html(accent_html))
 	world_name.text = Settings.t(str(world.get("name_key", "")))
+	%BackgroundLabel.text = ""
 	current_music_ref = str(world.get("music_ref", ""))
 	combat_background.set_meta("music_ref", current_music_ref)
 

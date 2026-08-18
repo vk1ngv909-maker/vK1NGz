@@ -281,11 +281,50 @@ Group 2 visual evidence completed here: `world1_en.png`, `world34_en.png`,
 
 34 suites, `ALL SUITES PASSED`.
 
+### Group 4A — eight heroes, six distinct skills (DONE)
+
+| hero | role | unlock stage | milestone effect types |
+| --- | --- | --- | --- |
+| dune_scout | ranged | 1 | all_hero_dps_mult, crit_chance_add |
+| oasis_guard | melee | 8 | self_dps_mult, tap_damage_add |
+| sun_priestess | support | 18 | gold_mult, skill_duration_mult |
+| falconer | ranged | 32 | all_hero_dps_mult, crit_chance_add, self_dps_mult |
+| scarab_knight | melee | 48 | all_hero_dps_mult, self_dps_mult, tap_damage_add |
+| mirage_weaver | magic | 64 | all_hero_dps_mult, self_dps_mult, skill_duration_mult |
+| djinn_binder | magic | 82 | all_hero_dps_mult, self_dps_mult, skill_cooldown_mult |
+| star_vizier | support | 100 | gold_mult, skill_cooldown_mult, skill_duration_mult |
+
+Milestone effects vary by role rather than every hero being a DPS clone:
+`all_hero_dps_mult`, `tap_damage_add`, `gold_mult`, `crit_chance_add`,
+`skill_duration_mult`, `self_dps_mult`. The earliest hero scales ALL heroes, so
+it stays relevant late.
+
+**Skills are mechanically distinct, verified in isolation:** sand_fury moves
+tap damage only; golden_wind moves gold only; critical_eclipse adds crit chance
+clamped to <= 0.95; falcon_storm changes falcon RATE; ancestor_call moves
+support DPS; time_fracture adds +10s to the boss timer, clamped to [0, 60], so
+it can never produce a negative or infinite timer.
+
+Independent adversarial results — `test_heroes_skills_adversarial.gd`, 17/17:
+- rapid hire input hires exactly once and spends gold once
+- **a bulk buy of 29 levels produces exactly the same DPS as 29 single buys**,
+  which is the milestone-fires-once proof
+- locked hero refused, unknown id safe, level 5000 stays finite
+- same skill never stacks with itself
+
+Balance after heroes and skills: first Prestige **35.4 min** (target 25-45),
+legendary 28.1, 8h offline 25.6, no NaN or negative gold.
+
+Carry-over fixes: the hardcoded "DESERT BACKGROUND" label now follows the
+active world, and `--debug-boss` captures each archetype.
+
+Evidence: `heroes_panel.png`, `boss_sandstorm.png`.
+35 suites, `ALL SUITES PASSED`.
+
 ## Next highest-priority action
 
-Gate 5 group 4: eight support heroes, six skills and fifteen relics as validated
-content, then the full twenty-item equipment set, then the closing simulation
-and regression.
+Gate 5 group 4B: fifteen Relics and the full twenty-item equipment set, with
+relic sensitivity simulations, then the closing Gate 5 regression.
 
 ## Placeholders
 

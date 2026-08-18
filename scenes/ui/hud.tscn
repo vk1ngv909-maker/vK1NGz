@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3]
+[gd_scene load_steps=11 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
 [ext_resource type="Script" path="res://scripts/combat/combat_arena.gd" id="2_combat"]
@@ -8,6 +8,8 @@
 [ext_resource type="PackedScene" path="res://scenes/ui/offline_rewards_dialog.tscn" id="6_offline"]
 [ext_resource type="PackedScene" path="res://scenes/ui/settings_panel.tscn" id="7_settings"]
 [ext_resource type="PackedScene" path="res://scenes/ui/tutorial_overlay.tscn" id="8_tutorial"]
+[ext_resource type="PackedScene" path="res://scenes/ui/heroes_panel.tscn" id="9_heroes"]
+[ext_resource type="PackedScene" path="res://scenes/ui/skills_panel.tscn" id="10_skills"]
 
 [node name="HUD" type="Control"]
 layout_mode = 3
@@ -139,9 +141,9 @@ layout_mode = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_left = 16.0
-offset_top = 48.0
+offset_top = 8.0
 offset_right = -16.0
-offset_bottom = 92.0
+offset_bottom = 44.0
 grow_horizontal = 2
 theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.75)
 theme_override_constants/shadow_offset_x = 2
@@ -513,6 +515,12 @@ unique_name_in_owner = true
 unique_name_in_owner = true
 
 [node name="SettingsPanel" parent="." instance=ExtResource("7_settings")]
+unique_name_in_owner = true
+
+[node name="HeroesPanel" parent="." instance=ExtResource("9_heroes")]
+unique_name_in_owner = true
+
+[node name="SkillsPanel" parent="." instance=ExtResource("10_skills")]
 unique_name_in_owner = true
 
 [node name="TutorialOverlay" parent="." instance=ExtResource("8_tutorial")]

@@ -47,6 +47,19 @@ func select(stage: int) -> Dictionary:
 	return result
 
 
+func select_by_id(archetype_id: String, stage: int = 10) -> Dictionary:
+	if archetype_id.is_empty():
+		return {}
+	for value: Dictionary in bosses:
+		if str(value.get("id", "")) == archetype_id:
+			var result: Dictionary = value.duplicate(true)
+			var safe_stage: int = maxi(BOSS_INTERVAL, stage)
+			result["encounter_id"] = encounter_id(safe_stage)
+			result["stage"] = safe_stage
+			return result
+	return {}
+
+
 static func archetype_index(stage: int, archetype_count: int) -> int:
 	if archetype_count <= 0:
 		return 0
