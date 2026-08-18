@@ -14,6 +14,7 @@ func _init() -> void:
 	_test_corruption_recovery()
 	_test_both_corrupt_defaults()
 	_test_v1_migration()
+	_test_v2_migration()
 	_test_validation()
 	_test_offline_claims()
 	_cleanup()
@@ -38,11 +39,11 @@ func _cleanup() -> void:
 
 func _fixture(gold: float = 0.0, stage: int = 1) -> Dictionary:
 	var result: Dictionary = manager.default_data()
-	result["gold"] = {"mantissa": gold, "exponent": 0}
-	result["stage"] = stage
-	result["max_stage"] = stage
-	result["last_seen_utc"] = 100
-	result["offline_claimed_utc"] = 0
+	result["run_state"]["gold"] = {"mantissa": gold, "exponent": 0}
+	result["run_state"]["stage"] = stage
+	result["permanent_state"]["max_stage"] = stage
+	result["permanent_state"]["last_seen_utc"] = 100
+	result["permanent_state"]["offline_claimed_utc"] = 0
 	return result
 
 
@@ -81,16 +82,16 @@ func _test_atomic_write_and_backup() -> void:
 	_check(manager.save(second), "second save succeeds")
 	_check(FileAccess.file_exists(manager.BACKUP_PATH), "second save creates backup")
 	var backup: Variant = _read_json(manager.BACKUP_PATH)
-	_check(backup is Dictionary and int(backup["stage"]) == 2, "backup contains previous primary")
+	_check(backup is Dictionary and int(backup["run_state"]["stage"]) == 2, "backup contains previous primary")
 
 
 func _test_corruption_recovery() -> void:
 	_write_text(manager.PRIMARY_PATH, "{corrupt")
 	var recovered: Dictionary = manager.load()
 	_check(manager.last_load_source == "backup", "corrupt primary loads backup")
-	_check(int(recovered["stage"]) == 2, "backup data is returned")
+	_check(int(recovered["run_state"]["stage"]) == 2, "backup data is returned")
 	var restored: Variant = _read_json(manager.PRIMARY_PATH)
-	_check(restored is Dictionary and int(restored["stage"]) == 2, "backup is restored to primary")
+	_check(restored is Dictionary and int(restored["run_state"]["stage"]) == 2, "backup is restored to primary")
 	_check(manager.validate(restored), "restored primary is valid")
 
 
@@ -100,8 +101,8 @@ func _test_both_corrupt_defaults() -> void:
 	var loaded: Dictionary = manager.load()
 	_check(manager.last_load_source == "default", "two corrupt files use defaults")
 	_check(int(loaded["schema_version"]) == manager.SCHEMA_VERSION, "defaults use current schema")
-	_check(int(loaded["stage"]) == 1, "defaults start at stage one")
-	_check(loaded["gold"] is Dictionary and float(loaded["gold"]["mantissa"]) == 0.0, "defaults contain zero BigNumber gold")
+	_check(int(loaded["run_state"]["stage"]) == 1, "defaults start at stage one")
+	_check(loaded["run_state"]["gold"] is Dictionary and float(loaded["run_state"]["gold"]["mantissa"]) == 0.0, "defaults contain zero BigNumber gold")
 
 
 func _test_v1_migration() -> void:
@@ -118,10 +119,29 @@ func _test_v1_migration() -> void:
 	_write_text(manager.PRIMARY_PATH, JSON.stringify(v1))
 	var migrated: Dictionary = manager.load()
 	_check(manager.last_load_source == "primary", "v1 fixture loads from primary")
-	_check(int(migrated["schema_version"]) == 2, "v1 migration advances schema")
-	_check(migrated["gold"] is Dictionary, "v1 numeric gold becomes a BigNumber dictionary")
-	_check(is_equal_approx(float(migrated["gold"]["mantissa"]), 1.25), "v1 gold mantissa is converted")
-	_check(int(migrated["gold"]["exponent"]) == 3, "v1 gold exponent is converted")
+	_check(int(migrated["schema_version"]) == 3, "v1 migration chains through current schema")
+	_check(migrated["run_state"]["gold"] is Dictionary, "v1 numeric gold becomes a BigNumber dictionary")
+	_check(is_equal_approx(float(migrated["run_state"]["gold"]["mantissa"]), 1.25), "v1 gold mantissa is converted")
+	_check(int(migrated["run_state"]["gold"]["exponent"]) == 3, "v1 gold exponent is converted")
+
+
+func _test_v2_migration() -> void:
+	var v2: Dictionary = {
+		"schema_version": 2,
+		"stage": 80,
+		"gold": {"mantissa": 7.0, "exponent": 4},
+		"tap_level": 9,
+		"max_stage": 125,
+		"prestige_currency": 17,
+		"relic_levels": {"sun_blade": 3},
+		"future_purchase": {"owned": true},
+	}
+	var migrated: Dictionary = manager.migrate(v2)
+	_check(int(migrated["schema_version"]) == 3, "v2 migration advances to v3")
+	_check(int(migrated["permanent_state"]["max_stage"]) == 125, "v2 migration preserves max stage")
+	_check(int(migrated["permanent_state"]["prestige_currency"]) == 17, "v2 migration preserves prestige currency")
+	_check(int(migrated["permanent_state"]["relic_levels"]["sun_blade"]) == 3, "v2 migration preserves relic levels")
+	_check(migrated["permanent_state"].has("future_purchase"), "unknown legacy data is preserved permanently")
 
 
 func _test_validation() -> void:
@@ -130,32 +150,38 @@ func _test_validation() -> void:
 	_check(not manager.validate(missing_version), "missing schema version is rejected")
 	_check(not manager.validate("not a dictionary"), "non-dictionary is rejected")
 	var bad_gold_type: Dictionary = _fixture()
-	bad_gold_type["gold"] = "lots"
+	bad_gold_type["run_state"]["gold"] = "lots"
 	_check(not manager.validate(bad_gold_type), "malformed gold type is rejected")
 	var bad_gold_shape: Dictionary = _fixture()
-	bad_gold_shape["gold"] = {"mantissa": 1.0}
+	bad_gold_shape["run_state"]["gold"] = {"mantissa": 1.0}
 	_check(not manager.validate(bad_gold_shape), "malformed BigNumber is rejected")
 	var negative_number: Dictionary = _fixture()
-	negative_number["gold"] = -1.0
+	negative_number["run_state"]["gold"] = -1.0
 	_check(not manager.validate(negative_number), "negative numeric gold is rejected")
 	var negative_big_number: Dictionary = _fixture()
-	negative_big_number["gold"] = {"mantissa": -1.0, "exponent": 10}
+	negative_big_number["run_state"]["gold"] = {"mantissa": -1.0, "exponent": 10}
 	_check(not manager.validate(negative_big_number), "negative BigNumber gold is rejected")
 	var bad_stage: Dictionary = _fixture()
-	bad_stage["stage"] = 0
+	bad_stage["run_state"]["stage"] = 0
 	_check(not manager.validate(bad_stage), "stage below one is rejected")
 	var malformed_stage: Dictionary = _fixture()
-	malformed_stage["stage"] = "one"
+	malformed_stage["run_state"]["stage"] = "one"
 	_check(not manager.validate(malformed_stage), "non-numeric stage is rejected")
 	var malformed_timestamp: Dictionary = _fixture()
-	malformed_timestamp["last_seen_utc"] = 10.5
+	malformed_timestamp["permanent_state"]["last_seen_utc"] = 10.5
 	_check(not manager.validate(malformed_timestamp), "fractional timestamp is rejected")
 	var nan_value: Dictionary = _fixture()
 	nan_value["extra"] = NAN
 	_check(not manager.validate(nan_value), "NaN anywhere in save is rejected")
 	var inf_value: Dictionary = _fixture()
-	inf_value["gold"] = {"mantissa": INF, "exponent": 0}
+	inf_value["run_state"]["gold"] = {"mantissa": INF, "exponent": 0}
 	_check(not manager.validate(inf_value), "infinite gold is rejected")
+	var missing_run_state: Dictionary = _fixture()
+	missing_run_state.erase("run_state")
+	_check(not manager.validate(missing_run_state), "missing run state is rejected")
+	var missing_permanent_state: Dictionary = _fixture()
+	missing_permanent_state.erase("permanent_state")
+	_check(not manager.validate(missing_permanent_state), "missing permanent state is rejected")
 
 
 func _test_offline_claims() -> void:

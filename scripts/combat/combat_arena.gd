@@ -2,6 +2,7 @@ extends Control
 
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
 const CombatState = preload("res://scripts/combat/combat_state.gd")
+const Relics = preload("res://scripts/progression/relics.gd")
 
 @onready var hero: ColorRect = %Hero
 @onready var falcon: ColorRect = %Falcon
@@ -47,6 +48,9 @@ func _process(delta: float) -> void:
 		_refresh_hud()
 	elif combat.is_boss and not combat.awaiting_retry:
 		boss_countdown.text = "%.1fs" % combat.boss_time_left
+	var dps_result: Dictionary = combat.dps_tick(delta)
+	if dps_result.has("damage") and (dps_result["damage"] as BigNumber).mantissa > 0.0:
+		_react_to_attack(dps_result)
 	var falcon_result: Dictionary = combat.falcon_tick(delta)
 	if falcon_result.has("damage"):
 		_react_to_attack(falcon_result)
@@ -188,31 +192,45 @@ func _on_retry_boss() -> void:
 
 func _load_combat() -> void:
 	var loaded: Dictionary = SaveManager.load()
-	var gold_value: Variant = loaded.get("gold", BigNumber.new().to_dict())
+	var run_state: Dictionary = loaded["run_state"]
+	var gold_value: Variant = run_state.get("gold", BigNumber.new().to_dict())
 	var loaded_gold: BigNumber
 	if gold_value is Dictionary:
 		loaded_gold = BigNumber.from_dict(gold_value as Dictionary)
 	else:
 		loaded_gold = BigNumber.from_float(float(gold_value))
-	var start_stage: int = int(loaded.get("stage", 1))
+	var start_stage: int = int(run_state.get("stage", 1))
 	# --start-stage N lets automated capture jump straight to a boss stage so
 	# boss visuals can be evidenced without farming ten stages first.
 	var cli: PackedStringArray = OS.get_cmdline_args()
 	for i in cli.size():
 		if cli[i] == "--start-stage" and i + 1 < cli.size():
 			start_stage = int(cli[i + 1])
-	combat = CombatState.new(start_stage, loaded_gold, int(loaded.get("tap_level", 1)))
+	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state)
+	var permanent_state: Dictionary = loaded["permanent_state"]
+	var relics: Relics = Relics.new(int(permanent_state.get("prestige_currency", 0)))
+	relics.from_dict({
+		"levels": permanent_state.get("relic_levels", {}),
+		"prestige_currency": permanent_state.get("prestige_currency", 0),
+	})
+	combat.set_relic_bonuses(1.0 + relics.total_bonus("damage"), 1.0 + relics.total_bonus("gold"))
+	combat.boss_time_left = maxf(0.0, float(run_state.get("boss_time_left", combat.boss_time_left)))
+	combat.awaiting_retry = bool(run_state.get("awaiting_retry", false))
 
 
 func _save_combat() -> void:
 	var save_data: Dictionary = SaveManager.data.duplicate(true)
 	if save_data.is_empty():
 		save_data = SaveManager.default_data()
-	save_data["stage"] = combat.stage
-	save_data["max_stage"] = maxi(int(save_data.get("max_stage", 1)), combat.stage)
-	save_data["gold"] = combat.gold.to_dict()
-	save_data["tap_level"] = combat.tap_level
-	save_data["last_seen_utc"] = int(Time.get_unix_time_from_system())
+	var run_state: Dictionary = save_data["run_state"]
+	var permanent_state: Dictionary = save_data["permanent_state"]
+	run_state["stage"] = combat.stage
+	run_state["gold"] = combat.gold.to_dict()
+	run_state["tap_level"] = combat.tap_level
+	run_state["boss_time_left"] = combat.boss_time_left
+	run_state["awaiting_retry"] = combat.awaiting_retry
+	permanent_state["max_stage"] = maxi(int(permanent_state.get("max_stage", 1)), combat.stage)
+	permanent_state["last_seen_utc"] = int(Time.get_unix_time_from_system())
 	SaveManager.save(save_data)
 
 

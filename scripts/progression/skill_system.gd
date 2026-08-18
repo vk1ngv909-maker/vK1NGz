@@ -78,14 +78,21 @@ func from_dict(saved: Dictionary) -> void:
 	clear()
 	var saved_active: Variant = saved.get("activated_at_ms", {})
 	var saved_cooldowns: Variant = saved.get("cooldown_until_ms", {})
+	# Saved timestamps come off disk and may be corrupt or hand-edited. Coerce
+	# only real numbers; anything else is dropped rather than trusted, so a bad
+	# file cannot produce an infinite buff or a negative cooldown.
 	if saved_active is Dictionary:
 		for id: Variant in saved_active:
 			if skills.has(str(id)):
-				activated_at_ms[str(id)] = int(saved_active[id])
+				var v: Variant = saved_active[id]
+				if v is int or v is float:
+					activated_at_ms[str(id)] = maxi(0, int(v))
 	if saved_cooldowns is Dictionary:
 		for id: Variant in saved_cooldowns:
 			if skills.has(str(id)):
-				cooldown_until_ms[str(id)] = int(saved_cooldowns[id])
+				var c: Variant = saved_cooldowns[id]
+				if c is int or c is float:
+					cooldown_until_ms[str(id)] = maxi(0, int(c))
 
 
 func _load_data() -> void:

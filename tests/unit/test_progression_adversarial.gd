@@ -23,18 +23,18 @@ func _init() -> void:
 
 	# ============ PRESTIGE: preview must be explicit ============
 	var state := {
-		"stage": 200, "max_stage": 200,
-		"gold": {"mantissa": 5.0, "exponent": 9},
-		"tap_level": 77,
-		"support_hero_levels": {"h1": 40, "h2": 12},
-		"prestige_currency": 3,
-		"relic_levels": {"r1": 4},
-		"equipment": ["sword_of_test"],
-		"achievements": ["first_boss"],
-		"settings": {"vibration": false},
-		"statistics": {"taps": 9999},
-		"active_skills": {"sand_fury": 123456},
-		"temporary_buffs": {"x": 2.0},
+		"schema_version": 3,
+		"run_state": {
+			"stage": 200, "gold": {"mantissa": 5.0, "exponent": 9}, "tap_level": 77,
+			"support_hero_levels": {"h1": 40, "h2": 12},
+			"active_skills": {"sand_fury": 123456}, "temporary_buffs": {"x": 2.0},
+			"future_power_boost": 1000,
+		},
+		"permanent_state": {
+			"max_stage": 200, "prestige_currency": 3, "relic_levels": {"r1": 4},
+			"equipment": ["sword_of_test"], "achievements": ["first_boss"],
+			"settings": {"vibration": false}, "statistics": {"taps": 9999},
+		},
 	}
 	var pv = pr.preview(state)
 	ck("preview lists resets", pv.has("resets") and (pv["resets"] as Array).size() > 0)
@@ -42,26 +42,29 @@ func _init() -> void:
 	ck("preview reports reward", int(pv.get("reward", 0)) > 0, str(pv.get("reward")))
 
 	# ============ PRESTIGE: refuse when reward is zero ============
-	var low := state.duplicate(true); low["max_stage"] = 5
+	var low := state.duplicate(true); low["permanent_state"]["max_stage"] = 5
 	var refused = pr.apply(low)
 	ck("apply refuses at zero reward", refused.get("refused", false) == true, str(refused.get("refused")))
-	ck("refused apply changes nothing", int(refused.get("tap_level", 0)) == 77, str(refused.get("tap_level")))
+	ck("refused apply changes nothing", int(refused["run_state"].get("tap_level", 0)) == 77, str(refused["run_state"].get("tap_level")))
 
 	# ============ PRESTIGE: reset the right things, keep the right things ============
 	var after = pr.apply(state.duplicate(true))
-	ck("stage reset to 1", int(after.get("stage", -1)) == 1, str(after.get("stage")))
-	ck("gold wiped", _is_zero(after.get("gold")), str(after.get("gold")))
-	ck("tap_level reset", int(after.get("tap_level", -1)) == 1, str(after.get("tap_level")))
-	ck("support levels wiped", _all_zero(after.get("support_hero_levels", {})), str(after.get("support_hero_levels")))
-	ck("active skills cleared", (after.get("active_skills", {}) as Dictionary).is_empty(), str(after.get("active_skills")))
-	ck("temp buffs cleared", (after.get("temporary_buffs", {}) as Dictionary).is_empty(), str(after.get("temporary_buffs")))
-	ck("max_stage PRESERVED", int(after.get("max_stage", 0)) == 200, str(after.get("max_stage")))
-	ck("relics PRESERVED", (after.get("relic_levels", {}) as Dictionary).get("r1", 0) == 4, str(after.get("relic_levels")))
-	ck("equipment PRESERVED", (after.get("equipment", []) as Array).has("sword_of_test"), str(after.get("equipment")))
-	ck("achievements PRESERVED", (after.get("achievements", []) as Array).size() == 1)
-	ck("settings PRESERVED", (after.get("settings", {}) as Dictionary).get("vibration") == false)
-	ck("statistics PRESERVED", (after.get("statistics", {}) as Dictionary).get("taps") == 9999)
-	ck("prestige currency INCREASED", int(after.get("prestige_currency", 0)) > 3, str(after.get("prestige_currency")))
+	var after_run: Dictionary = after["run_state"]
+	var after_permanent: Dictionary = after["permanent_state"]
+	ck("stage reset to 1", int(after_run.get("stage", -1)) == 1, str(after_run.get("stage")))
+	ck("gold wiped", _is_zero(after_run.get("gold")), str(after_run.get("gold")))
+	ck("tap_level reset", int(after_run.get("tap_level", -1)) == 1, str(after_run.get("tap_level")))
+	ck("support levels wiped", (after_run.get("support_hero_levels", {}) as Dictionary).is_empty(), str(after_run.get("support_hero_levels")))
+	ck("active skills cleared", (after_run.get("active_skills", {}) as Dictionary).is_empty(), str(after_run.get("active_skills")))
+	ck("temp buffs cleared", (after_run.get("temporary_buffs", {}) as Dictionary).is_empty(), str(after_run.get("temporary_buffs")))
+	ck("future run field wiped structurally", not after_run.has("future_power_boost"), str(after_run))
+	ck("max_stage PRESERVED", int(after_permanent.get("max_stage", 0)) == 200, str(after_permanent.get("max_stage")))
+	ck("relics PRESERVED", (after_permanent.get("relic_levels", {}) as Dictionary).get("r1", 0) == 4, str(after_permanent.get("relic_levels")))
+	ck("equipment PRESERVED", (after_permanent.get("equipment", []) as Array).has("sword_of_test"), str(after_permanent.get("equipment")))
+	ck("achievements PRESERVED", (after_permanent.get("achievements", []) as Array).size() == 1)
+	ck("settings PRESERVED", (after_permanent.get("settings", {}) as Dictionary).get("vibration") == false)
+	ck("statistics PRESERVED", (after_permanent.get("statistics", {}) as Dictionary).get("taps") == 9999)
+	ck("prestige currency INCREASED", int(after_permanent.get("prestige_currency", 0)) > 3, str(after_permanent.get("prestige_currency")))
 
 	# ============ SKILLS: no double activation, no self-stacking ============
 	var sk = S.new()

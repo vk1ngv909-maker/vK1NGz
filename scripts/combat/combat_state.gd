@@ -2,6 +2,7 @@ class_name CombatState
 extends RefCounted
 
 const BigNumber = preload("res://scripts/utilities/big_number.gd")
+const SupportHeroes = preload("res://scripts/progression/support_heroes.gd")
 
 # All combat balance lives here. Presentation code must consume results instead
 # of duplicating these values or formulas.
@@ -30,15 +31,27 @@ var gold: BigNumber = BigNumber.new()
 var tap_level: int = 1
 var boss_time_left: float = 0.0
 var awaiting_retry: bool = false
+var support_heroes: SupportHeroes
+var support_total_dps: BigNumber = BigNumber.new()
+var falcon_dps: BigNumber = BigNumber.new()
 
 var _falcon_elapsed: float = 0.0
 var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _relic_damage_mult: float = 1.0
+var _relic_gold_mult: float = 1.0
 
 
-func _init(initial_stage: int = 1, initial_gold: BigNumber = null, initial_tap_level: int = 1) -> void:
+func _init(
+	initial_stage: int = 1,
+	initial_gold: BigNumber = null,
+	initial_tap_level: int = 1,
+	run_state: Dictionary = {}
+) -> void:
 	stage = maxi(1, initial_stage)
 	gold = initial_gold._copy_normalized() if initial_gold != null else BigNumber.new()
 	tap_level = maxi(1, initial_tap_level)
+	support_heroes = SupportHeroes.new()
+	set_support_hero_levels(run_state.get("support_hero_levels", {}))
 	_rng.randomize()
 	spawn_enemy()
 
@@ -64,6 +77,14 @@ func falcon_tick(delta: float) -> Dictionary:
 	_falcon_elapsed = fmod(_falcon_elapsed, float(BALANCE["falcon_interval"]))
 	var damage: BigNumber = get_tap_damage().mul_float(float(BALANCE["falcon_damage_multiplier"]))
 	return _apply_damage(damage, "falcon")
+
+
+func dps_tick(delta: float) -> Dictionary:
+	if _cannot_attack():
+		return {"ignored": true}
+	var combined_dps: BigNumber = support_total_dps.add(falcon_dps)
+	var damage: BigNumber = combined_dps.mul_float(maxf(0.0, delta) * _relic_damage_mult)
+	return _apply_damage(damage, "dps")
 
 
 func tick(delta: float) -> Dictionary:
@@ -103,7 +124,18 @@ func spawn_enemy() -> void:
 
 
 func get_tap_damage() -> BigNumber:
-	return BigNumber.from_float(float(BALANCE["tap_damage_per_level"]) * tap_level)
+	return BigNumber.from_float(float(BALANCE["tap_damage_per_level"]) * tap_level).mul_float(_relic_damage_mult)
+
+
+func set_support_hero_levels(saved_levels: Variant) -> void:
+	if saved_levels is Dictionary:
+		support_heroes.from_dict(saved_levels as Dictionary)
+	support_total_dps = support_heroes.total_dps()
+
+
+func set_relic_bonuses(damage_mult: float, gold_mult: float) -> void:
+	_relic_damage_mult = maxf(0.0, damage_mult) if is_finite(damage_mult) else 1.0
+	_relic_gold_mult = maxf(0.0, gold_mult) if is_finite(gold_mult) else 1.0
 
 
 func get_upgrade_cost() -> BigNumber:
@@ -136,7 +168,7 @@ func _apply_damage(damage: BigNumber, kind: String) -> Dictionary:
 	var gold_awarded: BigNumber = BigNumber.new()
 	var stage_advanced: bool = false
 	if killed:
-		gold_awarded = get_enemy_gold(stage)
+		gold_awarded = get_enemy_gold(stage).mul_float(_relic_gold_mult)
 		gold = gold.add(gold_awarded)
 		stage += 1
 		stage_advanced = true

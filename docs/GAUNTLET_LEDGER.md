@@ -56,7 +56,9 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C11 | Falcon attack and boss-failure/Retry states not yet visually captured | P2 | RESOLVED — both captured |
 | C12 | Falcon dealt damage but never visibly moved, so it did not appear to own its damage | P2 | RESOLVED — lunge tween fires on the same frame as the cyan number |
 | C13 | Retry Boss button sits between hero and enemy inside the combat area | P3 | OPEN — acceptable in blockout, revisit in UI polish |
-| C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | OPEN — every new temporary save field MUST be added to `apply()`; consider a classification guard |
+| C14 | `Prestige.apply()` resets a hardcoded key list, so any temporary field added later silently survives a prestige | P2 | **RESOLVED** — save split into run_state/permanent_state; apply() rebuilds run_state from the canonical factory |
+| C16 | `SkillSystem.from_dict` coerced saved timestamps without type checks, raising engine errors on a corrupt save | P2 | RESOLVED — non-numeric values dropped, negatives clamped |
+| C17 | First-Prestige pacing: reaching stage 50 takes ~56 simulated hours. Stage 25 (first prestige) is ~10 minutes, close to the brief's 25-45 min target, so this is wall depth rather than a broken curve | P2 | OPEN — Milestone 3 balance work |
 | C15 | `scripts/shot.sh` dropped forwarded game args (my `shift 3` conflicted with Codex's `${@:4}`), so the prestige dialog never opened and the first capture looked like a plain HUD | P2 | RESOLVED — args forwarded correctly; Codex's claim of having inspected the dialog did not hold up |
 
 ## Blockers
@@ -97,7 +99,7 @@ adversarial, 23 combat + 13 adversarial). `ALL SUITES PASSED`.
 
 Evidence: `docs/evidence/combat_motion.png`, `combat_boss.png`, `combat_idle.png`
 
-## Gate 3 — progression loop (checkpoint, not yet closed)
+## Gate 3 — progression loop — **PASSED** (2026-08-18)
 
 | Requirement | Status | Evidence |
 | --- | --- | --- |
@@ -113,13 +115,39 @@ Evidence: `docs/evidence/combat_motion.png`, `combat_boss.png`, `combat_idle.png
 | 8 support heroes, 6 skills, 15 relics, data-driven | PASS | JSON under `resources/` |
 | Dialog fits all portrait sizes | PASS | `prestige_dialog.png` (720x1280), `prestige_dialog_tall.png` (1080x2400) |
 
-Test totals: 8 suites, `ALL SUITES PASSED`.
+| C14 structural fix | PASS | `test_c14_future_field.gd` — invented run fields destroyed, invented permanent fields kept, without editing prestige.gd |
+| Save migration v1/v2 -> v3 | PASS | `test_migration_adversarial.gd` — real on-disk fixtures, all permanent data intact |
+| Support DPS in live combat | PASS | `test_dps_relics_adversarial.gd` — gold events == kills, stage advances == kills |
+| DPS cannot hit dead enemy / during retry | PASS | same suite |
+| Skill READY / ACTIVE / COOLDOWN visuals | PASS | `skills_active.png` (ACTIVE 10s/12s), `skills_states.png` (COOLDOWN 45s/90s/50s) — state shown by text, not colour alone |
+| Skill expiry while game closed | PASS | `test_skill_timing_adversarial.gd` |
+| Cooldown not bypassable by reopening | PASS | 5 close/reopen cycles cannot clear it |
+| Corrupt/absurd timestamps safe | PASS | far-future, negative and non-numeric values handled |
+| Relics change power and persist | PASS | reaches `get_tap_damage()`, survives reload and prestige |
+| Post-Prestige run measurably faster | PASS | simulation: 20.0% faster to stage 50 |
+
+Test totals: 14 suites, `ALL SUITES PASSED`.
+
+### Simulation results (deterministic, seed 20260818)
+
+| run | to stage 50 | to 50% of max | to 80% of max | upgrades | final gold |
+| --- | --- | --- | --- | --- | --- |
+| A (no relics) | 203290s | 620s | 14400s | 734 | 752.26M |
+| B (post-prestige, damage relics) | 162640s | 490s | 11520s | 734 | 752.26M |
+
+Post-Prestige improvement: **20.0% faster**. No NaN, INF or negative gold at any
+step. Worst stall: 39200s at stage 49 (run A) — the intended progression wall.
+
+Upgrades and final gold are identical by design: both runs kill the same number
+of enemies to reach stage 50, so they earn the same gold and can afford the same
+upgrades. Only elapsed time differs, which is exactly what relics should change.
 
 ## Next highest-priority action
 
-Close Gate 3: wire support-hero DPS into live combat, verify the progression
-wall and the "new run is faster" property with a deterministic simulation, and
-capture skills in ACTIVE and COOLDOWN states (currently only READY is evidenced).
+**Gate 4 — MVP systems.** Inventory and equipment (compare, lock, salvage with
+confirmation for Rare+), offline rewards dialog on the existing collect-once
+guard, settings, localization structure, and tutorial — without breaking the
+Gate 2/3 loops.
 
 ## Placeholders
 

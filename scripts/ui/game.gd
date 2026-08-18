@@ -37,6 +37,20 @@ func _ready() -> void:
 		if ab != null and ab.has_method("debug_fail_boss"):
 			ab.debug_fail_boss()
 		await get_tree().process_frame
+	if "--demo-skills" in args:
+		var hud: Node = get_tree().current_scene.find_child("HUD", true, false)
+		if hud == null:
+			hud = find_child("HUD", true, false)
+		if hud != null and hud.has_method("debug_activate_skills"):
+			hud.debug_activate_skills(PackedStringArray(["sand_fury", "golden_wind"]))
+		await get_tree().process_frame
+	if "--demo-skills-cooldown" in args:
+		var hud2: Node = get_tree().current_scene.find_child("HUD", true, false)
+		if hud2 == null:
+			hud2 = find_child("HUD", true, false)
+		if hud2 != null and hud2.has_method("debug_force_cooldown"):
+			hud2.debug_force_cooldown(PackedStringArray(["sand_fury", "critical_eclipse"]))
+		await get_tree().process_frame
 	if "--demo-prestige" in args:
 		var ap: Node = get_tree().get_first_node_in_group("combat_arena")
 		var ms: int = 200

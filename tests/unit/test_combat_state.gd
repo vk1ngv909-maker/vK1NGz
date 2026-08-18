@@ -12,6 +12,8 @@ func _init() -> void:
 	_test_one_tap_one_application()
 	_test_kill_rewards_and_advances_once()
 	_test_falcon_interval_and_guard()
+	_test_support_dps_and_kill_guard()
+	_test_relic_multipliers()
 	_test_upgrade_never_makes_gold_negative()
 	_test_boss_failure_and_retry()
 	print("PASS %d / FAIL %d" % [passed, failed])
@@ -71,6 +73,31 @@ func _test_falcon_interval_and_guard() -> void:
 	_check(attack["kind"] == "falcon" and _approx_number(attack["damage"], 2.0), "falcon deals 40 percent tap damage")
 	state.enemy_hp = BigNumber.new()
 	_check(state.falcon_tick(2.0).get("ignored", false), "falcon cannot attack a dead enemy")
+
+
+func _test_support_dps_and_kill_guard() -> void:
+	var state: CombatState = CombatState.new(1, null, 1, {"support_hero_levels": {"dune_scout": 2}})
+	state.falcon_dps = BigNumber.from_float(1.0)
+	var result: Dictionary = state.dps_tick(0.5)
+	_check(result["kind"] == "dps" and _approx_number(result["damage"], 2.5), "DPS reads support levels and adds explicit falcon DPS")
+	state.enemy_hp = BigNumber.from_float(1.0)
+	var kill: Dictionary = state.dps_tick(1.0)
+	var gold_after_kill: BigNumber = state.gold
+	var after_death: Dictionary = state.dps_tick(1.0)
+	_check(kill["killed"] and kill["stage_advanced"] and state.stage == 2, "lethal DPS advances exactly one stage")
+	_check(_approx_number(gold_after_kill, 5.0), "lethal DPS awards gold exactly once")
+	_check(after_death.get("ignored", false) and state.gold.equals(gold_after_kill), "DPS after death cannot duplicate its reward")
+
+
+func _test_relic_multipliers() -> void:
+	var state: CombatState = CombatState.new(1, null, 2, {"support_hero_levels": {"dune_scout": 1}})
+	state.set_relic_bonuses(2.0, 3.0)
+	_check(_approx_number(state.get_tap_damage(), 20.0), "damage relic multiplier applies to tap damage")
+	var dps: Dictionary = state.dps_tick(0.5)
+	_check(_approx_number(dps["damage"], 2.0), "damage relic multiplier applies to support DPS")
+	state.enemy_hp = BigNumber.from_float(1.0)
+	state.tap()
+	_check(_approx_number(state.gold, 15.0), "gold relic multiplier applies to kill rewards")
 
 
 func _test_upgrade_never_makes_gold_negative() -> void:

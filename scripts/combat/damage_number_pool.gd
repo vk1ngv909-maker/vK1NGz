@@ -9,6 +9,7 @@ const FLOAT_DURATION: float = 0.65
 const NORMAL_COLOR: Color = Color(1.0, 0.94, 0.55)
 const CRITICAL_COLOR: Color = Color(1.0, 0.25, 0.08)
 const FALCON_COLOR: Color = Color(0.25, 0.9, 1.0)
+const DPS_COLOR: Color = Color(0.55, 0.95, 0.65)
 
 var _labels: Array[Label] = []
 var _tweens: Dictionary = {}
@@ -58,6 +59,8 @@ func _color_for(kind: String) -> Color:
 		return CRITICAL_COLOR
 	if kind == "falcon":
 		return FALCON_COLOR
+	if kind == "dps":
+		return DPS_COLOR
 	return NORMAL_COLOR
 
 

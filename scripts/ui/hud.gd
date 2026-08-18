@@ -65,7 +65,8 @@ func _setup_skills() -> void:
 	var loaded: Dictionary = SaveManager.data
 	if loaded.is_empty():
 		loaded = SaveManager.load()
-	var timestamps: Variant = loaded.get("skill_timestamps", {})
+	var run_state: Dictionary = loaded["run_state"]
+	var timestamps: Variant = run_state.get("skill_timestamps", {})
 	if timestamps is Dictionary:
 		skill_system.from_dict(timestamps as Dictionary)
 	for index: int in skill_buttons.size():
@@ -73,6 +74,26 @@ func _setup_skills() -> void:
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	skill_system.tick(now_ms)
 	_refresh_skill_buttons(now_ms)
+
+
+func debug_activate_skills(ids: PackedStringArray) -> void:
+	## Test-only: activate skills through the same path the buttons use, so
+	## ACTIVE and COOLDOWN states can be captured from the real running UI.
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	for id: String in ids:
+		skill_system.activate(id, now_ms)
+	_refresh_skill_buttons(now_ms)
+
+
+func debug_force_cooldown(ids: PackedStringArray) -> void:
+	## Test-only: activate then jump past the duration so the button shows the
+	## COOLDOWN state rather than ACTIVE.
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	for id: String in ids:
+		skill_system.activate(id, now_ms)
+	var later: int = now_ms + 20000
+	skill_system.tick(later)
+	_refresh_skill_buttons(later)
 
 
 func _on_skill_pressed(id: String) -> void:
@@ -105,8 +126,8 @@ func _save_skills() -> void:
 	var save_data: Dictionary = SaveManager.data.duplicate(true)
 	if save_data.is_empty():
 		save_data = SaveManager.default_data()
-	save_data["skill_timestamps"] = skill_system.to_dict()
-	save_data["last_seen_utc"] = int(Time.get_unix_time_from_system())
+	(save_data["run_state"] as Dictionary)["skill_timestamps"] = skill_system.to_dict()
+	(save_data["permanent_state"] as Dictionary)["last_seen_utc"] = int(Time.get_unix_time_from_system())
 	SaveManager.save(save_data)
 
 

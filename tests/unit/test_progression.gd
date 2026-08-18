@@ -80,20 +80,34 @@ func _test_prestige() -> void:
 	_check(prestige.reward_for(24) == 0 and not prestige.can_prestige(24), "prestige is refused below first reward")
 	_check(prestige.reward_for(25) == 1 and prestige.can_prestige(25), "reward formula unlocks at stage 25")
 	var state: Dictionary = {
-		"stage": 30, "max_stage": 50, "gold": {"mantissa": 5.0, "exponent": 4},
-		"tap_level": 8, "prestige_currency": 3, "support_hero_levels": {"dune_scout": 10},
-		"skill_timestamps": {"activated_at_ms": {"sand_fury": 1}, "cooldown_until_ms": {"sand_fury": 2}},
-		"temporary_buffs": {"damage": 2}, "relics": {"sun_blade": 2}, "equipment": {"weapon": "x"},
-		"achievements": ["a"], "settings": {"music": true}, "statistics": {"taps": 9}
+		"schema_version": 3,
+		"run_state": {
+			"stage": 30, "gold": {"mantissa": 5.0, "exponent": 4}, "tap_level": 8,
+			"support_hero_levels": {"dune_scout": 10},
+			"skill_timestamps": {"activated_at_ms": {"sand_fury": 1}, "cooldown_until_ms": {"sand_fury": 2}},
+			"temporary_buffs": {"damage": 2}, "future_run_multiplier": 99,
+		},
+		"permanent_state": {
+			"max_stage": 50, "prestige_currency": 3, "relic_levels": {"sun_blade": 2},
+			"equipment": {"weapon": "x"}, "achievements": ["a"],
+			"settings": {"music": true}, "statistics": {"taps": 9},
+		},
 	}
 	var result: Dictionary = prestige.apply(state)
-	_check(result["stage"] == 1 and result["tap_level"] == 1 and float(result["gold"]["mantissa"]) == 0.0, "prestige resets run progression")
-	_check(result["support_hero_levels"]["dune_scout"] == 0 and result["skill_timestamps"]["activated_at_ms"].is_empty(), "prestige clears heroes and skills")
-	_check(result["prestige_currency"] == 6 and result["relics"] == state["relics"], "prestige awards currency and preserves relics")
-	_check(recorder.calls == 1 and recorder.saved["stage"] == 1, "successful prestige saves immediately")
-	var refused_state: Dictionary = {"stage": 2, "max_stage": 2, "gold": {"mantissa": 7.0, "exponent": 0}}
+	var run_state: Dictionary = result["run_state"]
+	var permanent_state: Dictionary = result["permanent_state"]
+	_check(run_state["stage"] == 1 and run_state["tap_level"] == 1 and float(run_state["gold"]["mantissa"]) == 0.0, "prestige resets run progression")
+	_check(run_state["support_hero_levels"].is_empty() and run_state["skill_timestamps"]["activated_at_ms"].is_empty(), "prestige clears heroes and skills")
+	_check(not run_state.has("future_run_multiplier"), "prestige structurally removes future run fields")
+	_check(permanent_state["prestige_currency"] == 6 and permanent_state["relic_levels"] == state["permanent_state"]["relic_levels"], "prestige awards currency and preserves relics")
+	_check(recorder.calls == 1 and recorder.saved["run_state"]["stage"] == 1, "successful prestige saves immediately")
+	var refused_state: Dictionary = {
+		"schema_version": 3,
+		"run_state": {"stage": 2, "gold": {"mantissa": 7.0, "exponent": 0}},
+		"permanent_state": {"max_stage": 2},
+	}
 	var refused: Dictionary = prestige.apply(refused_state)
-	_check(refused.get("refused", false) and refused["stage"] == 2 and refused["gold"] == refused_state["gold"], "invalid prestige returns unchanged state with refusal")
+	_check(refused.get("refused", false) and refused["run_state"] == refused_state["run_state"], "invalid prestige returns unchanged state with refusal")
 	_check(recorder.calls == 1, "refused prestige does not save")
 	var view: Dictionary = prestige.preview(state)
 	_check(view["resets"] is Array and view["keeps"] is Array and view["reward"] == 3, "preview supplies explicit UI lists")
@@ -119,6 +133,6 @@ func _test_relics() -> void:
 func _test_save_defaults() -> void:
 	var manager: Node = SaveManagerScript.new()
 	var defaults: Dictionary = manager.call("default_data")
-	_check(defaults.has("support_hero_levels") and defaults.has("skill_timestamps"), "save defaults include heroes and skills")
-	_check(defaults.has("prestige_currency") and defaults.has("relic_levels") and defaults.has("max_stage"), "save defaults include permanent progression")
+	_check(defaults["run_state"].has("support_hero_levels") and defaults["run_state"].has("skill_timestamps"), "run defaults include heroes and skills")
+	_check(defaults["permanent_state"].has("prestige_currency") and defaults["permanent_state"].has("relic_levels") and defaults["permanent_state"].has("max_stage"), "permanent defaults include permanent progression")
 	manager.free()

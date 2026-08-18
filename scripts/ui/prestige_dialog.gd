@@ -38,7 +38,7 @@ func show_preview(preview: Dictionary) -> void:
 
 func debug_open(max_stage: int) -> void:
 	var prestige: Prestige = PrestigeLogic.new()
-	show_preview(prestige.preview({"max_stage": max_stage}))
+	show_preview(prestige.preview({"permanent_state": {"max_stage": max_stage}}))
 
 
 func _format_entries(entries: Variant) -> String:
