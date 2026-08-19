@@ -8,6 +8,9 @@ shift 3 || true
 # Anything after the output path is forwarded to the game, so captures can drive
 # real state (--debug-prestige, --demo-taps, ...) instead of posing a static UI.
 SHOT_EXTRA_ARGS=()
+# Extra evidence lines the game prints (JOURNEY, EVIDENCE, SEQ) can be surfaced
+# by widening SHOT_GREP; the default keeps capture output short.
+SHOT_GREP="${SHOT_GREP:-SHOT_SAVED|SCRIPT ERROR|Parse Error}"
 if [ "$#" -gt 0 ]; then
   SHOT_EXTRA_ARGS=("$@")
 fi
@@ -19,6 +22,6 @@ cp project.godot /tmp/project.godot.bak
 sed -i "s/^window\/size\/viewport_width=.*/window\/size\/viewport_width=$W/; s/^window\/size\/viewport_height=.*/window\/size\/viewport_height=$H/" project.godot
 timeout 200 xvfb-run -a --server-args="-screen 0 ${W}x${H}x24" \
   godot --path . --rendering-driver opengl3 --shot --shot-out "$ABS" "${SHOT_EXTRA_ARGS[@]}" \
-  2>&1 | grep -E 'SHOT_SAVED|SCRIPT ERROR' | tail -2
+  2>&1 | grep -E "$SHOT_GREP" | tail -"${SHOT_TAIL:-30}"
 cp /tmp/project.godot.bak project.godot
 [ -f "$OUT" ] && python3 -c "import struct;d=open('$OUT','rb').read(33);w,h=struct.unpack('>II',d[16:24]);print(f'FILE {w}x{h}')" || echo "NO SHOT"

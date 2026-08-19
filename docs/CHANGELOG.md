@@ -46,6 +46,19 @@
 - `SkillSystem.from_dict` trusted saved timestamps; corrupt values now dropped.
 - `scripts/shot.sh` dropped forwarded game arguments, hiding UI from capture.
 
+## Gate 5 group 4A closure
+
+**Added**
+- Capture drivers for the hero purchase journey, boss victory/first clear, each
+  skill lifecycle state, and a Falcon Storm frame sequence.
+- `test_group4a_closure.gd`: hero purchase arithmetic, first-clear grant/replay/
+  reload invariants, and every skill's effect window.
+
+**Fixed**
+- HUD showed the next stage while the defeated enemy was still on screen.
+- A run starting on a stage other than the saved one inherited the saved boss
+  countdown and could open a boss already failed.
+
 ## Gate 2 — Combat vertical slice
 - Tap/critical/falcon/DPS damage, pooled damage numbers, enemy reactions,
   boss timer, failure and Retry.

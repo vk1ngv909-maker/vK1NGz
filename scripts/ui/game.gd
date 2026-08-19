@@ -65,8 +65,39 @@ func _ready() -> void:
 		if ar2 != null and ar2.has_method("debug_retry"):
 			ar2.debug_retry()
 		await get_tree().process_frame
+	if "--demo-falcon-seq" in args:
+		# A still frame cannot show motion or a rate. This saves consecutive
+		# rendered frames (movement) and then samples the strike counter over
+		# real time (cadence), so both claims are measurable from the output.
+		var frames: int = 12
+		for i in args.size():
+			if args[i] == "--demo-falcon-seq" and i + 1 < args.size():
+				frames = clampi(int(args[i + 1]), 2, 40)
+		var seq_arena: Node = get_tree().get_first_node_in_group("combat_arena")
+		if seq_arena != null:
+			seq_arena.call("debug_falcon_sequence_setup")
+		var base: String = out_path.get_basename()
+		var start_ms: int = Time.get_ticks_msec()
+		for frame: int in frames:
+			await get_tree().process_frame
+			await get_tree().process_frame
+			var frame_image: Image = get_viewport().get_texture().get_image()
+			frame_image.save_png("%s_%02d.png" % [base, frame])
+			print("FALCONSEQ frame=%02d t=%.2f %s" % [
+				frame, float(Time.get_ticks_msec() - start_ms) / 1000.0,
+				seq_arena.call("debug_falcon_state") if seq_arena != null else ""])
+		for sample: int in 12:
+			await get_tree().create_timer(0.25).timeout
+			print("FALCONRATE t=%.2f %s" % [
+				float(Time.get_ticks_msec() - start_ms) / 1000.0,
+				seq_arena.call("debug_falcon_state") if seq_arena != null else ""])
+		get_tree().quit()
 	await get_tree().process_frame
 	await get_tree().process_frame
+	if "--debug-skill" in args:
+		var hud_check: Node = get_tree().get_first_node_in_group("hud")
+		if hud_check != null:
+			print("SKILL_BUTTONS %s" % str(hud_check.call("debug_button_texts")))
 	var shot: Image = get_viewport().get_texture().get_image()
 	var err: Error = shot.save_png(out_path)
 	if err != OK:

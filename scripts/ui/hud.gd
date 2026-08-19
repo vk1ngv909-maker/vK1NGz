@@ -108,6 +108,44 @@ func debug_force_cooldown(ids: PackedStringArray) -> void:
 	_refresh_skill_buttons(later)
 
 
+func debug_skill_state(id: String, state: String) -> void:
+	## Test-only: put ONE skill into the requested lifecycle state through the
+	## same skill system the buttons use, then report the modifier it produces so
+	## the screenshot can be checked against a real number.
+	# Same clock the HUD's own _process uses; a different one expires the skill
+	# on the next frame and the capture would show READY over an active skill.
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	skill_system.tick(now_ms)
+	if state == "cooldown":
+		# Activated far enough in the past that the duration has already run out
+		# while the cooldown still has time left, which is exactly the state the
+		# real UI shows after a skill ends.
+		var definition: Dictionary = skill_system.skills.get(id, {})
+		skill_system.activate(id, now_ms - int(definition.get("duration_ms", 0)) - 1000, 100)
+		skill_system.tick(now_ms)
+	elif state == "active":
+		skill_system.activate(id, now_ms, 100)
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	var timer_before: float = float(arena.get("combat").get("boss_time_left")) if arena != null else 0.0
+	sync_skill_effects()
+	var timer_after: float = float(arena.get("combat").get("boss_time_left")) if arena != null else 0.0
+	print("SKILL_TIMER %s state=%s boss_time_before=%.1f boss_time_after=%.1f" % [id, state, timer_before, timer_after])
+	_refresh_skill_buttons(now_ms)
+	print("SKILL %s state=%s tap=%.2f falcon=%.2f gold=%.2f support=%.2f crit_dmg=%.2f active=%s cooldown=%s" % [
+		id, state,
+		float(skill_system.tap_damage_multiplier()), float(skill_system.falcon_rate_multiplier()),
+		float(skill_system.gold_multiplier()), float(skill_system.support_dps_multiplier()),
+		float(skill_system.crit_damage_multiplier()),
+		skill_system.is_active(id), skill_system.is_on_cooldown(id)])
+
+
+func debug_button_texts() -> PackedStringArray:
+	var out := PackedStringArray()
+	for button: Button in skill_buttons:
+		out.append(button.text.replace("\n", "/"))
+	return out
+
+
 func _on_skill_pressed(id: String) -> void:
 	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
 	if skill_system.activate(id, now_ms, _max_stage()):

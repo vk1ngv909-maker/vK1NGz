@@ -5,6 +5,7 @@ const CombatState = preload("res://scripts/combat/combat_state.gd")
 const Relics = preload("res://scripts/progression/relics.gd")
 const RewardSystem = preload("res://scripts/progression/reward_system.gd")
 const WorldsLogic = preload("res://scripts/progression/worlds.gd")
+const InventoryLogic = preload("res://scripts/progression/inventory.gd")
 
 @onready var hero: ColorRect = %Hero
 @onready var falcon: ColorRect = %Falcon
@@ -25,6 +26,13 @@ var _falcon_tween: Tween
 var _enemy_tween: Tween
 var _flash_tween: Tween
 var _death_in_progress: bool = false
+## While a defeated enemy is still dissolving on screen the run has already
+## advanced internally. The HUD keeps describing the encounter the player can
+## still see, otherwise it reads "Stage 11 - BOSS" over a dead stage-10 boss.
+var _displayed_stage: int = 0
+## Test-only counter so a capture sequence can prove the falcon's strike rate
+## really rises while Falcon Storm is active, instead of asserting it.
+var debug_falcon_hits: int = 0
 var _enemy_color: Color
 var _reduced_flashing: bool = false
 ## Test-only: raises max_stage for captures so a jumped-to stage renders the
@@ -155,6 +163,83 @@ func debug_open_heroes(locked_only: bool = false) -> void:
 		panel.call("debug_open", locked_only)
 
 
+func debug_hero_journey(step: String) -> void:
+	var panel: Node = get_tree().get_first_node_in_group("heroes_panel")
+	if panel == null:
+		panel = get_tree().current_scene.find_child("HeroesPanel", true, false)
+	if panel == null:
+		push_error("CombatArena: heroes panel not found")
+		return
+	panel.call("debug_journey", step)
+
+
+func debug_skill_state(id: String, state: String) -> void:
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	if hud == null:
+		hud = get_tree().current_scene.find_child("HUD", true, false)
+	if hud == null:
+		push_error("CombatArena: HUD not found")
+		return
+	hud.call("debug_skill_state", id, state)
+
+
+func debug_falcon_sequence_setup() -> void:
+	## Test-only: park the run on an enemy that cannot die, so a frame sequence
+	## measures falcon cadence rather than stage churn.
+	combat.enemy_max_hp = BigNumber.from_mantissa_exponent(1.0, 40)
+	combat.enemy_hp = combat.enemy_max_hp._copy_normalized()
+	debug_falcon_hits = 0
+	_refresh_hud()
+
+
+func debug_falcon_state() -> String:
+	return "hits=%d falcon_x=%.1f falcon_y=%.1f rate_mult=%.2f" % [
+		debug_falcon_hits, falcon.position.x, falcon.position.y, combat.get("_skill_falcon_rate_mult")]
+
+
+func debug_boss_victory(phase: String) -> void:
+	## Test-only: drives a real boss kill through the ordinary tap -> death ->
+	## first-clear path. The only shortcut is dropping the boss HP to a single
+	## tap so the capture lands on the killing hit; the reward, the save and the
+	## inventory all still go through production code.
+	if not combat.is_boss:
+		var interval: int = int(CombatState.balance()["boss_stage_interval"])
+		combat.stage = int(ceil(float(combat.stage) / float(interval))) * interval
+		combat.spawn_enemy()
+	var boss_stage: int = combat.stage
+	var before: int = combat.inventory.owned_items.size()
+	combat.enemy_hp = combat.get_tap_damage()._copy_normalized()
+	debug_tap()
+	var after: int = combat.inventory.owned_items.size()
+	var granted_id: String = ""
+	for uid: Variant in combat.inventory.owned_items:
+		granted_id = str((combat.inventory.owned_items[uid] as Dictionary).get("item_id", ""))
+	print("BOSSWIN phase=%s boss_stage=%d cleared=%s items_before=%d items_after=%d item=%s" % [
+		phase, boss_stage, combat.boss_first_clears.has(CombatState.encounter_id(boss_stage)),
+		before, after, granted_id])
+	if phase == "replay":
+		# Same boss, second kill: the first-clear reward must not fire again.
+		combat.stage = boss_stage
+		combat.spawn_enemy()
+		combat.enemy_hp = combat.get_tap_damage()._copy_normalized()
+		debug_tap()
+		print("BOSSWIN replay_items=%d (expected %d)" % [combat.inventory.owned_items.size(), after])
+	if phase == "reload":
+		# Reload from the saved data the grant wrote; a duplicate would show up
+		# as an extra owned item.
+		var saved: Dictionary = combat.save_into(SaveManager.data)
+		var reloaded_inventory := InventoryLogic.new()
+		reloaded_inventory.from_dict((saved.get("permanent_state", {}) as Dictionary).get("equipment", {}))
+		print("BOSSWIN reload_items=%d (expected %d)" % [reloaded_inventory.owned_items.size(), after])
+	_refresh_hud()
+	if phase == "reward":
+		# The live inventory, not the debug fixture: the capture must show the
+		# item this boss actually granted.
+		var panel: Node = get_tree().get_first_node_in_group("inventory_panel")
+		if panel != null:
+			panel.call("open_panel")
+
+
 func debug_open_skills_panel() -> void:
 	var panel: Node = get_tree().get_first_node_in_group("skills_panel")
 	if panel != null:
@@ -213,6 +298,15 @@ func _open_debug_panels_from_command_line() -> void:
 			return
 		if args[index] == "--debug-settings":
 			debug_open_settings()
+			return
+		if args[index] == "--debug-skill" and index + 2 < args.size():
+			debug_skill_state(args[index + 1], args[index + 2])
+			return
+		if args[index] == "--debug-boss-victory" and index + 1 < args.size():
+			debug_boss_victory(args[index + 1])
+			return
+		if args[index] == "--debug-hero-journey" and index + 1 < args.size():
+			debug_hero_journey(args[index + 1])
 			return
 		if args[index] == "--debug-heroes":
 			debug_open_heroes(false)
@@ -291,9 +385,11 @@ func _react_to_attack(result: Dictionary) -> void:
 	_refresh_hp()
 	_play_hit_reaction()
 	if kind == "falcon":
+		debug_falcon_hits += 1
 		_play_falcon_strike()
 	if result.get("killed", false):
 		_death_in_progress = true
+		_displayed_stage = maxi(1, combat.stage - 1) if bool(result.get("stage_advanced", false)) else combat.stage
 		if result.get("stage_advanced", false):
 			var boss_stage: int = int(result.get("boss_stage", 0))
 			if boss_stage > 0:
@@ -359,6 +455,7 @@ func _play_death_reaction() -> void:
 	enemy.modulate = Color.WHITE
 	_apply_enemy_presentation()
 	_death_in_progress = false
+	_displayed_stage = 0
 	_update_facing()
 	_refresh_hud()
 
@@ -420,8 +517,12 @@ func _load_combat() -> void:
 		"prestige_currency": permanent_state.get("prestige_currency", 0),
 	})
 	combat.set_relic_bonuses(1.0 + relics.total_bonus("damage"), 1.0 + relics.total_bonus("gold"))
-	combat.boss_time_left = maxf(0.0, float(run_state.get("boss_time_left", combat.boss_time_left)))
-	combat.awaiting_retry = bool(run_state.get("awaiting_retry", false))
+	# The saved timer belongs to the saved stage. When the run starts on a
+	# different stage the fresh encounter keeps its own timer, otherwise a
+	# boss inherits a zero countdown and fails the instant it appears.
+	if int(run_state.get("stage", start_stage)) == combat.stage:
+		combat.boss_time_left = maxf(0.0, float(run_state.get("boss_time_left", combat.boss_time_left)))
+		combat.awaiting_retry = bool(run_state.get("awaiting_retry", false))
 	# Debug boss selection is applied last so stale saved timer/retry state cannot
 	# overwrite the requested live archetype before the capture frame.
 	if not _debug_boss_id.is_empty() and not combat.debug_spawn_boss(_debug_boss_id):
@@ -452,7 +553,8 @@ func _commit_boss_first_clear(boss_stage: int) -> Dictionary:
 
 func _refresh_hud() -> void:
 	gold_label.text = Settings.t("hud.gold") % Settings.format_big_number(combat.gold)
-	stage_label.text = Settings.t("hud.stage_boss" if combat.is_boss else "hud.stage") % Settings.format_number(combat.stage)
+	var shown_stage: int = _displayed_stage if _death_in_progress and _displayed_stage > 0 else combat.stage
+	stage_label.text = Settings.t("hud.stage_boss" if combat.is_boss else "hud.stage") % Settings.format_number(shown_stage)
 	var cost: BigNumber = combat.get_upgrade_cost()
 	tap_upgrade_button.text = Settings.t("hud.tap_upgrade") % [Settings.format_number(combat.tap_level), Settings.format_big_number(combat.get_tap_damage()), Settings.format_big_number(cost)]
 	tap_upgrade_button.disabled = combat.gold.compare(cost) < 0

@@ -166,3 +166,56 @@ func _buy(id: String, amount: int) -> void:
 		if arena != null:
 			arena.call("_save_combat")
 	_refresh()
+
+
+func debug_journey(step: String, hero_id: String = "oasis_guard") -> void:
+	## Drives one hero through the whole purchase journey so each stage can be
+	## captured. Every figure the capture shows comes from the same roster the
+	## real panel uses, so the screenshot and the game cannot disagree.
+	_debug_fixture = true
+	max_stage = 1 if step == "locked" else 100
+	roster = SupportHeroesLogic.new(BigNumber.from_mantissa_exponent(1.0, 6))
+	match step:
+		"locked", "affordable":
+			pass
+		"hired":
+			roster.hire(hero_id, max_stage)
+		"upgraded":
+			roster.hire(hero_id, max_stage)
+			roster.level_up(hero_id, 1)
+		"buymax":
+			roster.hire(hero_id, max_stage)
+			roster.level_up(hero_id, roster.max_affordable(hero_id, roster.gold))
+		"milestone":
+			roster.hire(hero_id, max_stage)
+			var target: int = int((roster.next_milestone(hero_id) as Dictionary).get("level", 10))
+			roster.level_up(hero_id, target - roster.get_level(hero_id))
+	show()
+	refresh_localized_text()
+	_refresh()
+	debug_report(step, hero_id)
+
+
+func debug_report(step: String, hero_id: String) -> void:
+	## Prints the computed truth next to the text the card actually renders, so
+	## a screenshot claim can be checked against the shared calculations.
+	var level: int = roster.get_level(hero_id)
+	var gold_text: String = Settings.format_big_number(roster.gold)
+	var dps_text: String = Settings.format_big_number(roster.hero_dps(hero_id))
+	var gain_text: String = Settings.format_big_number(roster.next_level_gain(hero_id))
+	var total_text: String = Settings.format_big_number(roster.total_dps())
+	var shown: String = ""
+	for card: Node in hero_list.get_children():
+		var label: Label = card.find_child("*", true, false) as Label
+		for node: Node in card.find_children("*", "Label", true, false):
+			var text: String = (node as Label).text
+			if text.begins_with(Settings.t(str((roster.heroes[hero_id] as Dictionary)["name_key"]))):
+				shown = text
+		if label != null and shown != "":
+			break
+	print("JOURNEY %s hero=%s gold=%s level=%d dps=%s gain=%s total_dps=%s" % [
+		step, hero_id, gold_text, level, dps_text, gain_text, total_text])
+	print("JOURNEY_CARD %s" % shown.replace("\n", " | "))
+	print("JOURNEY_MATCH level=%s dps=%s gain=%s" % [
+		shown.contains("%s %d" % [Settings.t("ui.level"), level]),
+		shown.contains(dps_text), shown.contains(gain_text)])

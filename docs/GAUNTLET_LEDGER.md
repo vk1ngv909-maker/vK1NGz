@@ -340,10 +340,79 @@ delta, crossing a milestone actually raises DPS, and reopening mid-ACTIVE or
 mid-COOLDOWN restores the true state.
 35 suites, `ALL SUITES PASSED`.
 
+## Gate 5 group 4A — CLOSED
+
+Closure evidence: the three journeys were driven through production code paths
+and captured, with every displayed figure printed next to the value the shared
+calculation functions return.
+
+**1. Hero purchase journey** (`hero_journey_locked.png`, `_affordable.png`,
+`_hired.png`, `_upgraded.png`, `_buymax.png`, `_milestone.png`, Oasis Guard,
+1,000,000 starting gold). Card text matched the roster on every step:
+
+| Step | Gold | Level | Hero DPS | Next-level gain | State shown |
+| --- | --- | --- | --- | --- | --- |
+| locked | 1M | 0 | 0 | 7 | LOCKED — Unlock at stage 8 |
+| affordable | 1M | 0 | 0 | 7 | AVAILABLE — AFFORDABLE |
+| hired | 999.86K | 1 | 7 | 7.56 | AVAILABLE — AFFORDABLE |
+| upgraded | 999.71K | 2 | 14.56 | 8.15 | AVAILABLE — AFFORDABLE |
+| Buy Max | 46.15K | 78 | 44.75K | 2.39K | AVAILABLE — NOT AFFORDABLE |
+| milestone | 997.92K | 10 | 199.26 | 28.69 | Milestone 10 / 25 |
+
+The milestone is a real effect, not a label: hero DPS goes 86.22 at level 9 to
+199.26 at level 10 (x2.31 = x1.155 growth x2.0 milestone), measured level by
+level.
+
+**2. Boss victory and first clear** (`boss_victory_kill.png`, `_victory.png`,
+`_reward.png`, `_replay.png`, `_reload.png`). Stage 10 Sandstorm Colossus,
+killed by a real tap through the ordinary death path, from a wiped save each
+run: items 0 -> 1, granted `dune_knife`, and the live inventory capture shows
+exactly "Dune Knife — COMMON · Score 15". Killing the same boss again leaves the
+count at 1 (`already_cleared`); reloading the written save also leaves it at 1.
+
+**3. All six skills live** (`skill_<id>_ready|active|cooldown.png`, 18 captures).
+Each ACTIVE capture carries the effect the data promises and reverts on
+COOLDOWN: sand_fury tap x3.0, falcon_storm falcon rate x4.0, golden_wind gold
+x2.5, ancestor_call support DPS x3.0, critical_eclipse crit damage x2.0, and
+time_fracture boss timer 30.0s -> 40.0s while active only. Button countdowns
+match the data (ACTIVE 10/8/12/1/15/9 s; COOLDOWN from 45/60/90/120/75/50 s).
+
+**Falcon Storm frame sequence** (`falconseq_storm_00..11.png` vs
+`falconseq_baseline_00..11.png`), consecutive rendered frames, not a still:
+
+- Movement: falcon x = 48.2 (rest) -> 343.7 -> 281.6 -> 48.2 across successive
+  frames, with the cyan falcon damage number on the boss in the same frame.
+- Rate: 12 strikes in 4.54s with Falcon Storm active versus 3 strikes in 4.49s
+  without it — x4.0, exactly the declared multiplier.
+
+Bugs found and fixed during this closure pass:
+
+- **C37/P2** — after a kill the HUD read the new stage over the corpse of the
+  old encounter ("Stage 11 — BOSS" while the stage-10 boss was still dissolving).
+  The HUD now describes the encounter on screen until the next one spawns.
+- **C38/P1** — a run starting on a stage other than the saved one inherited the
+  saved boss countdown, so a boss appeared already at TIME UP / BOSS FAILED. The
+  saved timer is now only restored for the stage it belongs to.
+- **C39** — my own capture driver used `Time.get_ticks_msec()` while the HUD
+  ticks on unix milliseconds, so an "ACTIVE" skill rendered READY. Caught by
+  printing the real button text at capture time rather than trusting the state
+  object; all 18 skill captures were retaken.
+
+Tests: `test_group4a_closure.gd` (new, 45 checks) pins the journeys as
+invariants — hire/upgrade/Buy Max/milestone arithmetic, first-clear grant,
+replay refusal, reload without duplication, a different boss stage still
+granting, and each skill's effect appearing and disappearing with its window.
+37 suites, `ALL SUITES PASSED`, with string, translation-freshness and parse
+guards green. C17 balance re-measured after all fixes: first prestige 35.5 min
+(target 25-45), all equipment and offline paths 25.8-35.5 min, `CRITERION 1: MET`.
+
+Group 4A is closed.
+
 ## Next highest-priority action
 
 Gate 5 group 4B: fifteen Relics and the full twenty-item equipment set, with
-relic sensitivity simulations, then the closing Gate 5 regression.
+relic sensitivity simulations, then the closing Gate 5 regression. Group 4A is
+closed and no 4B content was added during this checkpoint.
 
 ## Placeholders
 
