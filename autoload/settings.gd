@@ -184,6 +184,25 @@ static func format_big_number(value: BigNumber) -> String:
 	return _apply_numeral_style(value.format())
 
 
+## Unicode isolate characters. A left-to-right expression such as "0 / 8.5"
+## dropped into an Arabic sentence is reordered by the bidirectional algorithm
+## into "8.5 / 0", which reads as the wrong health value. Wrapping the run in an
+## isolate pins its internal order without affecting the sentence around it.
+const LTR_ISOLATE := "\u2066"
+const POP_ISOLATE := "\u2069"
+
+
+static func ltr(text: String) -> String:
+	## Keep a numeric expression left-to-right inside a right-to-left interface.
+	return LTR_ISOLATE + text + POP_ISOLATE
+
+
+static func format_pair(first: String, second: String, separator: String = " / ") -> String:
+	## A "current / maximum" readout, isolated so neither the numbers nor the
+	## separator can be reordered by the surrounding language.
+	return ltr(first + separator + second)
+
+
 static func format_percent(value: float, decimals: int = 0, show_plus: bool = false) -> String:
 	return format_number(value, decimals, show_plus) + "%"
 

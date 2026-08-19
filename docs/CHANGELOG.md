@@ -46,6 +46,18 @@
 - `SkillSystem.from_dict` trusted saved timestamps; corrupt values now dropped.
 - `scripts/shot.sh` dropped forwarded game arguments, hiding UI from capture.
 
+## Worlds 2 and 3
+
+**Added**
+- Moonlit Wildwood and Obsidian Citadel as four-layer parallax worlds.
+- `Settings.format_pair` / `Settings.ltr`: Unicode-isolated numeric runs.
+- `test_rtl_numeric_isolation.gd`, `test_world_boundaries.gd`.
+- Equipment contact sheet now carries English display names and asserts 20 unique ids.
+
+**Fixed**
+- Arabic health readout reversed the current and maximum values.
+- Sky segmentation only worked on a daylight sky.
+
 ## Visual re-theme — world 1 slice
 
 **Added**

@@ -39,14 +39,20 @@ def _feather(mask: np.ndarray, radius: int = FEATHER) -> np.ndarray:
 
 
 def _sky_mask(rgb: np.ndarray) -> np.ndarray:
-    """Sky is the blue region connected to the top edge."""
-    height = rgb.shape[0]
-    blueness = rgb[:, :, 2].astype(np.int16) - rgb[:, :, 0].astype(np.int16)
+    """The open sky: the region that grows down from the top edge.
+
+    Keyed on distance from the sky's own colour rather than on blueness, so a
+    daylight meadow, a moonlit forest and a volcanic sky all segment with the
+    same rule. Clouds and moons are much brighter than the sky they sit in, so
+    they are admitted explicitly.
+    """
+    height, width, _ = rgb.shape
+    top = rgb[: max(2, int(height * 0.03))].reshape(-1, 3).mean(axis=0)
+    distance = np.linalg.norm(rgb.astype(np.float32) - top, axis=2)
     value = rgb.max(axis=2).astype(np.int16)
     low = rgb.min(axis=2).astype(np.int16)
-    # Open sky only. Hazy blue mountains also read as blue, but they belong to
-    # the distant layer; keeping them here would ghost against it.
-    candidate = ((blueness > 58) & (value > 150)) | ((value > 232) & (value - low < 34))
+    bright = (value > int(top.max()) + 40) & (value - low < 70)
+    candidate = (distance < 86.0) | bright
     candidate[int(height * 0.46):, :] = False
     labels, count = ndimage.label(candidate)
     keep = np.unique(labels[0, :])
@@ -54,7 +60,17 @@ def _sky_mask(rgb: np.ndarray) -> np.ndarray:
     if keep.size == 0:
         candidate[: int(height * 0.2), :] = True
         return candidate
-    return np.isin(labels, keep)
+    mask = np.isin(labels, keep)
+    # Stop at the first row the sky no longer really covers, so the fill cannot
+    # leak down a matching-coloured cliff or tree line.
+    coverage = mask.mean(axis=1)
+    horizon = height
+    for y in range(int(height * 0.05), int(height * 0.46)):
+        if coverage[y] < 0.22:
+            horizon = y
+            break
+    mask[horizon:, :] = False
+    return mask
 
 
 def _sky_plate(rgb: np.ndarray, sky: np.ndarray) -> np.ndarray:

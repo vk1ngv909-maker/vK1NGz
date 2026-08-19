@@ -84,7 +84,7 @@ hud.boss_failed,فشلت معركة الزعيم
 hud.boss_battle,⚠ معركة الزعيم ⚠
 hud.time_up,انتهى الوقت
 hud.retry_boss,إعادة محاولة الزعيم
-hud.enemy_hp,%s / %s صحة
+hud.enemy_hp,الصحة: %s
 hud.ready,جاهز
 hud.active,نشط
 hud.cooldown,إعادة شحن

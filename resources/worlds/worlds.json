@@ -47,8 +47,10 @@
     "accent": "#67D3C2"
    },
    "background_layers": [
-    "PLACEHOLDER: crescent moon",
-    "PLACEHOLDER: silver dunes"
+    "res://assets/worlds/moonlit_dunes/sky.png",
+    "res://assets/worlds/moonlit_dunes/distant.png",
+    "res://assets/worlds/moonlit_dunes/arena.png",
+    "res://assets/worlds/moonlit_dunes/foreground.png"
    ],
    "music_ref": "placeholder://music/moonlit_dunes",
    "enemy_pool": [
@@ -79,8 +81,10 @@
     "accent": "#F4C95D"
    },
    "background_layers": [
-    "PLACEHOLDER: ruined pillars",
-    "PLACEHOLDER: solar throne"
+    "res://assets/worlds/ruins_of_the_sun_kingdom/sky.png",
+    "res://assets/worlds/ruins_of_the_sun_kingdom/distant.png",
+    "res://assets/worlds/ruins_of_the_sun_kingdom/arena.png",
+    "res://assets/worlds/ruins_of_the_sun_kingdom/foreground.png"
    ],
    "music_ref": "placeholder://music/sun_kingdom",
    "enemy_pool": [

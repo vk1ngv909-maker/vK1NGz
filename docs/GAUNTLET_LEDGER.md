@@ -573,12 +573,67 @@ Evidence: `docs/evidence/slice2/` — combat, boss, skills panel, live skill
 states, all-items inventory, equipment comparison and heroes, in English and
 Arabic at 720x1280 and 1080x2400.
 
+## Moonlit Wildwood and Obsidian Citadel — both worlds built
+
+**Arabic health readout fixed first.** The label read `صحة 8.5 / 0`: two
+separate `%s` placeholders let the bidirectional algorithm reorder the runs, so
+the maximum was announced as the current value. The pair is now emitted as one
+Unicode-isolated left-to-right run (`Settings.format_pair`, U+2066/U+2069) and
+the Arabic string became `الصحة: %s`. Regular enemies and bosses share the one
+call site, so both are covered. `test_rtl_numeric_isolation.gd` pins it across
+zero, full, decimal, BigNumber and extreme BigNumber values in both locales, and
+fails if any caller goes back to two placeholders. Verified on screen in Arabic:
+**الصحة: 3.5 / 8.5** at 720x1280 and 1080x2400.
+
+**Both worlds rebuilt as four layers each.** The sky segmentation was
+generalized: it now grows from the top edge by distance from the sky's own
+colour instead of by blueness, which is what let a daylight meadow, a night
+forest and a volcanic sky all segment with one rule, and it stops at the first
+row the sky no longer covers so the fill cannot leak down a matching cliff.
+
+| World | sky | distant | arena | foreground |
+| --- | --- | --- | --- | --- |
+| Emerald Meadow | moon-free daylight gradient + clouds | mountains, ruins, trees | sand disc | plants, stones, crystals |
+| Moonlit Wildwood | night gradient + moon | moonlit trees and ruins | pale teal glade | glowing mushrooms and roots |
+| Obsidian Citadel | crimson-violet sky | volcanic fortress and gate | dark stone platform with lava veins | magenta crystals and braziers |
+
+Every world's sky and arena layer is authored at the full 1080x1920 master;
+`test_world_boundaries.gd` asserts that, plus continuous stage ranges, four
+correctly named layers per world that exist on disk, and the right world owning
+its first, middle and last stage.
+
+**World resource release, four full cycles across all three worlds (12
+switches):** baseline 51.87 MB; each world resident at 51.95-52.45 MB with
+exactly 4 layers and **foreign_cached = 0** on every measurement, so no other
+world's layers are ever held; after releasing, **19.37 MB with 0 layers**. The
+four layers cost ~32.6 MB while their world is on screen and are fully returned.
+Memory does not grow across cycles (0.5 MB drift, not a trend). These are
+llvmpipe software-rendering figures and are **not** Android performance.
+
+**Balance untouched.** No balance value was edited; the C17 simulation still
+reports first prestige at **35.5 min**, `CRITERION 1: MET`, identical to the
+run before the worlds work.
+
+**Known design point, not a defect:** boss archetypes are milestone-based
+(`world_id: "milestone"`) with an escalating hp_modifier ramp of 1.00 / 1.08 /
+1.16 / 1.25 by stage, so the Ancient Treant can appear inside the Citadel. Enemy
+pools *are* world-bound and correct. Rebinding bosses to worlds would change
+which modifier lands on which stage — a balance change — so it is left for an
+explicit decision rather than made silently.
+
+Evidence: `docs/evidence/worlds23/` — normal and boss combat plus the skill
+showcase for both worlds, English and Arabic, at 720x1280 and 1080x2400, and the
+live all-items inventory through the debug-only path (`OS.is_debug_build()` and
+an explicit flag, unreachable in a release build).
+`docs/evidence/equipment_contact_sheet.webp` proves 20 unique ids with English
+display name, slot and rarity, and the builder asserts on any duplicate.
+
 ## Next highest-priority action
 
-Await visual approval of the world 1 slice. On approval: rebuild the Moonlit
-Wildwood and Obsidian Citadel layers the same way, then return to Gate 5 group
-4B (fifteen Relics and the full twenty-item equipment set) with relic
-sensitivity simulations and the closing Gate 5 regression.
+Gate 5 group 4B: fifteen Relics and the relic sensitivity simulations, then the
+closing Gate 5 regression. Open question for the owner: whether boss archetypes
+should be rebound to worlds, which is a balance change and needs a re-measured
+progression run.
 
 ## Placeholders
 

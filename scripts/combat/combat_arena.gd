@@ -580,7 +580,12 @@ func _refresh_hud() -> void:
 
 
 func _refresh_hp() -> void:
-	enemy_hp_label.text = Settings.t("hud.enemy_hp") % [Settings.format_big_number(combat.enemy_hp), Settings.format_big_number(combat.enemy_max_hp)]
+	# One isolated left-to-right run for the whole "current / maximum"
+	# expression: as two separate placeholders, Arabic reordered them and the
+	# label read the maximum first.
+	enemy_hp_label.text = Settings.t("hud.enemy_hp") % Settings.format_pair(
+		Settings.format_big_number(combat.enemy_hp),
+		Settings.format_big_number(combat.enemy_max_hp))
 	var ratio: BigNumber = combat.enemy_hp.div(combat.enemy_max_hp)
 	enemy_hp_bar.value = clampf(ratio.mantissa * pow(10.0, ratio.exponent) * 100.0, 0.0, 100.0)
 

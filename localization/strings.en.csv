@@ -84,7 +84,7 @@ hud.boss_failed,BOSS FAILED
 hud.boss_battle,⚠ BOSS BATTLE ⚠
 hud.time_up,TIME UP
 hud.retry_boss,Retry Boss
-hud.enemy_hp,%s / %s HP
+hud.enemy_hp,%s HP
 hud.ready,READY
 hud.active,ACTIVE
 hud.cooldown,COOLDOWN

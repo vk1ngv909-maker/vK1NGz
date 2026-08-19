@@ -76,25 +76,35 @@ func _ready() -> void:
 		var cycle_hud: Node = get_tree().get_first_node_in_group("hud")
 		var cycle_arena: Node = get_tree().get_first_node_in_group("combat_arena")
 		var world_source: Object = cycle_arena.get("worlds")
-		var built: Dictionary = world_source.call("world_for_stage", 1)
-		var bare: Dictionary = world_source.call("world_for_stage", 40)
+		var stages: Array[int] = [1, 40, 80]
+		var baseline: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
+		print("WORLDCYCLE baseline_mb=%.2f" % baseline)
 		for step: int in cycles:
-			cycle_hud.call("apply_world", built)
-			for f: int in 4:
-				await get_tree().process_frame
-			var loaded_mb: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
-			var loaded_layers: int = int(cycle_hud.call("debug_resident_layer_count"))
-			cycle_hud.call("apply_world", bare)
-			for f2: int in 4:
-				await get_tree().process_frame
-			var released_mb: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
-			var still_cached: int = 0
-			for layer_name: String in ["sky", "distant", "arena", "foreground"]:
-				if ResourceLoader.has_cached("res://assets/worlds/%s/%s.png" % [str(built.get("id", "")), layer_name]):
-					still_cached += 1
-			print("WORLDCYCLE step=%d built_world_mb=%.2f layers_loaded=%d other_world_mb=%.2f layers_after=%d still_cached=%d" % [
-				step, loaded_mb, loaded_layers, released_mb,
-				int(cycle_hud.call("debug_resident_layer_count")), still_cached])
+			for stage_value: int in stages:
+				var world: Dictionary = world_source.call("world_for_stage", stage_value)
+				cycle_hud.call("apply_world", world)
+				for f: int in 4:
+					await get_tree().process_frame
+				var loaded_mb: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
+				var loaded_layers: int = int(cycle_hud.call("debug_resident_layer_count"))
+				# Every other world's layers must be gone, not just unreferenced.
+				var foreign_cached: int = 0
+				for other_stage: int in stages:
+					if other_stage == stage_value:
+						continue
+					var other: Dictionary = world_source.call("world_for_stage", other_stage)
+					for layer_name: String in ["sky", "distant", "arena", "foreground"]:
+						if ResourceLoader.has_cached("res://assets/worlds/%s/%s.png" % [str(other.get("id", "")), layer_name]):
+							foreign_cached += 1
+				print("WORLDCYCLE cycle=%d world=%s loaded_mb=%.2f layers=%d foreign_cached=%d" % [
+					step, str(world.get("id", "")), loaded_mb, loaded_layers, foreign_cached])
+		# Back to a state with no world applied, to show the memory is returned.
+		cycle_hud.call("_apply_world_layers", "none")
+		for f3: int in 6:
+			await get_tree().process_frame
+		print("WORLDCYCLE final_released_mb=%.2f layers=%d" % [
+			float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0,
+			int(cycle_hud.call("debug_resident_layer_count"))])
 		get_tree().quit()
 	if "--demo-perf" in args:
 		# Frame cost and texture memory with the real world and sprites loaded,

@@ -16,7 +16,7 @@
     1344
    ],
    "drawn_width_vs_viewport": 1.18,
-   "coverage": 0.319
+   "coverage": 0.392
   },
   "arena": {
    "file": "assets/worlds/oasis_frontier/arena.png",
@@ -35,6 +35,82 @@
    ],
    "drawn_width_vs_viewport": 1.12,
    "coverage": 0.346
+  }
+ },
+ "moonlit_dunes": {
+  "sky": {
+   "file": "assets/worlds/moonlit_dunes/sky.png",
+   "stored_size": [
+    1080,
+    1920
+   ],
+   "drawn_width_vs_viewport": 1.0,
+   "coverage": 1.0
+  },
+  "distant": {
+   "file": "assets/worlds/moonlit_dunes/distant.png",
+   "stored_size": [
+    892,
+    1344
+   ],
+   "drawn_width_vs_viewport": 1.18,
+   "coverage": 0.329
+  },
+  "arena": {
+   "file": "assets/worlds/moonlit_dunes/arena.png",
+   "stored_size": [
+    1080,
+    1920
+   ],
+   "drawn_width_vs_viewport": 1.0,
+   "coverage": 0.379
+  },
+  "foreground": {
+   "file": "assets/worlds/moonlit_dunes/foreground.png",
+   "stored_size": [
+    1028,
+    1632
+   ],
+   "drawn_width_vs_viewport": 1.12,
+   "coverage": 0.351
+  }
+ },
+ "ruins_of_the_sun_kingdom": {
+  "sky": {
+   "file": "assets/worlds/ruins_of_the_sun_kingdom/sky.png",
+   "stored_size": [
+    1080,
+    1920
+   ],
+   "drawn_width_vs_viewport": 1.0,
+   "coverage": 1.0
+  },
+  "distant": {
+   "file": "assets/worlds/ruins_of_the_sun_kingdom/distant.png",
+   "stored_size": [
+    892,
+    1344
+   ],
+   "drawn_width_vs_viewport": 1.18,
+   "coverage": 0.264
+  },
+  "arena": {
+   "file": "assets/worlds/ruins_of_the_sun_kingdom/arena.png",
+   "stored_size": [
+    1080,
+    1920
+   ],
+   "drawn_width_vs_viewport": 1.0,
+   "coverage": 0.379
+  },
+  "foreground": {
+   "file": "assets/worlds/ruins_of_the_sun_kingdom/foreground.png",
+   "stored_size": [
+    1028,
+    1632
+   ],
+   "drawn_width_vs_viewport": 1.12,
+   "coverage": 0.28
   }
  }
 }
