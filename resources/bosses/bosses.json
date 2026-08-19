@@ -1,9 +1,65 @@
 {
-	"schema_version": 1,
-	"entries": [
-		{"id":"sandstorm_colossus","name_key":"boss.sandstorm_colossus.name","desc_key":"boss.sandstorm_colossus.desc","world_id":"milestone","hp_modifier":1.00,"timer_seconds":30.0,"palette":{"body":"#9A633B","accent":"#FFD166"},"silhouette":"wide","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
-		{"id":"lunar_glasswing","name_key":"boss.lunar_glasswing.name","desc_key":"boss.lunar_glasswing.desc","world_id":"milestone","hp_modifier":1.08,"timer_seconds":30.0,"palette":{"body":"#46518C","accent":"#B8FFF1"},"silhouette":"spindly","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
-		{"id":"ember_crown_construct","name_key":"boss.ember_crown_construct.name","desc_key":"boss.ember_crown_construct.desc","world_id":"milestone","hp_modifier":1.16,"timer_seconds":30.0,"palette":{"body":"#A83B2B","accent":"#FFB52E"},"silhouette":"tall","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"},
-		{"id":"vaultback_behemoth","name_key":"boss.vaultback_behemoth.name","desc_key":"boss.vaultback_behemoth.desc","world_id":"milestone","hp_modifier":1.25,"timer_seconds":30.0,"palette":{"body":"#565B50","accent":"#E0C784"},"silhouette":"squat","reward_table_id":"boss_first_clear_default","asset_status":"PLACEHOLDER"}
-	]
+ "schema_version": 1,
+ "entries": [
+  {
+   "id": "sandstorm_colossus",
+   "name_key": "boss.sandstorm_colossus.name",
+   "desc_key": "boss.sandstorm_colossus.desc",
+   "world_id": "milestone",
+   "hp_modifier": 1.0,
+   "timer_seconds": 30.0,
+   "palette": {
+    "body": "#9A633B",
+    "accent": "#FFD166"
+   },
+   "silhouette": "wide",
+   "reward_table_id": "boss_first_clear_default",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "lunar_glasswing",
+   "name_key": "boss.lunar_glasswing.name",
+   "desc_key": "boss.lunar_glasswing.desc",
+   "world_id": "milestone",
+   "hp_modifier": 1.08,
+   "timer_seconds": 30.0,
+   "palette": {
+    "body": "#46518C",
+    "accent": "#B8FFF1"
+   },
+   "silhouette": "spindly",
+   "reward_table_id": "boss_first_clear_default",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "ember_crown_construct",
+   "name_key": "boss.ember_crown_construct.name",
+   "desc_key": "boss.ember_crown_construct.desc",
+   "world_id": "milestone",
+   "hp_modifier": 1.16,
+   "timer_seconds": 30.0,
+   "palette": {
+    "body": "#A83B2B",
+    "accent": "#FFB52E"
+   },
+   "silhouette": "tall",
+   "reward_table_id": "boss_first_clear_default",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "vaultback_behemoth",
+   "name_key": "boss.vaultback_behemoth.name",
+   "desc_key": "boss.vaultback_behemoth.desc",
+   "world_id": "milestone",
+   "hp_modifier": 1.25,
+   "timer_seconds": 30.0,
+   "palette": {
+    "body": "#565B50",
+    "accent": "#E0C784"
+   },
+   "silhouette": "squat",
+   "reward_table_id": "boss_first_clear_default",
+   "asset_status": "CONCEPT_SOURCED"
+  }
+ ]
 }

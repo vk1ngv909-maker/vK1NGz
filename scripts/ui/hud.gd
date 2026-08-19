@@ -18,9 +18,9 @@ const SKILL_IDS: Array[String] = [
 @onready var safe_area: MarginContainer = %SafeArea
 @onready var bottom_margin: MarginContainer = %BottomMargin
 @onready var combat_area: Control = %CombatArea
-@onready var hero: ColorRect = %Hero
-@onready var falcon: ColorRect = %Falcon
-@onready var enemy: ColorRect = %Enemy
+@onready var hero: TextureRect = %Hero
+@onready var falcon: TextureRect = %Falcon
+@onready var enemy: TextureRect = %Enemy
 @onready var enemy_hp_label: Label = %EnemyHPLabel
 @onready var enemy_hp: ProgressBar = %EnemyHP
 @onready var skill_buttons: Array[Button] = [
@@ -43,6 +43,15 @@ const SKILL_IDS: Array[String] = [
 @onready var world_name: Label = %WorldName
 
 var skill_system: SkillSystem
+## Back-to-front parallax layers and how much wider than the viewport each one
+## is drawn; the wider a layer, the further it travels across a world.
+const PARALLAX_LAYERS: Array[String] = ["sky", "distant", "arena", "foreground"]
+const PARALLAX_OVERSCAN: Array[float] = [1.0, 1.18, 1.0, 1.12]
+var _world_layers: Dictionary = {}
+## The master canvas the layers are authored on, and how far down that canvas
+## the visible crop sits: 0 shows the top of the sky, 1 the foreground edge.
+const MASTER_SIZE := Vector2i(1080, 1920)
+const ARENA_CROP_BIAS := 0.62
 var current_music_ref: String = ""
 var current_world: Dictionary = {}
 
@@ -52,6 +61,11 @@ func _ready() -> void:
 	safe_area.add_theme_constant_override("margin_top", SAFE_TOP)
 	bottom_margin.add_theme_constant_override("margin_bottom", SAFE_BOTTOM)
 	combat_area.resized.connect(_layout_combat)
+	combat_background.resized.connect(_layout_world_layers)
+	# The layers are deliberately taller and wider than the combat window so
+	# they have room to parallax; without clipping they would paint over the
+	# HUD bars above and below.
+	combat_background.clip_contents = true
 	_setup_skills()
 	settings_button.pressed.connect(settings_panel.open_panel)
 	inventory_button.pressed.connect(inventory_panel.open_panel)
@@ -220,7 +234,10 @@ func apply_world(world: Dictionary) -> void:
 	var palette: Dictionary = world.get("palette", {})
 	var sand_html: String = str(palette.get("sand", "#C28C4C"))
 	if Color.html_is_valid(sand_html):
+		# Still painted underneath: a world whose parallax art is not built yet
+		# keeps its flat palette rather than showing an empty rectangle.
 		combat_background.color = Color.html(sand_html)
+	_apply_world_layers(str(world.get("id", "")))
 	var accent_html: String = str(palette.get("accent", "#FFFFFF"))
 	if Color.html_is_valid(accent_html):
 		world_name.add_theme_color_override("font_color", Color.html(accent_html))
@@ -228,6 +245,76 @@ func apply_world(world: Dictionary) -> void:
 	%BackgroundLabel.text = ""
 	current_music_ref = str(world.get("music_ref", ""))
 	combat_background.set_meta("music_ref", current_music_ref)
+
+
+func _apply_world_layers(world_id: String) -> void:
+	## Four separate layers, back to front. A world without built art simply has
+	## no textures and falls back to the flat palette colour behind them.
+	for layer_name: String in PARALLAX_LAYERS:
+		var rect: TextureRect = _world_layer(layer_name)
+		var path: String = "res://assets/worlds/%s/%s.png" % [world_id, layer_name]
+		var texture: Texture2D = load(path) as Texture2D if ResourceLoader.exists(path) else null
+		rect.texture = texture
+		rect.visible = texture != null
+	_layout_world_layers()
+
+
+func _world_layer(layer_name: String) -> TextureRect:
+	var existing: TextureRect = _world_layers.get(layer_name) as TextureRect
+	if existing != null and is_instance_valid(existing):
+		return existing
+	var rect := TextureRect.new()
+	rect.name = "Layer%s" % layer_name.capitalize()
+	rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	rect.stretch_mode = TextureRect.STRETCH_SCALE
+	# Without IGNORE_SIZE a TextureRect refuses to shrink below its texture, so
+	# on a smaller screen the arena layer stayed at master size and its band
+	# fell outside the visible window.
+	rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	rect.clip_contents = false
+	combat_background.add_child(rect)
+	combat_background.move_child(rect, _world_layers.size())
+	_world_layers[layer_name] = rect
+	return rect
+
+
+func _layout_world_layers() -> void:
+	## Nearer layers are drawn wider than the viewport and shifted further, so
+	## advancing through a world pans them at different speeds instead of
+	## sliding one flat picture.
+	var area: Vector2 = combat_background.size
+	if area.x <= 0.0 or area.y <= 0.0:
+		return
+	var progress: float = _world_progress()
+	for index: int in PARALLAX_LAYERS.size():
+		var layer_name: String = PARALLAX_LAYERS[index]
+		var rect: TextureRect = _world_layers.get(layer_name) as TextureRect
+		if rect == null or not is_instance_valid(rect):
+			continue
+		var overscan: float = PARALLAX_OVERSCAN[index]
+		# Keep the art's own 9:16 shape. The combat area is much squarer than
+		# that, so the layer is taller than the window and is slid up until the
+		# arena floor -- the part the actors stand on -- is the part on screen.
+		var layer_width: float = area.x * overscan
+		var layer_height: float = layer_width * float(MASTER_SIZE.y) / float(MASTER_SIZE.x)
+		rect.size = Vector2(layer_width, layer_height)
+		var travel: float = area.x * (overscan - 1.0)
+		rect.position = Vector2(-travel * progress, -maxf(0.0, layer_height - area.y) * ARENA_CROP_BIAS)
+
+
+func _world_progress() -> float:
+	## Position inside the current world, 0 at its first stage and 1 at its last.
+	if current_world.is_empty():
+		return 0.0
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	if arena == null:
+		return 0.0
+	var state: Object = arena.get("combat")
+	if state == null:
+		return 0.0
+	var from: float = float(current_world.get("stage_from", 1))
+	var to: float = float(current_world.get("stage_to", from + 1.0))
+	return clampf((float(state.get("stage")) - from) / maxf(1.0, to - from), 0.0, 1.0)
 
 
 func _remaining_seconds(until_ms: int, now_ms: int) -> int:
@@ -287,6 +374,10 @@ func _layout_combat() -> void:
 		maxf(0.0, hero_position.x - falcon_size.x * 0.45),
 		maxf(0.0, hero_position.y - falcon_size.y * 1.25)
 	)
+
+	var arena_node: Node = get_tree().get_first_node_in_group("combat_arena")
+	if arena_node != null and arena_node.has_method("place_enemy_name"):
+		arena_node.call("place_enemy_name")
 
 	var hp_width := actor_size.x * 1.20
 	var hp_height := maxf(32.0, area_size.y * 0.045)

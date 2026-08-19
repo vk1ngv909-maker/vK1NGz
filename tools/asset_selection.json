@@ -1,0 +1,175 @@
+{
+ "note": "Selected subset of the approved package for the current playable content. Unselected concepts stay in CLAUDE_READY_CARTOON_ASSET_BIBLE for later milestones.",
+ "assets": [
+  {
+   "category": "characters",
+   "source": "assets/characters/main_hero.webp",
+   "target": "hero/main_hero.png"
+  },
+  {
+   "category": "companions",
+   "source": "assets/companions/falcon_companion.webp",
+   "target": "hero/falcon.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/core_archer.webp",
+   "target": "heroes/dune_scout.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/core_knight.webp",
+   "target": "heroes/oasis_guard.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/sun_cleric.webp",
+   "target": "heroes/sun_priestess.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/spirit_tamer.webp",
+   "target": "heroes/falconer.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/royal_guardian.webp",
+   "target": "heroes/scarab_knight.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/wind_dancer.webp",
+   "target": "heroes/mirage_weaver.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/rune_scholar.webp",
+   "target": "heroes/djinn_binder.png"
+  },
+  {
+   "category": "characters",
+   "source": "assets/characters/moon_bard.webp",
+   "target": "heroes/star_vizier.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/leaf_fox.webp",
+   "target": "enemies/dune_raider.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/pebble_crab.webp",
+   "target": "enemies/oasis_scarab.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/sproutling.webp",
+   "target": "enemies/thorn_lizard.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/acorn_brute.webp",
+   "target": "enemies/mirage_stalker.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/mushroom_guard.webp",
+   "target": "enemies/night_howler.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/pollen_wisp.webp",
+   "target": "enemies/dust_wraith.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/frost_moth.webp",
+   "target": "enemies/moon_moth.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/shard_serpent.webp",
+   "target": "enemies/glass_serpent.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/rune_guardian.webp",
+   "target": "enemies/sunstone_sentinel.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/smoke_wisp.webp",
+   "target": "enemies/cursed_regalia.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/ember_imp.webp",
+   "target": "enemies/ember_djinn_construct.png"
+  },
+  {
+   "category": "monsters",
+   "source": "assets/monsters/obsidian_beetle.webp",
+   "target": "enemies/ossuary_warden.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/ancient_treant.webp",
+   "target": "bosses/sandstorm_colossus.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/crystal_cavern_wyrm.webp",
+   "target": "bosses/lunar_glasswing.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/clockwork_crown_king.webp",
+   "target": "bosses/ember_crown_construct.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/mushroom_monarch.webp",
+   "target": "bosses/vaultback_behemoth.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/iron_short_sword.webp",
+   "target": "equipment/dune_knife.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/grove_blade.webp",
+   "target": "equipment/sunsteel_sabre.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/prism_sword.webp",
+   "target": "equipment/ifrit_fang.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/ember_blade.webp",
+   "target": "equipment/blade_of_high_noon.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/verdant_crystal_orb.webp",
+   "target": "equipment/dust_wisp.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/star_wand.webp",
+   "target": "equipment/ember_halo.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/amethyst_wand.webp",
+   "target": "equipment/djinn_radiance.png"
+  },
+  {
+   "category": "weapons",
+   "source": "assets/weapons/astral_spellbook.webp",
+   "target": "equipment/solar_ascendance.png"
+  }
+ ]
+}

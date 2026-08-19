@@ -56,8 +56,15 @@ static func validate_encounter_ids(encounter_ids: Array) -> Array[Dictionary]:
 static func _validate_identity(issues: Array[Dictionary], path: String, entry_id: String, entry: Dictionary) -> void:
 	if str(entry.get("silhouette", "")) not in ["squat", "tall", "wide", "spindly"]:
 		_add(issues, path, entry_id, "silhouette", "invalid silhouette")
-	if str(entry.get("asset_status", "")) != "PLACEHOLDER":
-		_add(issues, path, entry_id, "asset_status", "must explicitly be PLACEHOLDER")
+	var status: String = str(entry.get("asset_status", ""))
+	if status not in ["PLACEHOLDER", "CONCEPT_SOURCED"]:
+		_add(issues, path, entry_id, "asset_status", "must be PLACEHOLDER or CONCEPT_SOURCED")
+	elif status == "CONCEPT_SOURCED":
+		# Claiming real art is only allowed when the sprite is actually there,
+		# so the status can never drift ahead of the assets.
+		var folder: String = "bosses" if path.contains("bosses") else "enemies"
+		if not ResourceLoader.exists("res://assets/sprites/%s/%s.png" % [folder, entry_id]):
+			_add(issues, path, entry_id, "asset_status", "CONCEPT_SOURCED without a sprite file")
 	var palette: Variant = entry.get("palette")
 	if palette is Dictionary:
 		for field: String in ["body", "accent"]:

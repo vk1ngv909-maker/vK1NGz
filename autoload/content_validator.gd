@@ -197,7 +197,15 @@ func _validate_world_nested(path: String, entry_id: String, world: Dictionary) -
 	var layers: Variant = world.get("background_layers")
 	if layers is Array:
 		for layer: Variant in layers as Array:
-			if not layer is String or "PLACEHOLDER" not in str(layer):
+			# A layer is either a labelled placeholder or a real file that is
+			# actually present. Naming a path that does not exist would ship a
+			# world with an invisible background.
+			if not layer is String:
+				_reject(path, entry_id, "background_layers", "unlabelled placeholder asset")
+			elif str(layer).begins_with("res://"):
+				if not ResourceLoader.exists(str(layer)):
+					_reject(path, entry_id, "background_layers", "missing layer file")
+			elif "PLACEHOLDER" not in str(layer):
 				_reject(path, entry_id, "background_layers", "unlabelled placeholder asset")
 
 

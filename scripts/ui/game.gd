@@ -65,6 +65,23 @@ func _ready() -> void:
 		if ar2 != null and ar2.has_method("debug_retry"):
 			ar2.debug_retry()
 		await get_tree().process_frame
+	if "--demo-perf" in args:
+		# Frame cost and texture memory with the real world and sprites loaded,
+		# measured in the running game rather than estimated from file sizes.
+		var samples: int = 120
+		var worst: float = 0.0
+		var total: float = 0.0
+		for sample: int in samples:
+			await get_tree().process_frame
+			var frame_ms: float = float(Performance.get_monitor(Performance.TIME_PROCESS)) * 1000.0
+			total += frame_ms
+			worst = maxf(worst, frame_ms)
+		print("PERF frames=%d avg_process_ms=%.2f worst_ms=%.2f texture_mb=%.2f static_mem_mb=%.2f objects=%d" % [
+			samples, total / float(samples), worst,
+			float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0,
+			float(Performance.get_monitor(Performance.MEMORY_STATIC)) / 1048576.0,
+			int(Performance.get_monitor(Performance.OBJECT_COUNT))])
+		get_tree().quit()
 	if "--demo-falcon-seq" in args:
 		# A still frame cannot show motion or a rate. This saves consecutive
 		# rendered frames (movement) and then samples the strike counter over

@@ -408,11 +408,100 @@ guards green. C17 balance re-measured after all fixes: first prestige 35.5 min
 
 Group 4A is closed.
 
+## Visual re-theme — world 1 vertical slice (awaiting approval)
+
+The owner approved Option A: the visual theme and content names move to the
+neutral cartoon fantasy of the supplied package, while Arabic and RTL stay.
+No id changed anywhere, so saves, first clears and owned equipment are
+untouched.
+
+**Corrected asset count.** The request named 26 characters/enemies/bosses/
+companions + 20 equipment = 46. 26 is right and all 26 are built. 20 equipment
+is not achievable from this package: it contains 31 weapon-type icons and no
+head, armour or charm art, so only the 4 weapon-slot and 4 aura-slot items have
+honest art. **34 of the 46 are built; 12 equipment items need art the package
+does not contain.** Their names were re-themed and their cards stay text-only
+rather than showing a hammer where a hood belongs. Full mapping and rejected
+options: `docs/ASSET_MAPPING.md`.
+
+**Background cleaning.** The package's own crops keep the reference sheet's
+flat colour wherever the silhouette encloses it, plus its drop shadow and pale
+halo. Measured on the 34 selected assets, before and after `clean_assets.py`:
+
+| Check | Before | After |
+| --- | --- | --- |
+| Sheet colour sealed inside a silhouette | 6,643 px in one boss alone | 0 px across all 34 |
+| Sheet colour on the cut edge (halo) | present on 18 sprites | 0 px across all 34 |
+| Neighbouring-character fragments at the crop border | present | 0 |
+| Total background pixels removed | — | 46,436 |
+
+Two discriminators do the work: the sheet's warm cast (red well above blue)
+separates it from white fur and pale ice, and the artwork's bold dark outline
+blocks a flood fill that starts from the transparent exterior. A first attempt
+that matched plain colour distance ate the frost moth's white fur, which is why
+the rule is written the way it is.
+
+`tests/unit/test_sprite_background.gd` enforces all three checks. Negative
+control: dropping a raw concept crop back in fails it with 6,643 px.
+
+**Parallax structure.** `oasis_frontier` is rebuilt from the flat 540x959
+concept into four layers on the 1080x1920 master canvas, segmented by the
+painting's own composition rather than sliced into equal bands:
+
+| Layer | Stored | Drawn width vs viewport | Content |
+| --- | --- | --- | --- |
+| sky | 540x960 | 1.00 | Sky and clouds only, extended below the horizon |
+| distant | 892x1344 | 1.18 | Mountains, ruins, trees |
+| arena | 1080x1920 | 1.00 | The floor the actors stand on |
+| foreground | 1028x1632 | 1.12 | Framing plants, stones and crystals |
+
+The wider layers travel further as the run advances through the world's stages,
+so progress pans the depths at different speeds. Back layers are stored at
+reduced resolution because they carry soft content: texture memory measured in
+the running game fell from 59.9 MB to 44.4 MB, of which 18.0 MB is the sprites
+and empty-world baseline — so the four layers cost 26.3 MB, down from 41.9 MB.
+
+**Performance.** Average process time was 162 ms with the built world and
+169 ms on a world with no art, i.e. the artwork added no measurable CPU cost.
+Both numbers come from llvmpipe software rendering in this container and are
+**not** device performance; no Android SDK or device is available here.
+
+Bugs found and fixed during the slice:
+
+- **C40/P1** — the parallax layers painted over the HUD bars, hiding gold,
+  stage and the skill row, because they are deliberately larger than the
+  combat window. The window now clips them.
+- **C41/P1** — at 720x1280 and 1080x2400 the arena floor was missing and the
+  sky's below-horizon fill showed instead: a `TextureRect` will not shrink
+  below its texture size unless `expand_mode` is `IGNORE_SIZE`, so the arena
+  layer stayed at master size and its band fell outside the visible window.
+  Caught by reading back the live layer geometry rather than trusting the shot.
+- **C42/P2** — the enemy name was printed across the creature's face. The rect
+  is scaled per enemy about its centre, so the label is now placed after layout
+  and its scale inverted.
+- **C43** — a first cleaning pass keyed on colour distance removed the frost
+  moth's white fur. Replaced with the warm-cast rule above.
+- **C44** — the concept package was being imported by Godot (137 files into
+  `.godot/imported`), which would ship concept art in an export. It now carries
+  a `.gdignore`.
+
+The content validator was tightened rather than relaxed: `asset_status` may now
+be `CONCEPT_SOURCED` instead of only `PLACEHOLDER`, but only when the sprite
+file actually exists, and a world background layer naming a `res://` path must
+resolve or the world is rejected.
+
+Evidence: `docs/evidence/slice1/` — normal enemy, boss, inventory, heroes,
+skills and equipment screens at 720x1280, 1080x1920 and 1080x2400 in English
+and Arabic (36 captures).
+
+Group 4A stays closed; no Group 4B content was added.
+
 ## Next highest-priority action
 
-Gate 5 group 4B: fifteen Relics and the full twenty-item equipment set, with
-relic sensitivity simulations, then the closing Gate 5 regression. Group 4A is
-closed and no 4B content was added during this checkpoint.
+Await visual approval of the world 1 slice. On approval: rebuild the Moonlit
+Wildwood and Obsidian Citadel layers the same way, then return to Gate 5 group
+4B (fifteen Relics and the full twenty-item equipment set) with relic
+sensitivity simulations and the closing Gate 5 regression.
 
 ## Placeholders
 

@@ -30,6 +30,9 @@ func open_panel() -> void:
 	var permanent: Dictionary = SaveManager.data.get("permanent_state", {})
 	max_stage = maxi(1, int(permanent.get("max_stage", 1)))
 	show()
+	# Localized chrome must be refreshed on open, not only when the language
+	# changes, or the panel keeps the English text baked into the scene.
+	refresh_localized_text()
 	_refresh()
 	%Close.grab_focus()
 
@@ -43,6 +46,7 @@ func debug_open() -> void:
 	skill_system.activate("golden_wind", now_ms - 20000, max_stage)
 	skill_system.tick(now_ms)
 	show()
+	refresh_localized_text()
 	_refresh()
 
 

@@ -46,6 +46,24 @@
 - `SkillSystem.from_dict` trusted saved timestamps; corrupt values now dropped.
 - `scripts/shot.sh` dropped forwarded game arguments, hiding UI from capture.
 
+## Visual re-theme — world 1 slice
+
+**Added**
+- `tools/clean_assets.py`, `tools/build_world_layers.py`, `tools/asset_selection.json`.
+- 34 production sprites and a four-layer parallax background for Emerald Meadow.
+- `test_sprite_background.gd`: no sealed sheet background, no cut-edge halo, real transparency.
+- `docs/ASSET_MAPPING.md`.
+
+**Changed**
+- Hero, falcon and enemy actors draw textures instead of coloured rectangles.
+- Display names in English and Arabic moved to neutral fantasy; no id changed.
+- `asset_status` may be `CONCEPT_SOURCED`, but only with the sprite present.
+
+**Fixed**
+- Parallax layers painted over the HUD bars.
+- The arena layer fell outside the window on 720x1280 and 1080x2400.
+- The enemy name label was drawn across the creature.
+
 ## Gate 5 group 4A closure
 
 **Added**

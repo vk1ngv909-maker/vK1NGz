@@ -1,13 +1,445 @@
 {
-	"schema_version": 1,
-	"entries": [
-		{"id":"dune_scout","name_key":"hero.dune_scout","desc_key":"hero.dune_scout.desc","role":"ranged","unlock_stage":1,"base_cost":25.0,"cost_growth":1.08,"base_dps":2.0,"dps_growth":1.0,"milestones":[{"level":10,"effect":{"type":"all_hero_dps_mult","value":2.00}},{"level":25,"effect":{"type":"crit_chance_add","value":0.02}},{"level":50,"effect":{"type":"all_hero_dps_mult","value":1.25}},{"level":100,"effect":{"type":"crit_chance_add","value":0.03}},{"level":200,"effect":{"type":"all_hero_dps_mult","value":1.50}}],"passive":{"type":"crit_chance_add","value":0.01},"sprite_ref":"placeholder://heroes/dune_scout","anim_ref":"placeholder://heroes/dune_scout_anim","asset_status":"PLACEHOLDER"},
-		{"id":"oasis_guard","name_key":"hero.oasis_guard","desc_key":"hero.oasis_guard.desc","role":"melee","unlock_stage":8,"base_cost":140.0,"cost_growth":1.085,"base_dps":7.0,"dps_growth":1.04,"milestones":[{"level":10,"effect":{"type":"self_dps_mult","value":2.0}},{"level":25,"effect":{"type":"tap_damage_add","value":0.15}},{"level":50,"effect":{"type":"self_dps_mult","value":2.0}},{"level":100,"effect":{"type":"tap_damage_add","value":0.25}},{"level":200,"effect":{"type":"self_dps_mult","value":3.0}}],"passive":{"type":"tap_damage_add","value":0.05},"sprite_ref":"placeholder://heroes/oasis_guard","anim_ref":"placeholder://heroes/oasis_guard_anim","asset_status":"PLACEHOLDER"},
-		{"id":"sun_priestess","name_key":"hero.sun_priestess","desc_key":"hero.sun_priestess.desc","role":"support","unlock_stage":18,"base_cost":850.0,"cost_growth":1.09,"base_dps":26.0,"dps_growth":1.045,"milestones":[{"level":10,"effect":{"type":"gold_mult","value":1.15}},{"level":25,"effect":{"type":"skill_duration_mult","value":1.10}},{"level":50,"effect":{"type":"gold_mult","value":1.20}},{"level":100,"effect":{"type":"skill_duration_mult","value":1.15}},{"level":200,"effect":{"type":"gold_mult","value":1.40}}],"passive":{"type":"gold_mult","value":1.05},"sprite_ref":"placeholder://heroes/sun_priestess","anim_ref":"placeholder://heroes/sun_priestess_anim","asset_status":"PLACEHOLDER"},
-		{"id":"falconer","name_key":"hero.falconer","desc_key":"hero.falconer.desc","role":"ranged","unlock_stage":32,"base_cost":5200.0,"cost_growth":1.095,"base_dps":100.0,"dps_growth":1.05,"milestones":[{"level":10,"effect":{"type":"crit_chance_add","value":0.03}},{"level":25,"effect":{"type":"self_dps_mult","value":2.0}},{"level":50,"effect":{"type":"crit_chance_add","value":0.04}},{"level":100,"effect":{"type":"all_hero_dps_mult","value":1.35}},{"level":200,"effect":{"type":"crit_chance_add","value":0.06}}],"passive":{"type":"crit_chance_add","value":0.02},"sprite_ref":"placeholder://heroes/falconer","anim_ref":"placeholder://heroes/falconer_anim","asset_status":"PLACEHOLDER"},
-		{"id":"scarab_knight","name_key":"hero.scarab_knight","desc_key":"hero.scarab_knight.desc","role":"melee","unlock_stage":48,"base_cost":31000.0,"cost_growth":1.10,"base_dps":390.0,"dps_growth":1.055,"milestones":[{"level":10,"effect":{"type":"self_dps_mult","value":2.0}},{"level":25,"effect":{"type":"tap_damage_add","value":0.20}},{"level":50,"effect":{"type":"self_dps_mult","value":2.5}},{"level":100,"effect":{"type":"tap_damage_add","value":0.35}},{"level":200,"effect":{"type":"all_hero_dps_mult","value":1.60}}],"passive":{"type":"tap_damage_add","value":0.10},"sprite_ref":"placeholder://heroes/scarab_knight","anim_ref":"placeholder://heroes/scarab_knight_anim","asset_status":"PLACEHOLDER"},
-		{"id":"mirage_weaver","name_key":"hero.mirage_weaver","desc_key":"hero.mirage_weaver.desc","role":"magic","unlock_stage":64,"base_cost":185000.0,"cost_growth":1.105,"base_dps":1500.0,"dps_growth":1.06,"milestones":[{"level":10,"effect":{"type":"all_hero_dps_mult","value":1.25}},{"level":25,"effect":{"type":"self_dps_mult","value":2.0}},{"level":50,"effect":{"type":"all_hero_dps_mult","value":1.35}},{"level":100,"effect":{"type":"skill_duration_mult","value":1.20}},{"level":200,"effect":{"type":"all_hero_dps_mult","value":1.75}}],"passive":{"type":"all_hero_dps_mult","value":1.08},"sprite_ref":"placeholder://heroes/mirage_weaver","anim_ref":"placeholder://heroes/mirage_weaver_anim","asset_status":"PLACEHOLDER"},
-		{"id":"djinn_binder","name_key":"hero.djinn_binder","desc_key":"hero.djinn_binder.desc","role":"magic","unlock_stage":82,"base_cost":1100000.0,"cost_growth":1.11,"base_dps":5800.0,"dps_growth":1.065,"milestones":[{"level":10,"effect":{"type":"all_hero_dps_mult","value":1.30}},{"level":25,"effect":{"type":"skill_cooldown_mult","value":0.92}},{"level":50,"effect":{"type":"self_dps_mult","value":2.5}},{"level":100,"effect":{"type":"all_hero_dps_mult","value":1.50}},{"level":200,"effect":{"type":"skill_cooldown_mult","value":0.85}}],"passive":{"type":"all_hero_dps_mult","value":1.10},"sprite_ref":"placeholder://heroes/djinn_binder","anim_ref":"placeholder://heroes/djinn_binder_anim","asset_status":"PLACEHOLDER"},
-		{"id":"star_vizier","name_key":"hero.star_vizier","desc_key":"hero.star_vizier.desc","role":"support","unlock_stage":100,"base_cost":6800000.0,"cost_growth":1.115,"base_dps":23000.0,"dps_growth":1.07,"milestones":[{"level":10,"effect":{"type":"skill_duration_mult","value":1.15}},{"level":25,"effect":{"type":"skill_cooldown_mult","value":0.90}},{"level":50,"effect":{"type":"gold_mult","value":1.30}},{"level":100,"effect":{"type":"skill_duration_mult","value":1.25}},{"level":200,"effect":{"type":"skill_cooldown_mult","value":0.80}}],"passive":{"type":"skill_cooldown_mult","value":0.95},"sprite_ref":"placeholder://heroes/star_vizier","anim_ref":"placeholder://heroes/star_vizier_anim","asset_status":"PLACEHOLDER"}
-	]
+ "schema_version": 1,
+ "entries": [
+  {
+   "id": "dune_scout",
+   "name_key": "hero.dune_scout",
+   "desc_key": "hero.dune_scout.desc",
+   "role": "ranged",
+   "unlock_stage": 1,
+   "base_cost": 25.0,
+   "cost_growth": 1.08,
+   "base_dps": 2.0,
+   "dps_growth": 1.0,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "crit_chance_add",
+      "value": 0.02
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.25
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "crit_chance_add",
+      "value": 0.03
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.5
+     }
+    }
+   ],
+   "passive": {
+    "type": "crit_chance_add",
+    "value": 0.01
+   },
+   "sprite_ref": "res://assets/sprites/heroes/dune_scout.png",
+   "anim_ref": "placeholder://heroes/dune_scout_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "oasis_guard",
+   "name_key": "hero.oasis_guard",
+   "desc_key": "hero.oasis_guard.desc",
+   "role": "melee",
+   "unlock_stage": 8,
+   "base_cost": 140.0,
+   "cost_growth": 1.085,
+   "base_dps": 7.0,
+   "dps_growth": 1.04,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "tap_damage_add",
+      "value": 0.15
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "tap_damage_add",
+      "value": 0.25
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 3.0
+     }
+    }
+   ],
+   "passive": {
+    "type": "tap_damage_add",
+    "value": 0.05
+   },
+   "sprite_ref": "res://assets/sprites/heroes/oasis_guard.png",
+   "anim_ref": "placeholder://heroes/oasis_guard_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "sun_priestess",
+   "name_key": "hero.sun_priestess",
+   "desc_key": "hero.sun_priestess.desc",
+   "role": "support",
+   "unlock_stage": 18,
+   "base_cost": 850.0,
+   "cost_growth": 1.09,
+   "base_dps": 26.0,
+   "dps_growth": 1.045,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "gold_mult",
+      "value": 1.15
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "skill_duration_mult",
+      "value": 1.1
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "gold_mult",
+      "value": 1.2
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "skill_duration_mult",
+      "value": 1.15
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "gold_mult",
+      "value": 1.4
+     }
+    }
+   ],
+   "passive": {
+    "type": "gold_mult",
+    "value": 1.05
+   },
+   "sprite_ref": "res://assets/sprites/heroes/sun_priestess.png",
+   "anim_ref": "placeholder://heroes/sun_priestess_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "falconer",
+   "name_key": "hero.falconer",
+   "desc_key": "hero.falconer.desc",
+   "role": "ranged",
+   "unlock_stage": 32,
+   "base_cost": 5200.0,
+   "cost_growth": 1.095,
+   "base_dps": 100.0,
+   "dps_growth": 1.05,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "crit_chance_add",
+      "value": 0.03
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "crit_chance_add",
+      "value": 0.04
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.35
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "crit_chance_add",
+      "value": 0.06
+     }
+    }
+   ],
+   "passive": {
+    "type": "crit_chance_add",
+    "value": 0.02
+   },
+   "sprite_ref": "res://assets/sprites/heroes/falconer.png",
+   "anim_ref": "placeholder://heroes/falconer_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "scarab_knight",
+   "name_key": "hero.scarab_knight",
+   "desc_key": "hero.scarab_knight.desc",
+   "role": "melee",
+   "unlock_stage": 48,
+   "base_cost": 31000.0,
+   "cost_growth": 1.1,
+   "base_dps": 390.0,
+   "dps_growth": 1.055,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "tap_damage_add",
+      "value": 0.2
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.5
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "tap_damage_add",
+      "value": 0.35
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.6
+     }
+    }
+   ],
+   "passive": {
+    "type": "tap_damage_add",
+    "value": 0.1
+   },
+   "sprite_ref": "res://assets/sprites/heroes/scarab_knight.png",
+   "anim_ref": "placeholder://heroes/scarab_knight_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "mirage_weaver",
+   "name_key": "hero.mirage_weaver",
+   "desc_key": "hero.mirage_weaver.desc",
+   "role": "magic",
+   "unlock_stage": 64,
+   "base_cost": 185000.0,
+   "cost_growth": 1.105,
+   "base_dps": 1500.0,
+   "dps_growth": 1.06,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.25
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.0
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.35
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "skill_duration_mult",
+      "value": 1.2
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.75
+     }
+    }
+   ],
+   "passive": {
+    "type": "all_hero_dps_mult",
+    "value": 1.08
+   },
+   "sprite_ref": "res://assets/sprites/heroes/mirage_weaver.png",
+   "anim_ref": "placeholder://heroes/mirage_weaver_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "djinn_binder",
+   "name_key": "hero.djinn_binder",
+   "desc_key": "hero.djinn_binder.desc",
+   "role": "magic",
+   "unlock_stage": 82,
+   "base_cost": 1100000.0,
+   "cost_growth": 1.11,
+   "base_dps": 5800.0,
+   "dps_growth": 1.065,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.3
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "skill_cooldown_mult",
+      "value": 0.92
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "self_dps_mult",
+      "value": 2.5
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "all_hero_dps_mult",
+      "value": 1.5
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "skill_cooldown_mult",
+      "value": 0.85
+     }
+    }
+   ],
+   "passive": {
+    "type": "all_hero_dps_mult",
+    "value": 1.1
+   },
+   "sprite_ref": "res://assets/sprites/heroes/djinn_binder.png",
+   "anim_ref": "placeholder://heroes/djinn_binder_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  },
+  {
+   "id": "star_vizier",
+   "name_key": "hero.star_vizier",
+   "desc_key": "hero.star_vizier.desc",
+   "role": "support",
+   "unlock_stage": 100,
+   "base_cost": 6800000.0,
+   "cost_growth": 1.115,
+   "base_dps": 23000.0,
+   "dps_growth": 1.07,
+   "milestones": [
+    {
+     "level": 10,
+     "effect": {
+      "type": "skill_duration_mult",
+      "value": 1.15
+     }
+    },
+    {
+     "level": 25,
+     "effect": {
+      "type": "skill_cooldown_mult",
+      "value": 0.9
+     }
+    },
+    {
+     "level": 50,
+     "effect": {
+      "type": "gold_mult",
+      "value": 1.3
+     }
+    },
+    {
+     "level": 100,
+     "effect": {
+      "type": "skill_duration_mult",
+      "value": 1.25
+     }
+    },
+    {
+     "level": 200,
+     "effect": {
+      "type": "skill_cooldown_mult",
+      "value": 0.8
+     }
+    }
+   ],
+   "passive": {
+    "type": "skill_cooldown_mult",
+    "value": 0.95
+   },
+   "sprite_ref": "res://assets/sprites/heroes/star_vizier.png",
+   "anim_ref": "placeholder://heroes/star_vizier_anim",
+   "asset_status": "CONCEPT_SOURCED"
+  }
+ ]
 }

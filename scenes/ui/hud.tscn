@@ -213,10 +213,11 @@ theme_override_font_sizes/font_size = 24
 text = ""
 visible = false
 
-[node name="Falcon" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+[node name="Falcon" type="TextureRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
 unique_name_in_owner = true
 layout_mode = 0
-color = Color(0.22, 0.62, 0.78, 1)
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Falcon"]
 layout_mode = 1
@@ -226,15 +227,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 13
-text = "FALCON\nPLACEHOLDER"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="Hero" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+[node name="Hero" type="TextureRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
 unique_name_in_owner = true
 layout_mode = 0
-color = Color(0.13, 0.34, 0.58, 1)
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Hero"]
 layout_mode = 1
@@ -244,7 +246,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_font_sizes/font_size = 18
-text = "HERO →\nPLACEHOLDER"
+text = ""
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -263,10 +265,11 @@ layout_mode = 0
 value = 72.0
 show_percentage = false
 
-[node name="Enemy" type="ColorRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+[node name="Enemy" type="TextureRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
 unique_name_in_owner = true
 layout_mode = 0
-color = Color(0.63, 0.16, 0.2, 1)
+expand_mode = 1
+stretch_mode = 5
 
 [node name="Placeholder" type="Label" parent="Zones/MiddleZone/CombatMargin/CombatArea/Enemy"]
 layout_mode = 1

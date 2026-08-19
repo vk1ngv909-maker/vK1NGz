@@ -7,9 +7,9 @@ const RewardSystem = preload("res://scripts/progression/reward_system.gd")
 const WorldsLogic = preload("res://scripts/progression/worlds.gd")
 const InventoryLogic = preload("res://scripts/progression/inventory.gd")
 
-@onready var hero: ColorRect = %Hero
-@onready var falcon: ColorRect = %Falcon
-@onready var enemy: ColorRect = %Enemy
+@onready var hero: TextureRect = %Hero
+@onready var falcon: TextureRect = %Falcon
+@onready var enemy: TextureRect = %Enemy
 @onready var enemy_hp_label: Label = %EnemyHPLabel
 @onready var enemy_hp_bar: ProgressBar = %EnemyHP
 @onready var gold_label: Label = %GoldAmount
@@ -33,7 +33,7 @@ var _displayed_stage: int = 0
 ## Test-only counter so a capture sequence can prove the falcon's strike rate
 ## really rises while Falcon Storm is active, instead of asserting it.
 var debug_falcon_hits: int = 0
-var _enemy_color: Color
+var _enemy_tint: Color = Color.WHITE
 var _reduced_flashing: bool = false
 ## Test-only: raises max_stage for captures so a jumped-to stage renders the
 ## unlock state a real player at that stage would actually see.
@@ -50,7 +50,9 @@ func _ready() -> void:
 	_set_combat_children_to_ignore_mouse()
 	_load_combat()
 	_apply_saved_accessibility()
-	_enemy_color = enemy.color
+	_enemy_tint = enemy.modulate
+	hero.texture = _sprite("res://assets/sprites/hero/main_hero.png")
+	falcon.texture = _sprite("res://assets/sprites/hero/falcon.png")
 	tap_upgrade_button.pressed.connect(_on_buy_tap_upgrade)
 	retry_button.pressed.connect(_on_retry_boss)
 	resized.connect(_update_facing)
@@ -109,7 +111,7 @@ func debug_flash(reduced: bool) -> void:
 	debug_tap()
 	if is_instance_valid(_flash_tween):
 		_flash_tween.kill()
-	enemy.color = _enemy_color.lerp(Color.WHITE, 0.25 if _reduced_flashing else 1.0)
+	enemy.modulate = _enemy_tint.lerp(Color.WHITE, 0.25 if _reduced_flashing else 1.0)
 
 
 func debug_open_prestige(max_stage: int) -> void:
@@ -436,10 +438,10 @@ func _play_hit_reaction() -> void:
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x + recoil * direction, 0.055).set_trans(Tween.TRANS_QUAD)
 	_enemy_tween.tween_property(enemy, "position:x", rest_position.x, 0.09).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
 	_flash_tween = create_tween()
-	var flash_color: Color = _enemy_color.lerp(Color.WHITE, strength * (0.25 if _reduced_flashing else 1.0))
+	var flash_color: Color = _enemy_tint.lerp(Color.WHITE, strength * (0.25 if _reduced_flashing else 1.0))
 	var flash_duration: float = 0.035
-	_flash_tween.tween_property(enemy, "color", flash_color, flash_duration)
-	_flash_tween.tween_property(enemy, "color", _enemy_color, 0.10)
+	_flash_tween.tween_property(enemy, "modulate", flash_color, flash_duration)
+	_flash_tween.tween_property(enemy, "modulate", _enemy_tint, 0.10)
 
 
 func _play_death_reaction() -> void:
@@ -629,33 +631,68 @@ func _apply_world_for_stage(for_stage: int, force_text_refresh: bool = false) ->
 func _apply_enemy_presentation() -> void:
 	if combat == null or combat.current_enemy.is_empty() or not is_instance_valid(enemy):
 		return
+	var id: String = str(combat.current_enemy.get("id", ""))
+	var folder: String = "bosses" if combat.is_boss else "enemies"
+	var texture: Texture2D = _sprite("res://assets/sprites/%s/%s.png" % [folder, id])
+	enemy.texture = texture
+	# A world whose art is not built yet still reads correctly: the palette
+	# colour paints the rectangle exactly as it did before.
 	var palette: Dictionary = combat.current_enemy.get("palette", {})
 	var body_html: String = str(palette.get("body", "#777777"))
-	if Color.html_is_valid(body_html):
-		enemy.color = Color.html(body_html)
-		_enemy_color = enemy.color
-	var accent_html: String = str(palette.get("accent", "#FFFFFF"))
+	if texture == null and Color.html_is_valid(body_html):
+		enemy.modulate = Color.WHITE
+		_enemy_tint = Color.WHITE
+		enemy.self_modulate = Color.html(body_html)
+	else:
+		enemy.self_modulate = Color.WHITE
+		enemy.modulate = Color.WHITE
+		_enemy_tint = Color.WHITE
 	var placeholder: Label = enemy.get_node_or_null("Placeholder") as Label
 	if placeholder != null:
 		placeholder.text = Settings.t(str(combat.current_enemy.get("name_key", "hud.enemy_placeholder")))
-		# The accent colour comes from the enemy palette and can land almost on
-		# top of the body colour, which made some names unreadable. Choose the
-		# label colour by contrast against the body instead, and outline it, so
-		# every enemy name stays legible whatever palette a designer picks.
-		var body: Color = enemy.color
-		var luminance: float = body.r * 0.2126 + body.g * 0.7152 + body.b * 0.0722
-		placeholder.add_theme_color_override("font_color", Color(0.06, 0.05, 0.08) if luminance > 0.55 else Color(1, 1, 1))
-		placeholder.add_theme_color_override("font_outline_color", Color(1, 1, 1, 0.85) if luminance > 0.55 else Color(0, 0, 0, 0.85))
-		placeholder.add_theme_constant_override("outline_size", 4)
+		# Drawn over artwork rather than a flat swatch, so the name is always
+		# light with a dark outline instead of being matched to a body colour.
+		placeholder.add_theme_color_override("font_color", Color(1, 1, 1))
+		placeholder.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
+		placeholder.add_theme_constant_override("outline_size", 5)
+		# The name belongs under the enemy, not across its face. The rect is
+		# scaled per enemy, so the label scale is inverted to keep the text the
+		# same size whatever the creature's size class is.
+		placeholder.size = Vector2(enemy.size.x, 30.0)
 	var size_scale: float = clampf(float(combat.current_enemy.get("size_scale", 1.0)), 0.8, 1.25)
 	var shape_scale: Vector2 = Vector2.ONE
-	match str(combat.current_enemy.get("silhouette", "squat")):
-		"tall": shape_scale = Vector2(0.72, 1.18)
-		"wide": shape_scale = Vector2(1.18, 0.72)
-		"spindly": shape_scale = Vector2(0.58, 1.08)
-		_: shape_scale = Vector2(1.05, 0.72)
+	if texture == null:
+		# Only the placeholder rectangle is stretched to suggest a silhouette;
+		# real artwork already has one and must not be distorted.
+		match str(combat.current_enemy.get("silhouette", "squat")):
+			"tall": shape_scale = Vector2(0.72, 1.18)
+			"wide": shape_scale = Vector2(1.18, 0.72)
+			"spindly": shape_scale = Vector2(0.58, 1.08)
+			_: shape_scale = Vector2(1.05, 0.72)
 	enemy.pivot_offset = enemy.size * 0.5
 	enemy.scale = shape_scale * size_scale
+	place_enemy_name()
+
+
+func place_enemy_name() -> void:
+	## Called again once the layout has given the enemy its real size: the rect
+	## is scaled about its centre, so a label pinned to the bottom edge is
+	## pulled inward. Undo the scale and that shift so the name sits under the
+	## creature instead of across it.
+	if not is_instance_valid(enemy):
+		return
+	var placeholder: Label = enemy.get_node_or_null("Placeholder") as Label
+	if placeholder == null or enemy.size.y <= 0.0:
+		return
+	placeholder.scale = Vector2(1.0 / maxf(0.01, enemy.scale.x), 1.0 / maxf(0.01, enemy.scale.y))
+	placeholder.size = Vector2(enemy.size.x * enemy.scale.x, 30.0)
+	placeholder.position = Vector2(
+		(enemy.size.x - placeholder.size.x) * 0.5,
+		enemy.size.y * 0.5 + enemy.size.y * 0.5 / maxf(0.01, enemy.scale.y) + 6.0)
+
+
+func _sprite(path: String) -> Texture2D:
+	return load(path) as Texture2D if ResourceLoader.exists(path) else null
 
 
 func _apply_saved_accessibility() -> void:

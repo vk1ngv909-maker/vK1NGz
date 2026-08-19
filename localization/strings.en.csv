@@ -107,22 +107,22 @@ skill.golden_wind,GOLDEN WIND
 skill.time_fracture,TIME FRACTURE
 skill.ancestor_call,ANCESTOR CALL
 skill.critical_eclipse,CRITICAL ECLIPSE
-equipment.dune_knife.name,Dune Knife
-equipment.sunsteel_sabre.name,Sunsteel Sabre
-equipment.ifrit_fang.name,Ifrit Fang
-equipment.blade_of_high_noon.name,Blade of High Noon
-equipment.wanderer_wrap.name,Wanderer Wrap
-equipment.scarab_circlet.name,Scarab Circlet
-equipment.oracle_veil.name,Oracle Veil
+equipment.dune_knife.name,Iron Short Sword
+equipment.sunsteel_sabre.name,Grove Blade
+equipment.ifrit_fang.name,Prism Sword
+equipment.blade_of_high_noon.name,Ember Blade
+equipment.wanderer_wrap.name,Traveller's Hood
+equipment.scarab_circlet.name,Leaf Circlet
+equipment.oracle_veil.name,Seer's Veil
 equipment.crown_of_stars.name,Crown of Stars
-equipment.traveler_robes.name,Traveler Robes
-equipment.caravan_guard_mail.name,Caravan Guard Mail
+equipment.traveler_robes.name,Traveller's Cloak
+equipment.caravan_guard_mail.name,Guard's Mail
 equipment.stormweave_mantle.name,Stormweave Mantle
-equipment.sultans_regalia.name,Sultan's Regalia
-equipment.dust_wisp.name,Dust Wisp
-equipment.ember_halo.name,Ember Halo
-equipment.djinn_radiance.name,Djinn Radiance
-equipment.solar_ascendance.name,Solar Ascendance
+equipment.sultans_regalia.name,Royal Regalia
+equipment.dust_wisp.name,Verdant Orb
+equipment.ember_halo.name,Star Wand
+equipment.djinn_radiance.name,Amethyst Wand
+equipment.solar_ascendance.name,Astral Spellbook
 equipment.beetle_token.name,Beetle Token
 equipment.falcon_bell.name,Falcon Bell
 equipment.moon_fox_talisman.name,Moon Fox Talisman
@@ -159,14 +159,14 @@ ui.prestige.entry.statistics,Statistics
 ui.prestige.entry.last_seen_utc,Last Seen Time
 ui.prestige.entry.offline_claimed_utc,Offline Reward State
 ui.prestige.entry.tutorial,Tutorial
-world.oasis_frontier.name,Oasis Frontier
-world.oasis_frontier.desc,Follow the caravan road beyond the first oasis.
-world.moonlit_dunes.name,Moonlit Dunes
-world.moonlit_dunes.desc,Cross silver sands beneath an endless moon.
-world.ruins_of_the_sun_kingdom.name,Ruins of the Sun Kingdom
-world.ruins_of_the_sun_kingdom.desc,Challenge the fallen kingdom at the edge of dawn.
-enemy.dune_raider.name,Dune Raider
-enemy.oasis_scarab.name,Oasis Scarab
+world.oasis_frontier.name,Emerald Meadow
+world.oasis_frontier.desc,Cross bright grassland ruins where blue crystals grow.
+world.moonlit_dunes.name,Moonlit Wildwood
+world.moonlit_dunes.desc,Walk a glowing forest under an endless moon.
+world.ruins_of_the_sun_kingdom.name,Obsidian Citadel
+world.ruins_of_the_sun_kingdom.desc,Climb a volcanic fortress lit by molten veins.
+enemy.dune_raider.name,Leaf Fox
+enemy.oasis_scarab.name,Pebble Crab
 enemy.moon_jackal.name,Moon Jackal
 enemy.star_wisp.name,Star Wisp
 enemy.sun_guardian.name,Sun Guardian
@@ -181,20 +181,20 @@ boss.gilded_manticore.name,Gilded Manticore
 boss.sun_priest.name,Sun Priest
 boss.phoenix_regent.name,Phoenix Regent
 boss.sun_king.name,The Sun King
-hero.dune_scout,Dune Scout
-hero.falconer,Falconer
-hero.oasis_guard,Oasis Guard
-hero.scarab_knight,Scarab Knight
-hero.mirage_weaver,Mirage Weaver
-hero.djinn_binder,Djinn Binder
-hero.sun_priestess,Sun Priestess
-hero.star_vizier,Star Vizier
-hero.dune_scout.desc,A keen-eyed scout whose signals strengthen every ally.
+hero.dune_scout,Meadow Archer
+hero.falconer,Spirit Tamer
+hero.oasis_guard,Grove Knight
+hero.scarab_knight,Royal Guardian
+hero.mirage_weaver,Wind Dancer
+hero.djinn_binder,Rune Scholar
+hero.sun_priestess,Sun Cleric
+hero.star_vizier,Moon Bard
+hero.dune_scout.desc,A keen-eyed archer whose signals strengthen every ally.
 hero.oasis_guard.desc,A steadfast blade who turns close combat into stronger taps.
 hero.sun_priestess.desc,A radiant guide who improves gold and lasting skill power.
 hero.falconer.desc,A precision hunter who raises the company critical chance.
 hero.scarab_knight.desc,A heavy striker who reinforces direct attacks.
-hero.mirage_weaver.desc,A spellcaster whose mirages amplify the whole roster.
+hero.mirage_weaver.desc,A spellcaster whose spinning blades amplify the whole roster.
 hero.djinn_binder.desc,A master of magic who empowers allies and shortens recovery.
 hero.star_vizier.desc,A celestial adviser who bends skill time and fortune.
 skill.sand_fury.desc,A burst of force behind every tap.
@@ -251,55 +251,55 @@ relic.map_of_stars,Map of Stars
 relic.desert_wind,Desert Wind
 relic.ember_rune,Ember Rune
 relic.merchant_scale,Merchant Scale
-equipment.dune_knife.desc,A simple blade shaped by the desert road.
-equipment.sunsteel_sabre.desc,A sabre tempered in reflected sunlight.
-equipment.ifrit_fang.desc,A fierce edge carrying an ember's heat.
-equipment.blade_of_high_noon.desc,A legendary weapon bright as midday.
-equipment.wanderer_wrap.desc,A light wrap for long journeys.
-equipment.scarab_circlet.desc,A circlet marked by the sacred scarab.
+equipment.dune_knife.desc,A plain blade every traveller starts with.
+equipment.sunsteel_sabre.desc,A sword grown around living wood.
+equipment.ifrit_fang.desc,A crystal edge that splits the light.
+equipment.blade_of_high_noon.desc,A legendary blade wrapped in steady flame.
+equipment.wanderer_wrap.desc,A light hood for long roads.
+equipment.scarab_circlet.desc,A circlet woven from evergreen leaves.
 equipment.oracle_veil.desc,A veil that shimmers around hidden paths.
 equipment.crown_of_stars.desc,A crown set with a midnight constellation.
-equipment.traveler_robes.desc,Practical robes for the caravan trail.
-equipment.caravan_guard_mail.desc,Mail worn by steadfast caravan guards.
-equipment.stormweave_mantle.desc,A mantle woven with desert lightning.
+equipment.traveler_robes.desc,Practical cloth for a long walk.
+equipment.caravan_guard_mail.desc,Mail worn by steadfast gate guards.
+equipment.stormweave_mantle.desc,A mantle woven with caught lightning.
 equipment.sultans_regalia.desc,Regalia worthy of an ancient court.
-equipment.dust_wisp.desc,A small aura of dancing desert dust.
-equipment.ember_halo.desc,A warm halo of banked embers.
-equipment.djinn_radiance.desc,Radiance drawn from a djinn's promise.
-equipment.solar_ascendance.desc,The blazing sign of a solar champion.
+equipment.dust_wisp.desc,A small orb humming with green light.
+equipment.ember_halo.desc,A wand that trails warm sparks.
+equipment.djinn_radiance.desc,A wand cut from a single violet stone.
+equipment.solar_ascendance.desc,A legendary book that keeps its own light.
 equipment.beetle_token.desc,A humble token polished by travel.
-equipment.falcon_bell.desc,A silver bell known to desert falcons.
+equipment.falcon_bell.desc,A silver bell your falcon answers to.
 equipment.moon_fox_talisman.desc,A moonlit charm for a clever companion.
 equipment.phoenix_signet.desc,A legendary signet of return and renewal.
-enemy.dune_raider.name,Dune Raider
-enemy.dune_raider.desc,A swift scavenger wrapped against the frontier wind.
-enemy.oasis_scarab.name,Oasis Scarab
-enemy.oasis_scarab.desc,A plated burrower that guards cool pools.
-enemy.thorn_lizard.name,Thorn Lizard
-enemy.thorn_lizard.desc,A broad desert crawler with a crown of thorns.
-enemy.mirage_stalker.name,Mirage Stalker
-enemy.mirage_stalker.desc,A slender hunter that shimmers in the heat.
-enemy.night_howler.name,Night Howler
-enemy.night_howler.desc,A moonlit prowler whose call rolls over the dunes.
-enemy.dust_wraith.name,Dust Wraith
-enemy.dust_wraith.desc,A tall swirl of sand held in restless motion.
-enemy.moon_moth.name,Moon Moth
-enemy.moon_moth.desc,A delicate flier drawn to silver light.
-enemy.glass_serpent.name,Glass Serpent
-enemy.glass_serpent.desc,A low crystal-scaled serpent that glides without sound.
-enemy.sunstone_sentinel.name,Sunstone Sentinel
-enemy.sunstone_sentinel.desc,A towering guardian assembled from warm stone.
-enemy.cursed_regalia.name,Cursed Regalia
-enemy.cursed_regalia.desc,Abandoned royal finery animated by lingering magic.
-enemy.ember_djinn_construct.name,Ember Djinn Construct
-enemy.ember_djinn_construct.desc,A crafted vessel driven by a captive ember wind.
-enemy.ossuary_warden.name,Ossuary Warden
-enemy.ossuary_warden.desc,A squat keeper built from pale relic-stone.
-boss.sandstorm_colossus.name,Sandstorm Colossus
-boss.sandstorm_colossus.desc,A massive frontier engine wrapped in a roaring gale.
-boss.lunar_glasswing.name,Lunar Glasswing
-boss.lunar_glasswing.desc,A vast crystalline hunter with razor-thin wings.
-boss.ember_crown_construct.name,Ember Crown Construct
-boss.ember_crown_construct.desc,A towering royal machine crowned with living flame.
-boss.vaultback_behemoth.name,Vaultback Behemoth
-boss.vaultback_behemoth.desc,A fortress-shaped brute plated in ancient metal.
+enemy.dune_raider.name,Leaf Fox
+enemy.dune_raider.desc,A quick woodland runner that darts between the stones.
+enemy.oasis_scarab.name,Pebble Crab
+enemy.oasis_scarab.desc,A rock-shelled crab that guards the meadow pools.
+enemy.thorn_lizard.name,Sproutling
+enemy.thorn_lizard.desc,A small plant creature with a stubborn leaf crown.
+enemy.mirage_stalker.name,Acorn Brute
+enemy.mirage_stalker.desc,A broad-fisted brute armoured in acorn shell.
+enemy.night_howler.name,Mushroom Guard
+enemy.night_howler.desc,A capped fighter that never lowers its shield.
+enemy.dust_wraith.name,Pollen Wisp
+enemy.dust_wraith.desc,A drifting light that scatters glowing pollen.
+enemy.moon_moth.name,Frost Moth
+enemy.moon_moth.desc,A pale flier whose wings leave a cold shimmer.
+enemy.glass_serpent.name,Shard Serpent
+enemy.glass_serpent.desc,A coiled serpent grown over with sharp crystal.
+enemy.sunstone_sentinel.name,Rune Guardian
+enemy.sunstone_sentinel.desc,A tall construct sealed with steady runes.
+enemy.cursed_regalia.name,Smoke Wisp
+enemy.cursed_regalia.desc,A restless coil of smoke with burning eyes.
+enemy.ember_djinn_construct.name,Ember Imp
+enemy.ember_djinn_construct.desc,A small fire spirit that never stops moving.
+enemy.ossuary_warden.name,Obsidian Beetle
+enemy.ossuary_warden.desc,A low beetle plated in dark volcanic glass.
+boss.sandstorm_colossus.name,Ancient Treant
+boss.sandstorm_colossus.desc,A wide forest guardian that slams with branch arms.
+boss.lunar_glasswing.name,Crystal Wyrm
+boss.lunar_glasswing.desc,A long coiled wyrm that sweeps the ground with crystal.
+boss.ember_crown_construct.name,Clockwork Crown King
+boss.ember_crown_construct.desc,A tall crowned machine with a cannon for a hand.
+boss.vaultback_behemoth.name,Mushroom Monarch
+boss.vaultback_behemoth.desc,A squat crowned monarch that punches with both fists.

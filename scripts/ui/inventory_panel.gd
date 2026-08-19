@@ -230,7 +230,32 @@ func _make_item_button(uid: String) -> Button:
 	style.corner_radius_bottom_right = 8
 	button.add_theme_stylebox_override("normal", style)
 	button.pressed.connect(_select_item.bind(uid))
+	_add_item_icon(button, str(owned["item_id"]))
 	return button
+
+
+func _add_item_icon(button: Button, item_id: String) -> void:
+	## Items whose art is built get a real icon; the rest keep the text-only
+	## card rather than a stand-in picture that would misdescribe them.
+	var path: String = "res://assets/sprites/equipment/%s.png" % item_id
+	if not ResourceLoader.exists(path):
+		return
+	var texture: Texture2D = load(path) as Texture2D
+	if texture == null:
+		return
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# Anchored as a left-hand column inside the card. Fixed positions were tried
+	# first and left the icon hanging outside the card's bottom corner.
+	button.add_child(icon)
+	icon.set_anchors_preset(Control.PRESET_LEFT_WIDE, true)
+	icon.offset_left = 12.0
+	icon.offset_right = 92.0
+	icon.offset_top = 18.0
+	icon.offset_bottom = -18.0
 
 
 func _select_item(uid: String) -> void:

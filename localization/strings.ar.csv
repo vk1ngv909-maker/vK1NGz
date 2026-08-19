@@ -107,25 +107,25 @@ skill.golden_wind,الريح الذهبية
 skill.time_fracture,صدع الزمن
 skill.ancestor_call,نداء الأسلاف
 skill.critical_eclipse,كسوف حرج
-equipment.dune_knife.name,سكين الكثبان
-equipment.sunsteel_sabre.name,سيف فولاذ الشمس
-equipment.ifrit_fang.name,ناب العفريت
-equipment.blade_of_high_noon.name,نصل الظهيرة
-equipment.wanderer_wrap.name,لفافة المتجول
-equipment.scarab_circlet.name,إكليل الجعران
-equipment.oracle_veil.name,حجاب العراف
+equipment.dune_knife.name,سيف حديدي قصير
+equipment.sunsteel_sabre.name,نصل البستان
+equipment.ifrit_fang.name,سيف المنشور
+equipment.blade_of_high_noon.name,نصل الجمر
+equipment.wanderer_wrap.name,قلنسوة الرحّالة
+equipment.scarab_circlet.name,إكليل الأوراق
+equipment.oracle_veil.name,خمار العرّافة
 equipment.crown_of_stars.name,تاج النجوم
-equipment.traveler_robes.name,رداء المسافر
-equipment.caravan_guard_mail.name,درع حارس القافلة
-equipment.stormweave_mantle.name,عباءة نسج العاصفة
-equipment.sultans_regalia.name,حلة السلطان
-equipment.dust_wisp.name,طيف الغبار
-equipment.ember_halo.name,هالة الجمر
-equipment.djinn_radiance.name,إشراقة الجني
-equipment.solar_ascendance.name,السمو الشمسي
-equipment.beetle_token.name,تعويذة الخنفساء
+equipment.traveler_robes.name,عباءة الرحّالة
+equipment.caravan_guard_mail.name,درع الحارس
+equipment.stormweave_mantle.name,عباءة العاصفة
+equipment.sultans_regalia.name,الحلّة الملكية
+equipment.dust_wisp.name,كرة الخضرة
+equipment.ember_halo.name,عصا النجمة
+equipment.djinn_radiance.name,عصا الجمشت
+equipment.solar_ascendance.name,سفر النجوم
+equipment.beetle_token.name,رمز الخنفساء
 equipment.falcon_bell.name,جرس الصقر
-equipment.moon_fox_talisman.name,طلسم ثعلب القمر
+equipment.moon_fox_talisman.name,تعويذة ثعلب القمر
 equipment.phoenix_signet.name,خاتم العنقاء
 ui.inventory.same,نفس المستوى
 ui.cancel,إلغاء
@@ -159,14 +159,14 @@ ui.prestige.entry.statistics,الإحصاءات
 ui.prestige.entry.last_seen_utc,وقت آخر ظهور
 ui.prestige.entry.offline_claimed_utc,حالة مكافأة الغياب
 ui.prestige.entry.tutorial,البرنامج التعليمي
-world.oasis_frontier.name,حدود الواحة
-world.oasis_frontier.desc,اتبع طريق القافلة وراء الواحة الأولى.
-world.moonlit_dunes.name,الكثبان المقمرة
-world.moonlit_dunes.desc,اعبر الرمال الفضية تحت قمر لا يغيب.
-world.ruins_of_the_sun_kingdom.name,أطلال مملكة الشمس
-world.ruins_of_the_sun_kingdom.desc,تحدَّ المملكة الساقطة عند حافة الفجر.
-enemy.dune_raider.name,مغير الكثبان
-enemy.oasis_scarab.name,جعران الواحة
+world.oasis_frontier.name,المرج الزمردي
+world.oasis_frontier.desc,اعبر أطلال المروج المضيئة حيث تنمو البلورات الزرقاء.
+world.moonlit_dunes.name,الغابة المقمرة
+world.moonlit_dunes.desc,امشِ في غابة متوهجة تحت قمر لا يغيب.
+world.ruins_of_the_sun_kingdom.name,قلعة السبج
+world.ruins_of_the_sun_kingdom.desc,اصعد قلعة بركانية تضيئها عروق منصهرة.
+enemy.dune_raider.name,ثعلب الأوراق
+enemy.oasis_scarab.name,سرطان الحصى
 enemy.moon_jackal.name,ابن آوى القمري
 enemy.star_wisp.name,طيف النجوم
 enemy.sun_guardian.name,حارس الشمس
@@ -181,22 +181,22 @@ boss.gilded_manticore.name,المانتيكور المذهب
 boss.sun_priest.name,كاهن الشمس
 boss.phoenix_regent.name,وصي العنقاء
 boss.sun_king.name,ملك الشمس
-hero.dune_scout,كشاف الكثبان
-hero.falconer,الصقار
-hero.oasis_guard,حارس الواحة
-hero.scarab_knight,فارس الجعران
-hero.mirage_weaver,ناسج السراب
-hero.djinn_binder,مروض الجان
+hero.dune_scout,رامية المرج
+hero.falconer,مروّضة الأرواح
+hero.oasis_guard,فارس البستان
+hero.scarab_knight,الحارس الملكي
+hero.mirage_weaver,راقصة الريح
+hero.djinn_binder,عالم الرقيم
 hero.sun_priestess,كاهنة الشمس
-hero.star_vizier,وزير النجوم
-hero.dune_scout.desc,كشاف حاد البصر تقوي إشاراته جميع الحلفاء.
-hero.oasis_guard.desc,مبارز صامد يحول القتال القريب إلى لمسات أقوى.
-hero.sun_priestess.desc,مرشدة مشعة تعزز الذهب ومدة المهارات.
-hero.falconer.desc,صياد دقيق يرفع فرصة الضربة الحرجة للفريق.
-hero.scarab_knight.desc,مقاتل ثقيل يعزز الهجمات المباشرة.
-hero.mirage_weaver.desc,ساحر تضخم سراباته قوة جميع الأبطال.
-hero.djinn_binder.desc,سيد سحر يقوي الحلفاء ويقصر وقت الاستعادة.
-hero.star_vizier.desc,مستشار سماوي يطوع زمن المهارات والحظ.
+hero.star_vizier,شاعر القمر
+hero.dune_scout.desc,رامية حادة النظر تقوّي إشاراتها كل الرفاق.
+hero.oasis_guard.desc,نصل ثابت يحوّل القتال القريب إلى نقرات أقوى.
+hero.sun_priestess.desc,مرشدة مشعّة ترفع الذهب وقوة المهارات.
+hero.falconer.desc,صيّادة دقيقة ترفع فرصة الضربة الحاسمة للجميع.
+hero.scarab_knight.desc,ضارب ثقيل يعزّز الهجمات المباشرة.
+hero.mirage_weaver.desc,ساحرة نصالها الدوّارة تضاعف قوة الفريق كله.
+hero.djinn_binder.desc,أستاذ سحر يقوّي الرفاق ويقصّر الانتظار.
+hero.star_vizier.desc,مستشار سماوي يطوّع وقت المهارات والحظ.
 skill.sand_fury.desc,دفعة قوة خلف كل لمسة.
 skill.sand_fury.effect,ضرر اللمس ×3
 skill.falcon_storm.desc,ينقض الصقر بوتيرة أسرع أثناء العاصفة.
@@ -251,55 +251,55 @@ relic.map_of_stars,خريطة النجوم
 relic.desert_wind,ريح الصحراء
 relic.ember_rune,نقش الجمر
 relic.merchant_scale,ميزان التاجر
-equipment.dune_knife.desc,نصل بسيط صاغه طريق الصحراء.
-equipment.sunsteel_sabre.desc,سيف مقوس صُقل بضوء الشمس.
-equipment.ifrit_fang.desc,حد شرس يحمل حرارة الجمر.
-equipment.blade_of_high_noon.desc,سلاح أسطوري يلمع كالظهيرة.
-equipment.wanderer_wrap.desc,لفافة خفيفة للرحلات الطويلة.
-equipment.scarab_circlet.desc,إكليل يحمل علامة الجعران المقدس.
-equipment.oracle_veil.desc,حجاب يتلألأ حول الدروب الخفية.
-equipment.crown_of_stars.desc,تاج مرصع بكوكبة ليلية.
-equipment.traveler_robes.desc,رداء عملي لطريق القوافل.
-equipment.caravan_guard_mail.desc,درع يرتديه حراس القوافل الصامدون.
-equipment.stormweave_mantle.desc,عباءة منسوجة ببرق الصحراء.
-equipment.sultans_regalia.desc,حلة تليق ببلاط قديم.
-equipment.dust_wisp.desc,هالة صغيرة من غبار الصحراء الراقص.
-equipment.ember_halo.desc,هالة دافئة من الجمر الخافت.
-equipment.djinn_radiance.desc,إشراقة مستمدة من عهد جني.
-equipment.solar_ascendance.desc,علامة متوهجة لبطل شمسي.
-equipment.beetle_token.desc,تميمة متواضعة صقلها السفر.
-equipment.falcon_bell.desc,جرس فضي تعرفه صقور الصحراء.
-equipment.moon_fox_talisman.desc,تميمة قمرية لرفيق ماكر.
+equipment.dune_knife.desc,نصل بسيط يبدأ به كل مسافر.
+equipment.sunsteel_sabre.desc,سيف نما حول خشب حيّ.
+equipment.ifrit_fang.desc,حدّ بلوري يشقّ الضوء.
+equipment.blade_of_high_noon.desc,نصل أسطوري يلتف حوله لهب ثابت.
+equipment.wanderer_wrap.desc,قلنسوة خفيفة للطرق الطويلة.
+equipment.scarab_circlet.desc,إكليل منسوج من أوراق دائمة الخضرة.
+equipment.oracle_veil.desc,خمار يتلألأ حول الدروب الخفية.
+equipment.crown_of_stars.desc,تاج مرصّع بكوكبة منتصف الليل.
+equipment.traveler_robes.desc,قماش عملي لمسير طويل.
+equipment.caravan_guard_mail.desc,درع يلبسه حرّاس البوابة الثابتون.
+equipment.stormweave_mantle.desc,عباءة منسوجة ببرق محبوس.
+equipment.sultans_regalia.desc,حلّة تليق ببلاط قديم.
+equipment.dust_wisp.desc,كرة صغيرة تهمس بضوء أخضر.
+equipment.ember_halo.desc,عصا تخلّف شرراً دافئاً.
+equipment.djinn_radiance.desc,عصا منحوتة من حجر بنفسجي واحد.
+equipment.solar_ascendance.desc,كتاب أسطوري يحمل ضوءه معه.
+equipment.beetle_token.desc,رمز متواضع صقله السفر.
+equipment.falcon_bell.desc,جرس فضي يستجيب له صقرك.
+equipment.moon_fox_talisman.desc,تعويذة مقمرة لرفيق ذكي.
 equipment.phoenix_signet.desc,خاتم أسطوري للعودة والتجدد.
-enemy.dune_raider.name,مغير الكثبان
-enemy.dune_raider.desc,جامع سريع يلتف بوشاح يحميه من رياح الحدود.
-enemy.oasis_scarab.name,جعران الواحة
-enemy.oasis_scarab.desc,حفار مدرع يحرس البرك الباردة.
-enemy.thorn_lizard.name,سحلية الشوك
-enemy.thorn_lizard.desc,زاحف صحراوي عريض تعلوه أشواك.
-enemy.mirage_stalker.name,متعقب السراب
-enemy.mirage_stalker.desc,صياد نحيل يتلألأ في وهج الحر.
-enemy.night_howler.name,عواء الليل
-enemy.night_howler.desc,متجول قمري يمتد نداؤه فوق الكثبان.
-enemy.dust_wraith.name,طيف الغبار
-enemy.dust_wraith.desc,دوامة رملية طويلة لا تهدأ حركتها.
-enemy.moon_moth.name,عثة القمر
-enemy.moon_moth.desc,حشرة رقيقة تنجذب إلى الضوء الفضي.
-enemy.glass_serpent.name,أفعى الزجاج
-enemy.glass_serpent.desc,أفعى منخفضة ذات حراشف بلورية تنساب بصمت.
-enemy.sunstone_sentinel.name,حارس حجر الشمس
-enemy.sunstone_sentinel.desc,حارس شاهق مركب من حجارة دافئة.
-enemy.cursed_regalia.name,الحلة المسحورة
-enemy.cursed_regalia.desc,زينة ملكية مهجورة تحركها بقايا السحر.
-enemy.ember_djinn_construct.name,بناء جني الجمر
-enemy.ember_djinn_construct.desc,وعاء مصنوع تحركه ريح جمر أسيرة.
-enemy.ossuary_warden.name,حارس العظام
-enemy.ossuary_warden.desc,حارس قصير مصنوع من حجر شاحب عتيق.
-boss.sandstorm_colossus.name,عملاق العاصفة الرملية
-boss.sandstorm_colossus.desc,آلة حدودية هائلة تلفها عاصفة هادرة.
-boss.lunar_glasswing.name,الجناح الزجاجي القمري
-boss.lunar_glasswing.desc,صياد بلوري ضخم بأجنحة رفيعة حادة.
-boss.ember_crown_construct.name,بناء تاج الجمر
-boss.ember_crown_construct.desc,آلة ملكية شاهقة يتوجها لهب حي.
-boss.vaultback_behemoth.name,هائل الظهر الحصين
-boss.vaultback_behemoth.desc,وحش على هيئة حصن تكسوه صفائح معدن عتيق.
+enemy.dune_raider.name,ثعلب الأوراق
+enemy.dune_raider.desc,عدّاء سريع من الغابة يتنقل بين الحجارة.
+enemy.oasis_scarab.name,سرطان الحصى
+enemy.oasis_scarab.desc,سرطان بصدفة صخرية يحرس برك المرج.
+enemy.thorn_lizard.name,البرعم
+enemy.thorn_lizard.desc,مخلوق نباتي صغير بتاج من الأوراق العنيدة.
+enemy.mirage_stalker.name,غليظ البلوط
+enemy.mirage_stalker.desc,غليظ عريض القبضة مدرّع بقشر البلوط.
+enemy.night_howler.name,حارس الفطر
+enemy.night_howler.desc,مقاتل بقبعة فطر لا يخفض درعه أبداً.
+enemy.dust_wraith.name,شهاب اللقاح
+enemy.dust_wraith.desc,ضوء سابح ينثر لقاحاً متوهجاً.
+enemy.moon_moth.name,عثّة الصقيع
+enemy.moon_moth.desc,طائرة شاحبة تترك أجنحتها بريقاً بارداً.
+enemy.glass_serpent.name,أفعى الشظايا
+enemy.glass_serpent.desc,أفعى ملتفة تغطيها بلورات حادة.
+enemy.sunstone_sentinel.name,حارس الرقيم
+enemy.sunstone_sentinel.desc,بنية عالية مختومة برقوم ثابتة.
+enemy.cursed_regalia.name,شهاب الدخان
+enemy.cursed_regalia.desc,لفافة دخان قلقة بعينين متقدتين.
+enemy.ember_djinn_construct.name,عفريت الجمر
+enemy.ember_djinn_construct.desc,روح نار صغيرة لا تهدأ.
+enemy.ossuary_warden.name,خنفساء السبج
+enemy.ossuary_warden.desc,خنفساء منخفضة مدرّعة بزجاج بركاني داكن.
+boss.sandstorm_colossus.name,الشجرة العتيقة
+boss.sandstorm_colossus.desc,حارس غابة عريض يضرب بأذرع من الأغصان.
+boss.lunar_glasswing.name,تنين البلور
+boss.lunar_glasswing.desc,تنين طويل ملتف يكنس الأرض بالبلور.
+boss.ember_crown_construct.name,ملك التروس المتوّج
+boss.ember_crown_construct.desc,آلة عالية متوّجة يدها مدفع.
+boss.vaultback_behemoth.name,ملك الفطر
+boss.vaultback_behemoth.desc,ملك قصير متوّج يلكم بقبضتيه.
