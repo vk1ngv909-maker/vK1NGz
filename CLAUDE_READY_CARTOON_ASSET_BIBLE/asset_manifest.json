@@ -1,0 +1,3204 @@
+{
+  "schema_version": 1,
+  "package_name": "CLAUDE_READY_CARTOON_ASSET_BIBLE",
+  "art_direction": {
+    "status": "approved_and_locked",
+    "style": "original culturally neutral 2D fantasy cartoon mobile RPG",
+    "rules": [
+      "bold dark outlines",
+      "rounded simplified geometry",
+      "flat color blocks",
+      "subtle two-step cel shading",
+      "strong small-screen silhouettes",
+      "no Arabic or Middle Eastern motifs",
+      "no protected Tap Titans artwork"
+    ]
+  },
+  "counts": {
+    "all_non_world_assets": 116,
+    "characters": 20,
+    "monsters": 39,
+    "bosses": 13,
+    "weapons": 31,
+    "companions": 13,
+    "worlds": 10
+  },
+  "assets": [
+    {
+      "id": "main_hero",
+      "display_name": "Main Hero",
+      "category": "character",
+      "role_or_affinity": "Primary tap hero",
+      "visual_description": "Balanced adventurer with crystal staff and teal cape.",
+      "image_path": "assets/characters/main_hero.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 396,
+      "file_height_px": 448,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "falcon_companion",
+      "display_name": "Falcon Companion",
+      "category": "companion",
+      "role_or_affinity": "Ranged companion",
+      "visual_description": "Small flying falcon; quick dive attack and cyan damage number.",
+      "image_path": "assets/companions/falcon_companion.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 236,
+      "file_height_px": 235,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "core_knight",
+      "display_name": "Core Knight",
+      "category": "character",
+      "role_or_affinity": "Tank support hero",
+      "visual_description": "Compact armored silhouette, sword and shield.",
+      "image_path": "assets/characters/core_knight.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 376,
+      "file_height_px": 387,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "core_archer",
+      "display_name": "Core Archer",
+      "category": "character",
+      "role_or_affinity": "Ranged support hero",
+      "visual_description": "Fast bow user with clear side-facing attack pose.",
+      "image_path": "assets/characters/core_archer.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 309,
+      "file_height_px": 363,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "core_mage",
+      "display_name": "Core Mage",
+      "category": "character",
+      "role_or_affinity": "Magic support hero",
+      "visual_description": "Blue and purple caster with staff and wide hat.",
+      "image_path": "assets/characters/core_mage.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 319,
+      "file_height_px": 373,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "meadow_slime",
+      "display_name": "Meadow Slime",
+      "category": "monster",
+      "role_or_affinity": "Early regular enemy",
+      "visual_description": "Round low silhouette; squash-and-stretch hit reaction.",
+      "image_path": "assets/monsters/meadow_slime.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 248,
+      "file_height_px": 219,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "forest_horn_beast",
+      "display_name": "Forest Horn Beast",
+      "category": "monster",
+      "role_or_affinity": "Forest regular enemy",
+      "visual_description": "Wide horned woodland creature with leafy body.",
+      "image_path": "assets/monsters/forest_horn_beast.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 248,
+      "file_height_px": 316,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "armored_goblin",
+      "display_name": "Armored Goblin",
+      "category": "monster",
+      "role_or_affinity": "Armored regular enemy",
+      "visual_description": "Small shield fighter with squat readable silhouette.",
+      "image_path": "assets/monsters/armored_goblin.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 229,
+      "file_height_px": 221,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "purple_fortress_boss",
+      "display_name": "Purple Fortress Boss",
+      "category": "boss",
+      "role_or_affinity": "Primary fortress boss",
+      "visual_description": "Massive purple horned boss with oversized gauntlet.",
+      "image_path": "assets/bosses/purple_fortress_boss.webp",
+      "source_sheet": "assets/reference_sheets/base.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 560,
+      "file_height_px": 404,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "ember_duelist",
+      "display_name": "Ember Duelist",
+      "category": "character",
+      "role_or_affinity": "Melee fire hero",
+      "visual_description": "Aggressive sword silhouette and burst tap-damage identity.",
+      "image_path": "assets/characters/ember_duelist.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 352,
+      "file_height_px": 392,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_ranger",
+      "display_name": "Frost Ranger",
+      "category": "character",
+      "role_or_affinity": "Ranged control hero",
+      "visual_description": "Ice bow; slow or freeze visual identity.",
+      "image_path": "assets/characters/frost_ranger.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 352,
+      "file_height_px": 409,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "storm_paladin",
+      "display_name": "Storm Paladin",
+      "category": "character",
+      "role_or_affinity": "Tank and stun hero",
+      "visual_description": "Hammer and round shield; heavy impact silhouette.",
+      "image_path": "assets/characters/storm_paladin.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 355,
+      "file_height_px": 382,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "grove_druid",
+      "display_name": "Grove Druid",
+      "category": "character",
+      "role_or_affinity": "Support healer",
+      "visual_description": "Branch staff, leaf cloak, and nature aura.",
+      "image_path": "assets/characters/grove_druid.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 341,
+      "file_height_px": 409,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_monk",
+      "display_name": "Crystal Monk",
+      "category": "character",
+      "role_or_affinity": "Critical melee hero",
+      "visual_description": "Large crystal gauntlets; short-range rapid attacks.",
+      "image_path": "assets/characters/crystal_monk.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 305,
+      "file_height_px": 372,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "shadow_rogue",
+      "display_name": "Shadow Rogue",
+      "category": "character",
+      "role_or_affinity": "Attack-speed hero",
+      "visual_description": "Twin daggers and low agile stance.",
+      "image_path": "assets/characters/shadow_rogue.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 378,
+      "file_height_px": 399,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sky_lancer",
+      "display_name": "Sky Lancer",
+      "category": "character",
+      "role_or_affinity": "Piercing melee hero",
+      "visual_description": "Long spear and strong forward attack line.",
+      "image_path": "assets/characters/sky_lancer.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 313,
+      "file_height_px": 393,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "arcane_alchemist",
+      "display_name": "Arcane Alchemist",
+      "category": "character",
+      "role_or_affinity": "Ranged debuff hero",
+      "visual_description": "Potion launcher and status-effect identity.",
+      "image_path": "assets/characters/arcane_alchemist.webp",
+      "source_sheet": "assets/reference_sheets/hero_a.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 303,
+      "file_height_px": 374,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "iron_engineer",
+      "display_name": "Iron Engineer",
+      "category": "character",
+      "role_or_affinity": "Ranged device hero",
+      "visual_description": "Mechanical cannon-wrench and deployable gadget identity.",
+      "image_path": "assets/characters/iron_engineer.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 364,
+      "file_height_px": 382,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "moon_bard",
+      "display_name": "Moon Bard",
+      "category": "character",
+      "role_or_affinity": "Skill-duration support",
+      "visual_description": "Magical lute and moon-themed buffs.",
+      "image_path": "assets/characters/moon_bard.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 320,
+      "file_height_px": 396,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "spirit_tamer",
+      "display_name": "Spirit Tamer",
+      "category": "character",
+      "role_or_affinity": "Companion support",
+      "visual_description": "Floating spirit and summon-focused bonuses.",
+      "image_path": "assets/characters/spirit_tamer.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 334,
+      "file_height_px": 394,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sun_cleric",
+      "display_name": "Sun Cleric",
+      "category": "character",
+      "role_or_affinity": "Defensive support",
+      "visual_description": "Mace and sun shield; healing and protection.",
+      "image_path": "assets/characters/sun_cleric.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 335,
+      "file_height_px": 422,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "wild_beast_rider",
+      "display_name": "Wild Beast Rider",
+      "category": "character",
+      "role_or_affinity": "Summon melee hero",
+      "visual_description": "Boar partner and charge-based attack.",
+      "image_path": "assets/characters/wild_beast_rider.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 378,
+      "file_height_px": 403,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "rune_scholar",
+      "display_name": "Rune Scholar",
+      "category": "character",
+      "role_or_affinity": "Magic damage hero",
+      "visual_description": "Open spellbook and floating rune crystal.",
+      "image_path": "assets/characters/rune_scholar.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 363,
+      "file_height_px": 396,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "wind_dancer",
+      "display_name": "Wind Dancer",
+      "category": "character",
+      "role_or_affinity": "Agile melee hero",
+      "visual_description": "Twin ring blades and dodge-speed identity.",
+      "image_path": "assets/characters/wind_dancer.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 359,
+      "file_height_px": 409,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "royal_guardian",
+      "display_name": "Royal Guardian",
+      "category": "character",
+      "role_or_affinity": "Heavy tank hero",
+      "visual_description": "Oversized tower shield and defensive milestones.",
+      "image_path": "assets/characters/royal_guardian.webp",
+      "source_sheet": "assets/reference_sheets/hero_b.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 353,
+      "file_height_px": 411,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "300-360",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 6,
+          "critical_attack": 6,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "honey_slime",
+      "display_name": "Honey Slime",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Low round slime with sticky bounce attack.",
+      "image_path": "assets/monsters/honey_slime.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 296,
+      "file_height_px": 225,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sproutling",
+      "display_name": "Sproutling",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Small plant enemy with leaf-top silhouette.",
+      "image_path": "assets/monsters/sproutling.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 235,
+      "file_height_px": 274,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "pebble_crab",
+      "display_name": "Pebble Crab",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Rock shell crab with side-step attack.",
+      "image_path": "assets/monsters/pebble_crab.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 303,
+      "file_height_px": 267,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "leaf_fox",
+      "display_name": "Leaf Fox",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Fast woodland runner with pointed silhouette.",
+      "image_path": "assets/monsters/leaf_fox.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 320,
+      "file_height_px": 255,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "mushroom_guard",
+      "display_name": "Mushroom Guard",
+      "category": "monster",
+      "role_or_affinity": "Moonlit Wildwood",
+      "visual_description": "Shield-and-club mushroom fighter.",
+      "image_path": "assets/monsters/mushroom_guard.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 328,
+      "file_height_px": 254,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "vine_snapper",
+      "display_name": "Vine Snapper",
+      "category": "monster",
+      "role_or_affinity": "Moonlit Wildwood",
+      "visual_description": "Stationary plant mouth with snapping attack.",
+      "image_path": "assets/monsters/vine_snapper.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 301,
+      "file_height_px": 265,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_mite",
+      "display_name": "Crystal Mite",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Low armored insect carrying bright crystals.",
+      "image_path": "assets/monsters/crystal_mite.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 252,
+      "file_height_px": 235,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "puddle_blob",
+      "display_name": "Puddle Blob",
+      "category": "monster",
+      "role_or_affinity": "Coral Sky Coast",
+      "visual_description": "Water slime with splash hit reaction.",
+      "image_path": "assets/monsters/puddle_blob.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 265,
+      "file_height_px": 207,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "acorn_brute",
+      "display_name": "Acorn Brute",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Broad fists and acorn-shell armor.",
+      "image_path": "assets/monsters/acorn_brute.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 314,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "moss_turtle",
+      "display_name": "Moss Turtle",
+      "category": "monster",
+      "role_or_affinity": "Whispering Marsh",
+      "visual_description": "Slow defensive enemy with high durability.",
+      "image_path": "assets/monsters/moss_turtle.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 318,
+      "file_height_px": 259,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "pollen_wisp",
+      "display_name": "Pollen Wisp",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Small flying light enemy.",
+      "image_path": "assets/monsters/pollen_wisp.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 194,
+      "file_height_px": 216,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "hill_hopper",
+      "display_name": "Hill Hopper",
+      "category": "monster",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Spring-legged rock frog with jump attack.",
+      "image_path": "assets/monsters/hill_hopper.webp",
+      "source_sheet": "assets/reference_sheets/monster_a.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 325,
+      "file_height_px": 260,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "ice_wolf_cub",
+      "display_name": "Ice Wolf Cub",
+      "category": "monster",
+      "role_or_affinity": "Frostpeak Pass",
+      "visual_description": "Fast low-profile ice beast.",
+      "image_path": "assets/monsters/ice_wolf_cub.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 299,
+      "file_height_px": 233,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "snow_golem",
+      "display_name": "Snow Golem",
+      "category": "monster",
+      "role_or_affinity": "Frostpeak Pass",
+      "visual_description": "Round heavy snow construct.",
+      "image_path": "assets/monsters/snow_golem.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 307,
+      "file_height_px": 312,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_beetle",
+      "display_name": "Crystal Beetle",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Armored crystal insect.",
+      "image_path": "assets/monsters/crystal_beetle.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 298,
+      "file_height_px": 271,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_moth",
+      "display_name": "Frost Moth",
+      "category": "monster",
+      "role_or_affinity": "Frostpeak Pass",
+      "visual_description": "Flying enemy with wide wing silhouette.",
+      "image_path": "assets/monsters/frost_moth.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 300,
+      "file_height_px": 261,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "coral_crab",
+      "display_name": "Coral Crab",
+      "category": "monster",
+      "role_or_affinity": "Coral Sky Coast",
+      "visual_description": "Wide red coral shell attacker.",
+      "image_path": "assets/monsters/coral_crab.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 349,
+      "file_height_px": 229,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "shell_guardian",
+      "display_name": "Shell Guardian",
+      "category": "monster",
+      "role_or_affinity": "Coral Sky Coast",
+      "visual_description": "Stone-shell humanoid with trident.",
+      "image_path": "assets/monsters/shell_guardian.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 313,
+      "file_height_px": 295,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "floating_jelly",
+      "display_name": "Floating Jelly",
+      "category": "monster",
+      "role_or_affinity": "Coral Sky Coast",
+      "visual_description": "Airborne jelly with soft tentacle motion.",
+      "image_path": "assets/monsters/floating_jelly.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 199,
+      "file_height_px": 141,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_tusk_beast",
+      "display_name": "Frost Tusk Beast",
+      "category": "monster",
+      "role_or_affinity": "Frostpeak Pass",
+      "visual_description": "Wide charging snow boar.",
+      "image_path": "assets/monsters/frost_tusk_beast.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 313,
+      "file_height_px": 294,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "cave_bat",
+      "display_name": "Cave Bat",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Quick flying cave enemy.",
+      "image_path": "assets/monsters/cave_bat.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 344,
+      "file_height_px": 209,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "stalagmite_golem",
+      "display_name": "Stalagmite Golem",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Blocky stone-and-crystal brawler.",
+      "image_path": "assets/monsters/stalagmite_golem.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 308,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "angler_slime",
+      "display_name": "Angler Slime",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Low glowing lure creature.",
+      "image_path": "assets/monsters/angler_slime.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 265,
+      "file_height_px": 237,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "shard_serpent",
+      "display_name": "Shard Serpent",
+      "category": "monster",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Long coiled crystal snake.",
+      "image_path": "assets/monsters/shard_serpent.webp",
+      "source_sheet": "assets/reference_sheets/monster_b.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 278,
+      "file_height_px": 265,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "ember_imp",
+      "display_name": "Ember Imp",
+      "category": "monster",
+      "role_or_affinity": "Obsidian Citadel",
+      "visual_description": "Small fire caster with horned silhouette.",
+      "image_path": "assets/monsters/ember_imp.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 278,
+      "file_height_px": 306,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "lava_tortoise",
+      "display_name": "Lava Tortoise",
+      "category": "monster",
+      "role_or_affinity": "Obsidian Citadel",
+      "visual_description": "Heavy lava-shell defender.",
+      "image_path": "assets/monsters/lava_tortoise.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 355,
+      "file_height_px": 263,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "smoke_wisp",
+      "display_name": "Smoke Wisp",
+      "category": "monster",
+      "role_or_affinity": "Obsidian Citadel",
+      "visual_description": "Floating smoke enemy with glowing eyes.",
+      "image_path": "assets/monsters/smoke_wisp.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 235,
+      "file_height_px": 318,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "obsidian_beetle",
+      "display_name": "Obsidian Beetle",
+      "category": "monster",
+      "role_or_affinity": "Obsidian Citadel",
+      "visual_description": "Dark armored beetle with purple core.",
+      "image_path": "assets/monsters/obsidian_beetle.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 292,
+      "file_height_px": 230,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "gear_goblin",
+      "display_name": "Gear Goblin",
+      "category": "monster",
+      "role_or_affinity": "Clockwork City",
+      "visual_description": "Mechanical tool user and fast melee enemy.",
+      "image_path": "assets/monsters/gear_goblin.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 283,
+      "file_height_px": 280,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "clockwork_hound",
+      "display_name": "Clockwork Hound",
+      "category": "monster",
+      "role_or_affinity": "Clockwork City",
+      "visual_description": "Mechanical dog with wind-up key.",
+      "image_path": "assets/monsters/clockwork_hound.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 325,
+      "file_height_px": 284,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "wind_cloud",
+      "display_name": "Wind Cloud",
+      "category": "monster",
+      "role_or_affinity": "Storm Isles",
+      "visual_description": "Floating gust enemy with soft cloud body.",
+      "image_path": "assets/monsters/wind_cloud.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 273,
+      "file_height_px": 243,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "thunder_ram",
+      "display_name": "Thunder Ram",
+      "category": "monster",
+      "role_or_affinity": "Storm Isles",
+      "visual_description": "Charging horned beast with lightning accents.",
+      "image_path": "assets/monsters/thunder_ram.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 266,
+      "file_height_px": 278,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "star_jelly",
+      "display_name": "Star Jelly",
+      "category": "monster",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Cosmic jelly with star core.",
+      "image_path": "assets/monsters/star_jelly.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 269,
+      "file_height_px": 276,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "cosmic_owl",
+      "display_name": "Cosmic Owl",
+      "category": "monster",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Flying guardian with broad eye silhouette.",
+      "image_path": "assets/monsters/cosmic_owl.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 258,
+      "file_height_px": 273,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "rune_guardian",
+      "display_name": "Rune Guardian",
+      "category": "monster",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Stone construct with purple runes.",
+      "image_path": "assets/monsters/rune_guardian.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 294,
+      "file_height_px": 275,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "plasma_serpent",
+      "display_name": "Plasma Serpent",
+      "category": "monster",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Small coiled energy serpent.",
+      "image_path": "assets/monsters/plasma_serpent.webp",
+      "source_sheet": "assets/reference_sheets/monster_c.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 231,
+      "file_height_px": 262,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "210-300",
+        "max_source_texture_px": 512,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "defeat": 6
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "ancient_treant",
+      "display_name": "Ancient Treant",
+      "category": "boss",
+      "role_or_affinity": "Emerald Meadow",
+      "visual_description": "Tall branch-armed guardian with slam attacks.",
+      "image_path": "assets/bosses/ancient_treant.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 500,
+      "file_height_px": 474,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "mushroom_monarch",
+      "display_name": "Mushroom Monarch",
+      "category": "boss",
+      "role_or_affinity": "Moonlit Wildwood",
+      "visual_description": "Wide crowned mushroom with heavy punches.",
+      "image_path": "assets/bosses/mushroom_monarch.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 427,
+      "file_height_px": 412,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_tusk_mammoth",
+      "display_name": "Frost Tusk Mammoth",
+      "category": "boss",
+      "role_or_affinity": "Frostpeak Pass",
+      "visual_description": "Massive ice tusks and charge attack.",
+      "image_path": "assets/bosses/frost_tusk_mammoth.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 494,
+      "file_height_px": 448,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "coral_shell_titan",
+      "display_name": "Coral Shell Titan",
+      "category": "boss",
+      "role_or_affinity": "Coral Sky Coast",
+      "visual_description": "Very wide crab silhouette and claw combo.",
+      "image_path": "assets/bosses/coral_shell_titan.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 507,
+      "file_height_px": 415,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_cavern_wyrm",
+      "display_name": "Crystal Cavern Wyrm",
+      "category": "boss",
+      "role_or_affinity": "Crystal Caverns",
+      "visual_description": "Long coiled boss with crystal sweep.",
+      "image_path": "assets/bosses/crystal_cavern_wyrm.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 474,
+      "file_height_px": 402,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "storm_thunder_roc",
+      "display_name": "Storm Thunder Roc",
+      "category": "boss",
+      "role_or_affinity": "Storm Isles",
+      "visual_description": "Large flying boss with lightning dive.",
+      "image_path": "assets/bosses/storm_thunder_roc.webp",
+      "source_sheet": "assets/reference_sheets/boss_a.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 512,
+      "file_height_px": 419,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "clockwork_crown_king",
+      "display_name": "Clockwork Crown King",
+      "category": "boss",
+      "role_or_affinity": "Clockwork City",
+      "visual_description": "Tall mechanical king with ranged cannon hand.",
+      "image_path": "assets/bosses/clockwork_crown_king.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 456,
+      "file_height_px": 419,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "magma_horn_beast",
+      "display_name": "Magma Horn Beast",
+      "category": "boss",
+      "role_or_affinity": "Obsidian Citadel",
+      "visual_description": "Low massive volcanic charge boss.",
+      "image_path": "assets/bosses/magma_horn_beast.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 499,
+      "file_height_px": 422,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "whispering_marsh_hydra",
+      "display_name": "Whispering Marsh Hydra",
+      "category": "boss",
+      "role_or_affinity": "Whispering Marsh",
+      "visual_description": "Three rounded heads with alternating attacks.",
+      "image_path": "assets/bosses/whispering_marsh_hydra.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 477,
+      "file_height_px": 428,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "celestial_owl_guardian",
+      "display_name": "Celestial Owl Guardian",
+      "category": "boss",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Floating winged caster boss.",
+      "image_path": "assets/bosses/celestial_owl_guardian.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 467,
+      "file_height_px": 398,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "storm_sea_leviathan",
+      "display_name": "Storm Sea Leviathan",
+      "category": "boss",
+      "role_or_affinity": "Storm Isles",
+      "visual_description": "Long water serpent with wave attack.",
+      "image_path": "assets/bosses/storm_sea_leviathan.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 472,
+      "file_height_px": 445,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "cosmic_star_knight",
+      "display_name": "Cosmic Star Knight",
+      "category": "boss",
+      "role_or_affinity": "Astral Temple",
+      "visual_description": "Armored final boss with giant star shield.",
+      "image_path": "assets/bosses/cosmic_star_knight.webp",
+      "source_sheet": "assets/reference_sheets/boss_b.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 497,
+      "file_height_px": 436,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "420-560",
+        "max_source_texture_px": 768,
+        "anchor": "bottom_center",
+        "default_facing": "left_toward_hero",
+        "animation_states": {
+          "idle": 6,
+          "attack": 8,
+          "hit": 3,
+          "enraged": 6,
+          "defeat": 10
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "iron_short_sword",
+      "display_name": "Iron Short Sword",
+      "category": "weapon",
+      "role_or_affinity": "sword",
+      "visual_description": "Common neutral starter sword.",
+      "image_path": "assets/weapons/iron_short_sword.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 205,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "grove_blade",
+      "display_name": "Grove Blade",
+      "category": "weapon",
+      "role_or_affinity": "sword",
+      "visual_description": "Nature-themed rare sword.",
+      "image_path": "assets/weapons/grove_blade.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 208,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "prism_sword",
+      "display_name": "Prism Sword",
+      "category": "weapon",
+      "role_or_affinity": "sword",
+      "visual_description": "Crystal epic sword.",
+      "image_path": "assets/weapons/prism_sword.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 199,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "ember_blade",
+      "display_name": "Ember Blade",
+      "category": "weapon",
+      "role_or_affinity": "sword",
+      "visual_description": "Fire legendary sword.",
+      "image_path": "assets/weapons/ember_blade.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 206,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "skyguard_sword",
+      "display_name": "Skyguard Sword",
+      "category": "weapon",
+      "role_or_affinity": "sword",
+      "visual_description": "Light-and-wind sword.",
+      "image_path": "assets/weapons/skyguard_sword.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 168,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "woodsman_axe",
+      "display_name": "Woodsman Axe",
+      "category": "weapon",
+      "role_or_affinity": "axe",
+      "visual_description": "Common wood-and-iron axe.",
+      "image_path": "assets/weapons/woodsman_axe.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 227,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_twin_axe",
+      "display_name": "Frost Twin Axe",
+      "category": "weapon",
+      "role_or_affinity": "axe",
+      "visual_description": "Ice double-headed axe.",
+      "image_path": "assets/weapons/frost_twin_axe.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 211,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "oak_maul",
+      "display_name": "Oak Maul",
+      "category": "weapon",
+      "role_or_affinity": "hammer",
+      "visual_description": "Heavy wooden common maul.",
+      "image_path": "assets/weapons/oak_maul.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 218,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "amethyst_maul",
+      "display_name": "Amethyst Maul",
+      "category": "weapon",
+      "role_or_affinity": "hammer",
+      "visual_description": "Purple crystal epic hammer.",
+      "image_path": "assets/weapons/amethyst_maul.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 206,
+      "file_height_px": 254,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sunstone_hammer",
+      "display_name": "Sunstone Hammer",
+      "category": "weapon",
+      "role_or_affinity": "hammer",
+      "visual_description": "Gold-and-green legendary hammer.",
+      "image_path": "assets/weapons/sunstone_hammer.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 207,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "stone_spear",
+      "display_name": "Stone Spear",
+      "category": "weapon",
+      "role_or_affinity": "spear",
+      "visual_description": "Common stone-tipped spear.",
+      "image_path": "assets/weapons/stone_spear.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 173,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_lance",
+      "display_name": "Frost Lance",
+      "category": "weapon",
+      "role_or_affinity": "spear",
+      "visual_description": "Long ice rare spear.",
+      "image_path": "assets/weapons/frost_lance.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 189,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "twin_leaf_daggers",
+      "display_name": "Twin Leaf Daggers",
+      "category": "weapon",
+      "role_or_affinity": "daggers",
+      "visual_description": "Fast nature dagger pair.",
+      "image_path": "assets/weapons/twin_leaf_daggers.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 13,
+      "file_width_px": 175,
+      "file_height_px": 217,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "twin_void_daggers",
+      "display_name": "Twin Void Daggers",
+      "category": "weapon",
+      "role_or_affinity": "daggers",
+      "visual_description": "Purple critical dagger pair.",
+      "image_path": "assets/weapons/twin_void_daggers.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 14,
+      "file_width_px": 149,
+      "file_height_px": 250,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "iron_round_shield",
+      "display_name": "Iron Round Shield",
+      "category": "weapon",
+      "role_or_affinity": "shield",
+      "visual_description": "Common defensive round shield.",
+      "image_path": "assets/weapons/iron_round_shield.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 15,
+      "file_width_px": 198,
+      "file_height_px": 244,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "skyguard_shield",
+      "display_name": "Skyguard Shield",
+      "category": "weapon",
+      "role_or_affinity": "shield",
+      "visual_description": "Winged blue legendary shield.",
+      "image_path": "assets/weapons/skyguard_shield.webp",
+      "source_sheet": "assets/reference_sheets/weapon_melee.webp",
+      "source_index_left_to_right_top_to_bottom": 16,
+      "file_width_px": 203,
+      "file_height_px": 253,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "grove_bow",
+      "display_name": "Grove Bow",
+      "category": "weapon",
+      "role_or_affinity": "bow",
+      "visual_description": "Common nature bow.",
+      "image_path": "assets/weapons/grove_bow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 191,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_bow",
+      "display_name": "Frost Bow",
+      "category": "weapon",
+      "role_or_affinity": "bow",
+      "visual_description": "Ice slow-effect bow.",
+      "image_path": "assets/weapons/frost_bow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 215,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "void_bow",
+      "display_name": "Void Bow",
+      "category": "weapon",
+      "role_or_affinity": "bow",
+      "visual_description": "Purple critical bow.",
+      "image_path": "assets/weapons/void_bow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 211,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sunwing_bow",
+      "display_name": "Sunwing Bow",
+      "category": "weapon",
+      "role_or_affinity": "bow",
+      "visual_description": "Gold legendary bow.",
+      "image_path": "assets/weapons/sunwing_bow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 200,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "grove_crossbow",
+      "display_name": "Grove Crossbow",
+      "category": "weapon",
+      "role_or_affinity": "crossbow",
+      "visual_description": "Compact nature crossbow.",
+      "image_path": "assets/weapons/grove_crossbow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 243,
+      "file_height_px": 211,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "frost_crossbow",
+      "display_name": "Frost Crossbow",
+      "category": "weapon",
+      "role_or_affinity": "crossbow",
+      "visual_description": "Blue heavy crossbow.",
+      "image_path": "assets/weapons/frost_crossbow.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 250,
+      "file_height_px": 233,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "grove_orb_staff",
+      "display_name": "Grove Orb Staff",
+      "category": "weapon",
+      "role_or_affinity": "staff",
+      "visual_description": "Nature support staff.",
+      "image_path": "assets/weapons/grove_orb_staff.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 209,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_staff",
+      "display_name": "Crystal Staff",
+      "category": "weapon",
+      "role_or_affinity": "staff",
+      "visual_description": "Blue crystal damage staff.",
+      "image_path": "assets/weapons/crystal_staff.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 186,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "void_orb_staff",
+      "display_name": "Void Orb Staff",
+      "category": "weapon",
+      "role_or_affinity": "staff",
+      "visual_description": "Purple arcane staff.",
+      "image_path": "assets/weapons/void_orb_staff.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 201,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "sun_staff",
+      "display_name": "Sun Staff",
+      "category": "weapon",
+      "role_or_affinity": "staff",
+      "visual_description": "Gold healing staff.",
+      "image_path": "assets/weapons/sun_staff.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 158,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "star_wand",
+      "display_name": "Star Wand",
+      "category": "weapon",
+      "role_or_affinity": "wand",
+      "visual_description": "Bright star skill wand.",
+      "image_path": "assets/weapons/star_wand.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 195,
+      "file_height_px": 255,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "amethyst_wand",
+      "display_name": "Amethyst Wand",
+      "category": "weapon",
+      "role_or_affinity": "wand",
+      "visual_description": "Purple cooldown wand.",
+      "image_path": "assets/weapons/amethyst_wand.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 181,
+      "file_height_px": 256,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "astral_spellbook",
+      "display_name": "Astral Spellbook",
+      "category": "weapon",
+      "role_or_affinity": "spellbook",
+      "visual_description": "Floating magic book.",
+      "image_path": "assets/weapons/astral_spellbook.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 13,
+      "file_width_px": 256,
+      "file_height_px": 244,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "verdant_crystal_orb",
+      "display_name": "Verdant Crystal Orb",
+      "category": "weapon",
+      "role_or_affinity": "orb",
+      "visual_description": "Green crystal support orb.",
+      "image_path": "assets/weapons/verdant_crystal_orb.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 14,
+      "file_width_px": 217,
+      "file_height_px": 253,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "alchemist_launcher",
+      "display_name": "Alchemist Launcher",
+      "category": "weapon",
+      "role_or_affinity": "launcher",
+      "visual_description": "Potion projectile weapon.",
+      "image_path": "assets/weapons/alchemist_launcher.webp",
+      "source_sheet": "assets/reference_sheets/weapon_magic.webp",
+      "source_index_left_to_right_top_to_bottom": 15,
+      "file_width_px": 248,
+      "file_height_px": 217,
+      "runtime_spec": {
+        "recommended_icon_canvas_px": "192x192",
+        "max_source_texture_px": 256,
+        "anchor": "center",
+        "transparent_padding_percent": 12,
+        "animation_states": {}
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "baby_griffin",
+      "display_name": "Baby Griffin",
+      "category": "companion",
+      "role_or_affinity": "Air dash attacker",
+      "visual_description": "Fast dive attack; small airborne silhouette.",
+      "image_path": "assets/companions/baby_griffin.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 1,
+      "file_width_px": 286,
+      "file_height_px": 287,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "fire_fox",
+      "display_name": "Fire Fox",
+      "category": "companion",
+      "role_or_affinity": "Fire burst attacker",
+      "visual_description": "Short flame dash and burn effect.",
+      "image_path": "assets/companions/fire_fox.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 2,
+      "file_width_px": 320,
+      "file_height_px": 310,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "water_otter",
+      "display_name": "Water Otter",
+      "category": "companion",
+      "role_or_affinity": "Water projectile attacker",
+      "visual_description": "Throws a small water orb.",
+      "image_path": "assets/companions/water_otter.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 3,
+      "file_width_px": 268,
+      "file_height_px": 265,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "stone_turtle",
+      "display_name": "Stone Turtle",
+      "category": "companion",
+      "role_or_affinity": "Defensive companion",
+      "visual_description": "Slow attack and protection bonus.",
+      "image_path": "assets/companions/stone_turtle.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 4,
+      "file_width_px": 296,
+      "file_height_px": 271,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "moon_owl",
+      "display_name": "Moon Owl",
+      "category": "companion",
+      "role_or_affinity": "Magic projectile companion",
+      "visual_description": "Moon orb attack and cooldown support.",
+      "image_path": "assets/companions/moon_owl.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 5,
+      "file_width_px": 291,
+      "file_height_px": 253,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "clockwork_dog",
+      "display_name": "Clockwork Dog",
+      "category": "companion",
+      "role_or_affinity": "Rapid mechanical attacker",
+      "visual_description": "Quick bite and gear projectile.",
+      "image_path": "assets/companions/clockwork_dog.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 6,
+      "file_width_px": 318,
+      "file_height_px": 270,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "forest_sprite",
+      "display_name": "Forest Sprite",
+      "category": "companion",
+      "role_or_affinity": "Healing companion",
+      "visual_description": "Leaf projectile and support aura.",
+      "image_path": "assets/companions/forest_sprite.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 7,
+      "file_width_px": 309,
+      "file_height_px": 288,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "crystal_dragon_hatchling",
+      "display_name": "Crystal Dragon Hatchling",
+      "category": "companion",
+      "role_or_affinity": "Crystal breath attacker",
+      "visual_description": "Short ranged crystal breath.",
+      "image_path": "assets/companions/crystal_dragon_hatchling.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 8,
+      "file_width_px": 320,
+      "file_height_px": 280,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "storm_cloud_ram",
+      "display_name": "Storm Cloud Ram",
+      "category": "companion",
+      "role_or_affinity": "Lightning attacker",
+      "visual_description": "Charge and small lightning strike.",
+      "image_path": "assets/companions/storm_cloud_ram.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 9,
+      "file_width_px": 285,
+      "file_height_px": 274,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "star_jelly_companion",
+      "display_name": "Star Jelly Companion",
+      "category": "companion",
+      "role_or_affinity": "Astral support",
+      "visual_description": "Floating star projectile.",
+      "image_path": "assets/companions/star_jelly_companion.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 10,
+      "file_width_px": 251,
+      "file_height_px": 268,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "boar_mount",
+      "display_name": "Boar Mount",
+      "category": "companion",
+      "role_or_affinity": "Charge attacker",
+      "visual_description": "Ground rush with knockback reaction.",
+      "image_path": "assets/companions/boar_mount.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 11,
+      "file_width_px": 320,
+      "file_height_px": 244,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    },
+    {
+      "id": "mushroom_buddy",
+      "display_name": "Mushroom Buddy",
+      "category": "companion",
+      "role_or_affinity": "Buff companion",
+      "visual_description": "Spore puff and gold-support identity.",
+      "image_path": "assets/companions/mushroom_buddy.webp",
+      "source_sheet": "assets/reference_sheets/companions.webp",
+      "source_index_left_to_right_top_to_bottom": 12,
+      "file_width_px": 266,
+      "file_height_px": 263,
+      "runtime_spec": {
+        "recommended_display_height_px_at_1080x1920": "110-180",
+        "max_source_texture_px": 320,
+        "anchor": "bottom_center",
+        "default_facing": "right_toward_enemy",
+        "animation_states": {
+          "idle": 4,
+          "attack": 5,
+          "hit": 3,
+          "victory": 5
+        }
+      },
+      "production_status": "concept_reference_only_requires_clean_sprite_redraw_or_final_cutout"
+    }
+  ],
+  "worlds": [
+    {
+      "id": "oasis_frontier",
+      "display_name": "Emerald Meadow",
+      "category": "world",
+      "stage_range_or_status": "1-33",
+      "visual_description": "Bright grassland, blue crystals, and friendly ruins.",
+      "suggested_enemy_pool": [
+        "honey_slime",
+        "sproutling",
+        "pebble_crab",
+        "leaf_fox",
+        "acorn_brute"
+      ],
+      "image_path": "assets/worlds/oasis_frontier.webp",
+      "source_sheet": "assets/worlds/oasis_frontier.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "moonlit_dunes",
+      "display_name": "Moonlit Wildwood",
+      "category": "world",
+      "stage_range_or_status": "34-66",
+      "visual_description": "Blue-purple forest with moonlight and glowing mushrooms.",
+      "suggested_enemy_pool": [
+        "mushroom_guard",
+        "vine_snapper",
+        "pollen_wisp"
+      ],
+      "image_path": "assets/worlds/moonlit_dunes.webp",
+      "source_sheet": "assets/worlds/moonlit_dunes.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "ruins_of_the_sun_kingdom",
+      "display_name": "Obsidian Citadel",
+      "category": "world",
+      "stage_range_or_status": "67-100",
+      "visual_description": "Volcanic fortress with magenta crystals and controlled lava.",
+      "suggested_enemy_pool": [
+        "ember_imp",
+        "lava_tortoise",
+        "smoke_wisp",
+        "obsidian_beetle"
+      ],
+      "image_path": "assets/worlds/ruins_of_the_sun_kingdom.webp",
+      "source_sheet": "assets/worlds/ruins_of_the_sun_kingdom.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "frostpeak_pass",
+      "display_name": "Frostpeak Pass",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Snow mountains, frozen waterfall, and blue crystal arena.",
+      "suggested_enemy_pool": [
+        "ice_wolf_cub",
+        "snow_golem",
+        "frost_moth",
+        "frost_tusk_beast"
+      ],
+      "image_path": "assets/worlds/frostpeak_pass.webp",
+      "source_sheet": "assets/worlds/frostpeak_pass.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "crystal_caverns",
+      "display_name": "Crystal Caverns",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Underground crystal cave and glowing mineral pools.",
+      "suggested_enemy_pool": [
+        "crystal_beetle",
+        "cave_bat",
+        "stalagmite_golem",
+        "angler_slime",
+        "shard_serpent"
+      ],
+      "image_path": "assets/worlds/crystal_caverns.webp",
+      "source_sheet": "assets/worlds/crystal_caverns.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "coral_sky_coast",
+      "display_name": "Coral Sky Coast",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Sunny coast with coral cliffs, shells, and lighthouse island.",
+      "suggested_enemy_pool": [
+        "coral_crab",
+        "shell_guardian",
+        "floating_jelly",
+        "puddle_blob"
+      ],
+      "image_path": "assets/worlds/coral_sky_coast.webp",
+      "source_sheet": "assets/worlds/coral_sky_coast.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "clockwork_city",
+      "display_name": "Clockwork City",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Brass towers, gears, and blue energy pipes.",
+      "suggested_enemy_pool": [
+        "gear_goblin",
+        "clockwork_hound"
+      ],
+      "image_path": "assets/worlds/clockwork_city.webp",
+      "source_sheet": "assets/worlds/clockwork_city.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "whispering_marsh",
+      "display_name": "Whispering Marsh",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Mystical swamp with willow roots and a dry stone arena.",
+      "suggested_enemy_pool": [
+        "moss_turtle",
+        "vine_snapper"
+      ],
+      "image_path": "assets/worlds/whispering_marsh.webp",
+      "source_sheet": "assets/worlds/whispering_marsh.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "storm_isles",
+      "display_name": "Storm Isles",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Floating islands, cloud waterfalls, wind, and controlled lightning.",
+      "suggested_enemy_pool": [
+        "wind_cloud",
+        "thunder_ram",
+        "cosmic_owl"
+      ],
+      "image_path": "assets/worlds/storm_isles.webp",
+      "source_sheet": "assets/worlds/storm_isles.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    },
+    {
+      "id": "astral_temple",
+      "display_name": "Astral Temple",
+      "category": "world",
+      "stage_range_or_status": "Future",
+      "visual_description": "Floating marble temple with star crystals and cosmic sky.",
+      "suggested_enemy_pool": [
+        "star_jelly",
+        "cosmic_owl",
+        "rune_guardian",
+        "plasma_serpent"
+      ],
+      "image_path": "assets/worlds/astral_temple.webp",
+      "source_sheet": "assets/worlds/astral_temple.webp",
+      "file_width_px": 540,
+      "file_height_px": 959,
+      "runtime_spec": {
+        "master_canvas_px": "1080x1920",
+        "supported_viewports_px": [
+          "720x1280",
+          "1080x1920",
+          "1080x2400"
+        ],
+        "layout_zones": {
+          "hud_top_percent": 18,
+          "combat_center_percent": 50,
+          "hero_controls_bottom_percent": 30
+        },
+        "max_parallax_layers": 4,
+        "recommended_layers": [
+          "sky",
+          "midground",
+          "arena",
+          "foreground"
+        ],
+        "max_ambient_loops": 2
+      },
+      "production_status": "concept_background_requires_parallax_layer_rebuild",
+      "save_compatibility_note": "The first three IDs are existing stable IDs. Future IDs require an approved content-structure change before use."
+    }
+  ]
+}

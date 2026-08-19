@@ -1,0 +1,1 @@
+Unzip this package inside the Claude Code workspace. Then ask Claude Code to read ART_BIBLE.md and asset_manifest.json completely before changing the game.
