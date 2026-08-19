@@ -42,6 +42,9 @@ var _damage_numbers_enabled: bool = true
 var worlds: RefCounted = WorldsLogic.new()
 var current_world_id: String = ""
 var _debug_boss_id: String = ""
+## Utility relics raise offline earnings. Read by the offline dialog so the
+## bonus is applied where the reward is actually computed.
+var _relic_offline_multiplier: float = 1.0
 
 
 func _ready() -> void:
@@ -528,7 +531,19 @@ func _load_combat() -> void:
 		"levels": permanent_state.get("relic_levels", {}),
 		"prestige_currency": permanent_state.get("prestige_currency", 0),
 	})
-	combat.set_relic_bonuses(1.0 + relics.total_bonus("damage"), 1.0 + relics.total_bonus("gold"))
+	# Every relic category has to reach the game: damage and gold multiply their
+	# own values, speed drives the falcon's rate, skills shorten cooldowns and
+	# utility raises offline earnings.
+	combat.set_relic_bonuses(
+		1.0 + relics.total_bonus("damage"),
+		1.0 + relics.total_bonus("gold"),
+		1.0 + relics.total_bonus("speed"))
+	var hud_node: Node = get_tree().get_first_node_in_group("hud")
+	if hud_node != null:
+		var system: Object = hud_node.get("skill_system")
+		if system != null:
+			system.call("set_cooldown_multiplier", 1.0 / (1.0 + relics.total_bonus("skills")))
+	_relic_offline_multiplier = 1.0 + relics.total_bonus("utility")
 	# The saved timer belongs to the saved stage. When the run starts on a
 	# different stage the fresh encounter keeps its own timer, otherwise a
 	# boss inherits a zero countdown and fails the instant it appears.

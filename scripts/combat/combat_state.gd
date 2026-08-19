@@ -62,6 +62,7 @@ var _relic_damage_mult: float = 1.0
 var _relic_gold_mult: float = 1.0
 var _skill_tap_mult: float = 1.0
 var _skill_falcon_rate_mult: float = 1.0
+var _relic_falcon_rate_mult: float = 1.0
 var _skill_gold_mult: float = 1.0
 var _skill_support_dps_mult: float = 1.0
 var _skill_crit_chance_add: float = 0.0
@@ -117,7 +118,7 @@ func falcon_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	_falcon_elapsed += maxf(0.0, delta)
-	var interval: float = float(balance()["falcon_interval"]) / maxf(0.001, _skill_falcon_rate_mult)
+	var interval: float = float(balance()["falcon_interval"]) / maxf(0.001, _skill_falcon_rate_mult * _relic_falcon_rate_mult)
 	if _falcon_elapsed < interval:
 		return {"attacked": false}
 	_falcon_elapsed = fmod(_falcon_elapsed, interval)
@@ -336,9 +337,12 @@ func set_support_hero_levels(saved_levels: Variant) -> void:
 	support_total_dps = support_heroes.total_dps()
 
 
-func set_relic_bonuses(damage_mult: float, gold_mult: float) -> void:
+func set_relic_bonuses(damage_mult: float, gold_mult: float, falcon_rate_mult: float = 1.0) -> void:
+	## Speed relics act on the falcon's strike rate. Without this they were
+	## purchasable with prestige currency and changed nothing at all.
 	_relic_damage_mult = maxf(0.0, damage_mult) if is_finite(damage_mult) else 1.0
 	_relic_gold_mult = maxf(0.0, gold_mult) if is_finite(gold_mult) else 1.0
+	_relic_falcon_rate_mult = maxf(0.05, falcon_rate_mult) if is_finite(falcon_rate_mult) else 1.0
 
 
 func set_skill_modifiers(

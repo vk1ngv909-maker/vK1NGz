@@ -681,12 +681,58 @@ simulation's own tolerance. `CRITERION 1: MET` on every run.
 Evidence: `docs/evidence/boss_visuals/` — one boss per world, English and
 Arabic, at 720x1280 and 1080x2400.
 
+## Gate 5 group 4B — relics wired and measured
+
+The fifteen relics existed as data; only two of the five categories reached the
+game. `speed`, `skills` and `utility` relics could be bought with prestige
+currency and changed nothing at all. Each is now connected to a system that
+already existed:
+
+| Category | What it now drives |
+| --- | --- |
+| damage | tap and DPS damage multiplier (already wired) |
+| gold | gold multiplier (already wired) |
+| speed | the falcon's strike interval |
+| skills | every skill cooldown, clamped so a cooldown can never be removed |
+| utility | the offline reward, applied where the gold is computed |
+
+**The simulation was made deterministic first.** Combat seeds its RNG from
+entropy, which is right in a real run and wrong in a measurement: five runs of
+the C17 file on identical code spanned 2117-2155s. Both simulations now pin a
+fixed seed, and C17 reports **2077s / 34.6 min on every run**, inside the
+25-45 min window. No balance value was edited to achieve this.
+
+**Relic sensitivity** (`tests/simulations/sim_relic_sensitivity.gd`), seconds to
+first Prestige against a 2018s baseline, spending cheapest-first:
+
+| Category | 10 points | 25 points | 60 points | Per point at 10 |
+| --- | --- | --- | --- | --- |
+| damage | 1566s (-452) | 1261s (-757) | 867s (-1151) | 45.2 s |
+| gold | 1708s (-310) | 1449s (-569) | 1098s (-920) | 31.0 s |
+| speed | 2012s (-6) | 2006s (-12) | 1997s (-21) | **0.6 s** |
+| skills | cooldown 45.0s -> 41.3s | -> 38.8s | -> 33.6s | — |
+| utility | offline x1.14 | x1.29 | x1.64 | — |
+
+**Open balance finding, deliberately not fixed here:** speed relics are wired
+but worth about **0.6 seconds per prestige point**, against 45 for damage. The
+falcon is too small a share of early clear time for its rate to matter. Raising
+it is a balance change that moves the C17 figure, so it is reported rather than
+applied silently. `test_relic_effects.gd` pins every category to its system, the
+cooldown floor, the per-category isolation of spending, the maximum level and
+the non-negative currency.
+
+Relic display names were re-themed to match the approved direction
+(`Sultan's Coin` -> `Royal Coin`, `Djinn Lamp` -> `Spirit Lantern`,
+`Oasis Charm` -> `Grove Charm`, `Desert Wind` -> `Wildwind`,
+`Phoenix Ankh` -> `Phoenix Sigil`) with every id untouched. There is still no
+relics panel, so these names are not yet player-visible.
+
 ## Next highest-priority action
 
-Gate 5 group 4B: fifteen Relics and the relic sensitivity simulations, then the
-closing Gate 5 regression. Open question for the owner: whether boss archetypes
-should be rebound to worlds, which is a balance change and needs a re-measured
-progression run.
+Two owner decisions, both balance changes that would move the C17 figure:
+whether speed relics should be strengthened from 0.6 s per point, and whether a
+relics panel is wanted in this gate. Then the closing Gate 5 regression and
+Gate 6 (Android build), which stays blocked with no SDK or device here.
 
 ## Placeholders
 

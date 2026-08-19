@@ -27,6 +27,15 @@ func is_unlocked(id: String, max_stage: int) -> bool:
 	return maxi(0, max_stage) >= int(condition.get("max_stage", 1))
 
 
+## Skill relics shorten every cooldown. 1.0 is no reduction; 0.8 is twenty per
+## cent off. Clamped so a relic set can never make a skill permanent.
+var cooldown_multiplier: float = 1.0
+
+
+func set_cooldown_multiplier(value: float) -> void:
+	cooldown_multiplier = clampf(value, 0.35, 1.0) if is_finite(value) else 1.0
+
+
 func activate(id: String, now_ms: int, max_stage: int = 2_000_000_000) -> bool:
 	if not is_unlocked(id, max_stage):
 		return false
@@ -37,7 +46,7 @@ func activate(id: String, now_ms: int, max_stage: int = 2_000_000_000) -> bool:
 		if activated_at_ms.has(str(blocked_value)):
 			return false
 	activated_at_ms[id] = safe_now
-	var cooldown_ms: int = int((skills[id] as Dictionary).get("cooldown_ms", 0))
+	var cooldown_ms: int = int(float((skills[id] as Dictionary).get("cooldown_ms", 0)) * cooldown_multiplier)
 	cooldown_until_ms[id] = mini(MAX_TIMESTAMP_MS, safe_now + maxi(0, cooldown_ms))
 	if id == "time_fracture":
 		one_shot_consumed[id] = false

@@ -10,8 +10,17 @@ const TAPS: float = 5.0
 const PRESTIGE_STAGE: int = 25          # reward_for() first becomes non-zero here
 const MAX_SECONDS: float = 400000.0
 
+## Combat seeds its RNG from entropy, which is right for a real run and wrong
+## for a measurement: five runs of this file on identical code spanned 2117-2155
+## seconds purely from critical-hit and enemy-selection rolls. Every simulated
+## run is pinned to the same seed so a difference in the output means a
+## difference in the game.
+const SIM_SEED: int = 0x5EED17
+
 func run_to(target_stage: int, dmg_mult: float, gold_mult: float, start_gold: float = 0.0) -> Dictionary:
 	var c = CS.new()
+	c.set_random_seed(SIM_SEED)
+	c.spawn_enemy()
 	c.set_relic_bonuses(dmg_mult, gold_mult)
 	if start_gold > 0.0:
 		c.gold = BN.from_float(start_gold)

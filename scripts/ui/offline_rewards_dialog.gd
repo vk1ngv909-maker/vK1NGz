@@ -36,7 +36,13 @@ func open_for_seconds(seconds_away: int, debug_fixture: bool = false) -> void:
 	var b: Dictionary = CombatState.balance()
 	var gold_per_kill: float = float(b["enemy_gold_base"]) * pow(float(b["enemy_gold_growth"]), maxf(0.0, float(max_stage) - 1.0))
 	var gold_per_second: float = gold_per_kill * float(b.get("offline_kills_per_second", 0.2))
-	_gold = floor(float(_seconds) * gold_per_second * float(b.get("offline_efficiency", 0.35)))
+	# Utility relics raise what an absence is worth. Without this the whole
+	# utility category could be bought with prestige currency for no effect.
+	var relic_multiplier: float = 1.0
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	if arena != null:
+		relic_multiplier = maxf(1.0, float(arena.get("_relic_offline_multiplier")))
+	_gold = floor(float(_seconds) * gold_per_second * float(b.get("offline_efficiency", 0.35)) * relic_multiplier)
 	capped.visible = seconds_away > SaveManager.MAX_OFFLINE_SECONDS
 	confirmation.hide()
 	collect_button.disabled = false
