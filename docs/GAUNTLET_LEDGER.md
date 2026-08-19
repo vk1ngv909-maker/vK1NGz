@@ -67,6 +67,10 @@ Current milestone: **M0 → Gate 1 (Technical Foundation)**
 | C27 | Offline formula was `seconds * max_stage * 0.5`, not the brief's `min(hours,8) * gold_per_second * 0.35`; it handed a stage-1 player 14400 gold and pulled first Prestige to 22.1 min | P2 | RESOLVED — brief formula implemented, measured at 26.1 min for an 8h absence |
 | C28 | Equipment bonuses summed raw, so a full legendary set nearly doubled early damage (first Prestige 13.4 min) | P2 | RESOLVED — diminishing returns `raw/(1+2.5*raw)`, chosen by sweep |
 | C29 | `sim_balance_c17.gd` passed raw multipliers straight to `set_relic_bonuses`, bypassing the diminishing-returns curve, so it reported equipment numbers players would never experience | P2 | RESOLVED — the sim now goes through the real curve |
+| C33 | `next_level_gain` was derived inline in the heroes panel, so the number a player reads could drift from the real value | P2 | RESOLVED — one shared method, asserted equal to the real per-hero delta |
+| C34 | `--start-stage` moved the run stage but not `max_stage`, so captures showed skills locked that a real player at that stage would already own — a misleading image, not a game bug (unlock logic verified correct at max_stage 90) | P2 | RESOLVED — the debug flag now raises `max_stage` too |
+| C35 | Panel chrome (title, Close, Buy Quantity) kept the English text baked into the scene because `refresh_localized_text()` ran only on a language-change signal, never on open | P2 | RESOLVED — refreshed on open; Arabic panel now reads أبطال الدعم / كمية الشراء / إغلاق |
+| C36 | I declared a debug variable against an anchor that lives in a different file, so it was never declared and every scene using the arena hit a parse error — caught only because I captured before running the parse guard | P2 | RESOLVED — declared properly; lesson: run the guard before trusting any capture |
 | C32 | Enemy name labels took their colour straight from the enemy palette, so some names were nearly invisible against the body colour | P2 | RESOLVED — label colour now chosen by luminance contrast plus an outline; measured contrast spread went from near-zero to 225 |
 | C30 | Clipped Arabic text in the top HUD ("الذهب — ACEHOLDER") | P2 | **RESOLVED** — two causes at once: a localized PLACEHOLDER sentence was being rendered inside a fixed 72px icon swatch, and under RTL `clip_text` cuts from the left, which is what produced "ACEHOLDER". The swatch is art, so it no longer renders text at all; the key was deleted from both CSVs; gold and stage labels are clip-guarded. Guard: `test_hud_layout.gd`. Evidence: `c30_ar_topbar.png`, `c30_en_topbar.png` |
 | C31 | The claim that legendary gear was unobtainable before first Prestige was **unfounded** — there was no drop system and no unlock field, so nothing enforced it | **P1** | RESOLVED — `unlock_stage` added per rarity (legendary 50), enforced in `Inventory.add()`, proven by `test_equipment_gating.gd` |
@@ -281,7 +285,7 @@ Group 2 visual evidence completed here: `world1_en.png`, `world34_en.png`,
 
 34 suites, `ALL SUITES PASSED`.
 
-### Group 4A — eight heroes, six distinct skills (DONE)
+### Group 4A — eight heroes, six distinct skills (DONE, visually verified)
 
 | hero | role | unlock stage | milestone effect types |
 | --- | --- | --- | --- |
@@ -318,7 +322,22 @@ legendary 28.1, 8h offline 25.6, no NaN or negative gold.
 Carry-over fixes: the hardcoded "DESERT BACKGROUND" label now follows the
 active world, and `--debug-boss` captures each archetype.
 
-Evidence: `heroes_panel.png`, `boss_sandstorm.png`.
+Evidence:
+- Bosses (all four archetypes): `boss_sandstorm.png`, `boss_lunar_glasswing.png`,
+  `boss_ember_crown_construct.png`, `boss_vaultback_behemoth.png` — each shows
+  the localized name, its own palette and silhouette, HP bar, active timer,
+  damage numbers, hero facing the boss and the falcon beside it.
+- Boss journey: `journey_fail.png` (BOSS FAILED / TIME UP), `journey_retry.png`.
+- Skill states: `boss_lunar_glasswing.png` shows LOCKED with the unlock stage in
+  text; `skills_all_states.png` shows ACTIVE with a countdown and READY.
+- Heroes: `heroes_panel.png` (en), `heroes_ar_720.png` (ar RTL),
+  `heroes_en_2400.png` (tall).
+
+Runtime checks (`test_ui_matches_runtime.gd`, 7/7) confirm the panel is not
+lying to the player: Buy Max buys exactly the advertised quantity and one more
+is unaffordable, the displayed next-level gain equals the real per-hero DPS
+delta, crossing a milestone actually raises DPS, and reopening mid-ACTIVE or
+mid-COOLDOWN restores the true state.
 35 suites, `ALL SUITES PASSED`.
 
 ## Next highest-priority action

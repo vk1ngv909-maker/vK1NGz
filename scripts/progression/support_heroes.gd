@@ -121,6 +121,14 @@ func hero_dps(id: String, at_level: int = -1) -> BigNumber:
 	return result
 
 
+func next_level_gain(id: String) -> BigNumber:
+	## Single source of truth for the next-level gain figure shown in the panel. It
+	## used to derive this inline, which lets the displayed number drift away
+	## from the real one if either side changes.
+	var level: int = get_level(id)
+	return hero_dps(id, level + 1).sub(hero_dps(id, level))
+
+
 func total_dps() -> BigNumber:
 	var total: BigNumber = BigNumber.new()
 	for id_value: Variant in heroes:

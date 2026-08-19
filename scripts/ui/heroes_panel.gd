@@ -36,6 +36,9 @@ func open_panel() -> void:
 	roster.gold = (_combat.get("gold") as BigNumber)._copy_normalized()
 	max_stage = maxi(1, int(_combat.get("max_stage_reached")))
 	show()
+	# Localized chrome must be refreshed on open, not only when the language
+	# changes; otherwise the panel keeps the English text baked into the scene.
+	refresh_localized_text()
 	_refresh()
 	%Close.grab_focus()
 
@@ -51,6 +54,9 @@ func debug_open(locked_only: bool = false) -> void:
 				roster.hire(id, max_stage)
 				roster.level_up(id, 8 + int((roster.heroes[id] as Dictionary).get("unlock_stage", 1)) % 18)
 	show()
+	# Localized chrome must be refreshed on open, not only on a language change,
+	# or the panel keeps the English text baked into the scene file.
+	refresh_localized_text()
 	_refresh()
 
 
@@ -79,8 +85,7 @@ func _make_hero_card(id: String) -> PanelContainer:
 	var cost: BigNumber = roster.cost_for(id, amount)
 	var affordable: bool = unlocked and amount > 0 and roster.gold.compare(cost) >= 0
 	var current_dps: BigNumber = roster.hero_dps(id)
-	var next_dps: BigNumber = roster.hero_dps(id, level + 1)
-	var gain: BigNumber = next_dps.sub(current_dps)
+	var gain: BigNumber = roster.next_level_gain(id)
 	var milestone: Dictionary = roster.next_milestone(id)
 	var milestone_text: String = Settings.t("ui.heroes.milestones_complete")
 	if not milestone.is_empty():

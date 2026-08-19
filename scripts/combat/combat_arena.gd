@@ -27,6 +27,9 @@ var _flash_tween: Tween
 var _death_in_progress: bool = false
 var _enemy_color: Color
 var _reduced_flashing: bool = false
+## Test-only: raises max_stage for captures so a jumped-to stage renders the
+## unlock state a real player at that stage would actually see.
+var debug_forced_max_stage: int = 0
 var _damage_numbers_enabled: bool = true
 var worlds: RefCounted = WorldsLogic.new()
 var current_world_id: String = ""
@@ -395,14 +398,21 @@ func _load_combat() -> void:
 	for i in cli.size():
 		if cli[i] == "--start-stage" and i + 1 < cli.size():
 			start_stage = int(cli[i + 1])
+			# A capture that jumps to stage 90 must also reflect a player who
+			# REACHED stage 90, otherwise the shot shows skills locked that a
+			# real player at that stage would already own — a misleading image.
+			debug_forced_max_stage = maxi(debug_forced_max_stage, start_stage)
 		if cli[i] == "--debug-stage" and i + 1 < cli.size() and OS.is_debug_build():
 			start_stage = maxi(1, int(cli[i + 1]))
 		if cli[i] == "--debug-world" and i + 1 < cli.size() and OS.is_debug_build():
 			start_stage = maxi(1, int(cli[i + 1]))
+			debug_forced_max_stage = maxi(debug_forced_max_stage, start_stage)
 		if cli[i] == "--debug-boss" and i + 1 < cli.size() and OS.is_debug_build():
 			_debug_boss_id = cli[i + 1]
 			start_stage = 10
 	var permanent_state: Dictionary = loaded["permanent_state"]
+	if debug_forced_max_stage > 0:
+		permanent_state["max_stage"] = maxi(int(permanent_state.get("max_stage", 1)), debug_forced_max_stage)
 	combat = CombatState.new(start_stage, loaded_gold, int(run_state.get("tap_level", 1)), run_state, permanent_state)
 	var relics: Relics = Relics.new(int(permanent_state.get("prestige_currency", 0)))
 	relics.from_dict({
