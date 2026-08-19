@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dpkbu6d25au0v"
-path="res://.godot/imported/djinn_radiance.png-fbcccbc1198ce61be034f673ed2fd914.ctex"
+uid="uid://drjnn0svoyu3i"
+path="res://.godot/imported/falcon_bell.webp-2e467f2a5b4561feff00c93122a4bf83.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/djinn_radiance.png"
-dest_files=["res://.godot/imported/djinn_radiance.png-fbcccbc1198ce61be034f673ed2fd914.ctex"]
+source_file="res://assets/sprites/equipment/falcon_bell.webp"
+dest_files=["res://.godot/imported/falcon_bell.webp-2e467f2a5b4561feff00c93122a4bf83.ctex"]
 
 [params]
 

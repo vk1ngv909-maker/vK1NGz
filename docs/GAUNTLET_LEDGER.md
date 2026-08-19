@@ -415,14 +415,31 @@ neutral cartoon fantasy of the supplied package, while Arabic and RTL stay.
 No id changed anywhere, so saves, first clears and owned equipment are
 untouched.
 
-**Corrected asset count.** The request named 26 characters/enemies/bosses/
-companions + 20 equipment = 46. 26 is right and all 26 are built. 20 equipment
-is not achievable from this package: it contains 31 weapon-type icons and no
-head, armour or charm art, so only the 4 weapon-slot and 4 aura-slot items have
-honest art. **34 of the 46 are built; 12 equipment items need art the package
-does not contain.** Their names were re-themed and their cards stay text-only
-rather than showing a hammer where a hood belongs. Full mapping and rejected
-options: `docs/ASSET_MAPPING.md`.
+**Final asset count: 46 of 46 built.** 26 characters, enemies, bosses and the
+companion come from the package. All 20 equipment icons now exist: 8 cleaned
+from the package (weapon and aura slots) and **12 drawn from scratch** by
+`tools/make_equipment_icons.py`, because the package carries weapon-type icons
+only. The real slot ids are `weapon`, `head`, `outfit`, `aura` and
+`companion_charm` — there is no `armor` or `amulet` slot — so the twelve are
+4 `head`, 4 `outfit` and 4 `companion_charm`, verified against
+`resources/equipment/equipment.json` before drawing. Every icon is 256x256
+lossless WebP, transparent, centred inside a 12% safe margin, with a rarity
+frame whose corner brackets thicken by tier and a badge of one to four pips, so
+rarity reads without colour. Full mapping and rejected options:
+`docs/ASSET_MAPPING.md`.
+
+**World resource release.** Measured live over four switch cycles
+(`--demo-world-cycle 4`): with Emerald Meadow active, 4 layers resident and
+50.10 MB of texture memory; after switching to a world with no built art,
+**0 layers resident, 0 still in the resource cache, 17.01 MB** — and identical
+figures on every cycle, so nothing accumulates. The four layers therefore cost
+33.1 MB while their world is on screen and nothing when it is not.
+
+**Sky sharpness.** The sky was being painted at 540x960 and stretched. It is now
+authored directly on the 1080x1920 master: the vertical gradient is evaluated at
+1920 rows instead of being an upscaled 959-row ramp, and only the cloud pixels
+are resampled, once. Inspected at 1080x1920 and 1080x2400 — cloud edges are
+crisp and the gradient shows no banding.
 
 **Background cleaning.** The package's own crops keep the reference sheet's
 flat colour wherever the silhouette encloses it, plus its drop shadow and pale
@@ -450,16 +467,16 @@ painting's own composition rather than sliced into equal bands:
 
 | Layer | Stored | Drawn width vs viewport | Content |
 | --- | --- | --- | --- |
-| sky | 540x960 | 1.00 | Sky and clouds only, extended below the horizon |
+| sky | 1080x1920 | 1.00 | Sky and clouds only, gradient authored at master size |
 | distant | 892x1344 | 1.18 | Mountains, ruins, trees |
 | arena | 1080x1920 | 1.00 | The floor the actors stand on |
 | foreground | 1028x1632 | 1.12 | Framing plants, stones and crystals |
 
 The wider layers travel further as the run advances through the world's stages,
 so progress pans the depths at different speeds. Back layers are stored at
-reduced resolution because they carry soft content: texture memory measured in
-the running game fell from 59.9 MB to 44.4 MB, of which 18.0 MB is the sprites
-and empty-world baseline — so the four layers cost 26.3 MB, down from 41.9 MB.
+reduced resolution because they carry soft content: texture memory with the world
+on screen is 50.3 MB against a 17.0 MB baseline, so the four layers cost
+33.1 MB and are fully released on a world switch.
 
 **Performance.** Average process time was 162 ms with the built world and
 169 ms on a world with no art, i.e. the artwork added no measurable CPU cost.
@@ -492,7 +509,16 @@ resolve or the world is rejected.
 
 Evidence: `docs/evidence/slice1/` — normal enemy, boss, inventory, heroes,
 skills and equipment screens at 720x1280, 1080x1920 and 1080x2400 in English
-and Arabic (36 captures).
+and Arabic (36 captures), composed into three review boards:
+`slice1_review_720x1280.webp`, `slice1_review_1080x1920.webp`,
+`slice1_review_1080x2400.webp`.
+
+A sixth defect surfaced while reviewing them:
+
+- **C45/P2** — the skills panel kept its English title and Close button when
+  opened in Arabic, the same defect class as C35 on the heroes panel.
+  `refresh_localized_text()` is now called on open, not only on a language
+  change.
 
 Group 4A stays closed; no Group 4B content was added.
 

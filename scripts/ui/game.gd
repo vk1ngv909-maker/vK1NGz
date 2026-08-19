@@ -65,6 +65,37 @@ func _ready() -> void:
 		if ar2 != null and ar2.has_method("debug_retry"):
 			ar2.debug_retry()
 		await get_tree().process_frame
+	if "--demo-world-cycle" in args:
+		# Only the active world's four layers may stay resident. Switching
+		# worlds repeatedly must return texture memory to the same level rather
+		# than accumulating, which a single before/after reading cannot show.
+		var cycles: int = 3
+		for i in args.size():
+			if args[i] == "--demo-world-cycle" and i + 1 < args.size():
+				cycles = clampi(int(args[i + 1]), 1, 10)
+		var cycle_hud: Node = get_tree().get_first_node_in_group("hud")
+		var cycle_arena: Node = get_tree().get_first_node_in_group("combat_arena")
+		var world_source: Object = cycle_arena.get("worlds")
+		var built: Dictionary = world_source.call("world_for_stage", 1)
+		var bare: Dictionary = world_source.call("world_for_stage", 40)
+		for step: int in cycles:
+			cycle_hud.call("apply_world", built)
+			for f: int in 4:
+				await get_tree().process_frame
+			var loaded_mb: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
+			var loaded_layers: int = int(cycle_hud.call("debug_resident_layer_count"))
+			cycle_hud.call("apply_world", bare)
+			for f2: int in 4:
+				await get_tree().process_frame
+			var released_mb: float = float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0
+			var still_cached: int = 0
+			for layer_name: String in ["sky", "distant", "arena", "foreground"]:
+				if ResourceLoader.has_cached("res://assets/worlds/%s/%s.png" % [str(built.get("id", "")), layer_name]):
+					still_cached += 1
+			print("WORLDCYCLE step=%d built_world_mb=%.2f layers_loaded=%d other_world_mb=%.2f layers_after=%d still_cached=%d" % [
+				step, loaded_mb, loaded_layers, released_mb,
+				int(cycle_hud.call("debug_resident_layer_count")), still_cached])
+		get_tree().quit()
 	if "--demo-perf" in args:
 		# Frame cost and texture memory with the real world and sprites loaded,
 		# measured in the running game rather than estimated from file sizes.

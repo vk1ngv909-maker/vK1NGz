@@ -3,8 +3,8 @@
   "sky": {
    "file": "assets/worlds/oasis_frontier/sky.png",
    "stored_size": [
-    540,
-    960
+    1080,
+    1920
    ],
    "drawn_width_vs_viewport": 1.0,
    "coverage": 1.0

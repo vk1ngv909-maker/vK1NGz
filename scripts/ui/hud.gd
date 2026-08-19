@@ -259,6 +259,17 @@ func _apply_world_layers(world_id: String) -> void:
 	_layout_world_layers()
 
 
+func debug_resident_layer_count() -> int:
+	## How many parallax layer textures are actually held right now. The rects
+	## are reused between worlds; only their textures are loaded and released.
+	var count: int = 0
+	for layer_name: String in PARALLAX_LAYERS:
+		var rect: TextureRect = _world_layers.get(layer_name) as TextureRect
+		if rect != null and is_instance_valid(rect) and rect.texture != null:
+			count += 1
+	return count
+
+
 func _world_layer(layer_name: String) -> TextureRect:
 	var existing: TextureRect = _world_layers.get(layer_name) as TextureRect
 	if existing != null and is_instance_valid(existing):

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by6llfjdvw4pu"
-path="res://.godot/imported/blade_of_high_noon.png-37f7d2465c1cca840699d40e6877f45f.ctex"
+uid="uid://d4fhkm0wi2iy6"
+path="res://.godot/imported/stormweave_mantle.webp-66a8f7a3c54681456e92dac5311dff0f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/blade_of_high_noon.png"
-dest_files=["res://.godot/imported/blade_of_high_noon.png-37f7d2465c1cca840699d40e6877f45f.ctex"]
+source_file="res://assets/sprites/equipment/stormweave_mantle.webp"
+dest_files=["res://.godot/imported/stormweave_mantle.webp-66a8f7a3c54681456e92dac5311dff0f.ctex"]
 
 [params]
 

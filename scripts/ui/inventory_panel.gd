@@ -237,7 +237,7 @@ func _make_item_button(uid: String) -> Button:
 func _add_item_icon(button: Button, item_id: String) -> void:
 	## Items whose art is built get a real icon; the rest keep the text-only
 	## card rather than a stand-in picture that would misdescribe them.
-	var path: String = "res://assets/sprites/equipment/%s.png" % item_id
+	var path: String = "res://assets/sprites/equipment/%s.webp" % item_id
 	if not ResourceLoader.exists(path):
 		return
 	var texture: Texture2D = load(path) as Texture2D

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c3cj2s4ayaavh"
-path="res://.godot/imported/ember_halo.png-018cb54b96bc3cda3119dcbdd23d3cec.ctex"
+uid="uid://c63nmmlc5h07k"
+path="res://.godot/imported/moon_fox_talisman.webp-6f502d64b47c6366b483ab7df412649e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/ember_halo.png"
-dest_files=["res://.godot/imported/ember_halo.png-018cb54b96bc3cda3119dcbdd23d3cec.ctex"]
+source_file="res://assets/sprites/equipment/moon_fox_talisman.webp"
+dest_files=["res://.godot/imported/moon_fox_talisman.webp-6f502d64b47c6366b483ab7df412649e.ctex"]
 
 [params]
 

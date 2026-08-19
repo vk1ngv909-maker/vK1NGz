@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://djv81vdbs21mh"
-path="res://.godot/imported/solar_ascendance.png-131b9565190606a2d834489d37393196.ctex"
+uid="uid://dojidmt4rbb0"
+path="res://.godot/imported/ifrit_fang.webp-1da5a3b665af1e620f1e16d8c7c08e6f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/solar_ascendance.png"
-dest_files=["res://.godot/imported/solar_ascendance.png-131b9565190606a2d834489d37393196.ctex"]
+source_file="res://assets/sprites/equipment/ifrit_fang.webp"
+dest_files=["res://.godot/imported/ifrit_fang.webp-1da5a3b665af1e620f1e16d8c7c08e6f.ctex"]
 
 [params]
 

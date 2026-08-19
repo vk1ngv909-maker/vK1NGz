@@ -60,9 +60,15 @@ before.
 
 ## Equipment
 
-Eight of the twenty items have honest art in the package. Every weapon-slot and
-aura-slot item is covered; head, outfit and companion-charm items are not,
-because the package contains weapon-type icons only.
+All twenty items now have art. Eight come from the package (weapon and aura
+slots); the twelve head, outfit and companion_charm items were drawn from
+scratch by `tools/make_equipment_icons.py`, because the package contains
+weapon-type icons only and a hammer standing in for a hood would misdescribe
+the item.
+
+The real slot ids are `weapon`, `head`, `outfit`, `aura` and `companion_charm`
+— there is no `armor` or `amulet` slot; the twelve drawn icons are 4 `head`,
+4 `outfit` and 4 `companion_charm`.
 
 | Game id (unchanged) | Slot | Package asset | New name (EN / AR) |
 | --- | --- | --- | --- |
@@ -75,8 +81,26 @@ because the package contains weapon-type icons only.
 | `djinn_radiance` | aura | `weapons/amethyst_wand` | Amethyst Wand / عصا الجمشت |
 | `solar_ascendance` | aura | `weapons/astral_spellbook` | Astral Spellbook / سفر النجوم |
 
-The remaining twelve items were renamed to neutral fantasy names but still show
-the text-only inventory card; they need art that the package does not contain.
+### Drawn for this project (original)
+
+| Game id (unchanged) | Slot | Rarity | Icon subject |
+| --- | --- | --- | --- |
+| `wanderer_wrap` | head | common | Traveller's hood |
+| `scarab_circlet` | head | rare | Leaf circlet with gems |
+| `oracle_veil` | head | epic | Veil with a dark face opening |
+| `crown_of_stars` | head | legendary | Star-set crown |
+| `traveler_robes` | outfit | common | Plain cloak |
+| `caravan_guard_mail` | outfit | rare | Banded chest mail |
+| `stormweave_mantle` | outfit | epic | Mantle with a lightning bolt |
+| `sultans_regalia` | outfit | legendary | Ornate court robe |
+| `beetle_token` | companion_charm | common | Beetle medallion |
+| `falcon_bell` | companion_charm | rare | Bell with clapper |
+| `moon_fox_talisman` | companion_charm | epic | Crescent and fox muzzle |
+| `phoenix_signet` | companion_charm | legendary | Signet ring with a feather |
+
+Every one of the twenty carries the same rarity frame — corner brackets that
+thicken by tier — and a badge of one to four pips, so rarity reads without
+relying on colour alone.
 
 ## Rejected options
 

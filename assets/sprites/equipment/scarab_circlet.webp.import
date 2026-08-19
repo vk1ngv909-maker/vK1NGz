@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://buc53lbwkkb02"
-path="res://.godot/imported/dune_knife.png-bbac0c0e90cd7c1678517ded37496793.ctex"
+uid="uid://cxaagisxvqoln"
+path="res://.godot/imported/scarab_circlet.webp-ef021140ba82ac54926c0a97261aad52.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/dune_knife.png"
-dest_files=["res://.godot/imported/dune_knife.png-bbac0c0e90cd7c1678517ded37496793.ctex"]
+source_file="res://assets/sprites/equipment/scarab_circlet.webp"
+dest_files=["res://.godot/imported/scarab_circlet.webp-ef021140ba82ac54926c0a97261aad52.ctex"]
 
 [params]
 

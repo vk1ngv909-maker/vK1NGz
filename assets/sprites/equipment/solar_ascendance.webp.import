@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c76qg1cai5kg0"
-path="res://.godot/imported/sunsteel_sabre.png-376e50477c38e9909cab3479729d9753.ctex"
+uid="uid://cnve1pxbyh5v6"
+path="res://.godot/imported/solar_ascendance.webp-715100f38969330f19ce3a74b1d310a8.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/sunsteel_sabre.png"
-dest_files=["res://.godot/imported/sunsteel_sabre.png-376e50477c38e9909cab3479729d9753.ctex"]
+source_file="res://assets/sprites/equipment/solar_ascendance.webp"
+dest_files=["res://.godot/imported/solar_ascendance.webp-715100f38969330f19ce3a74b1d310a8.ctex"]
 
 [params]
 

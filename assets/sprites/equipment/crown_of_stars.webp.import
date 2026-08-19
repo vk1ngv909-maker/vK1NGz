@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqh30fp634k57"
-path="res://.godot/imported/ifrit_fang.png-1a34a831cef103b81afc3ca13f552110.ctex"
+uid="uid://cl2ywaytui5im"
+path="res://.godot/imported/crown_of_stars.webp-d83c47212db9f8cf676dfd581b49fccf.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/equipment/ifrit_fang.png"
-dest_files=["res://.godot/imported/ifrit_fang.png-1a34a831cef103b81afc3ca13f552110.ctex"]
+source_file="res://assets/sprites/equipment/crown_of_stars.webp"
+dest_files=["res://.godot/imported/crown_of_stars.webp-d83c47212db9f8cf676dfd581b49fccf.ctex"]
 
 [params]
 

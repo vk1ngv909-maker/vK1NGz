@@ -92,6 +92,39 @@ def _sky_plate(rgb: np.ndarray, sky: np.ndarray) -> np.ndarray:
     return np.clip(blended, 0, 255).astype(np.uint8)
 
 
+def _sky_master(rgb: np.ndarray, sky: np.ndarray) -> np.ndarray:
+    """The sky plate, authored at the master canvas size."""
+    height, width, _ = rgb.shape
+    plate = _sky_plate(rgb, sky)
+    target = Image.fromarray(plate, "RGB").resize(MASTER, Image.LANCZOS)
+    # Re-evaluate the vertical gradient at master height so its banding is not
+    # an upscaled copy of a 959-row ramp.
+    profile = np.zeros((height, 3), dtype=np.float32)
+    last = None
+    for y in range(height):
+        row = sky[y]
+        if row.any():
+            profile[y] = rgb[y][row].mean(axis=0)
+            last = profile[y].copy()
+        elif last is not None:
+            profile[y] = last
+        else:
+            profile[y] = rgb[y].mean(axis=0)
+    horizon = int(np.argmax(sky.sum(axis=1)[::-1] > 0))
+    horizon_row = height - 1 - horizon
+    for y in range(horizon_row, height):
+        fade = min(1.0, (y - horizon_row) / max(1.0, height - horizon_row))
+        profile[y] = profile[horizon_row] * (1.0 - 0.35 * fade)
+    source_rows = np.linspace(0.0, height - 1.0, MASTER[1])
+    fine = np.stack([np.interp(source_rows, np.arange(height), profile[:, channel])
+                     for channel in range(3)], axis=1)
+    gradient = np.repeat(fine[:, None, :], MASTER[0], axis=1)
+    cloud_mask = np.array(Image.fromarray((sky * 255).astype(np.uint8)).resize(MASTER, Image.BILINEAR)).astype(np.float32) / 255.0
+    blended = np.array(target).astype(np.float32) * cloud_mask[:, :, None] + gradient * (1.0 - cloud_mask[:, :, None])
+    return np.dstack([np.clip(blended, 0, 255).astype(np.uint8),
+                      np.full((MASTER[1], MASTER[0]), 255, np.uint8)])
+
+
 def _band(height: int, top: float, bottom: float) -> np.ndarray:
     mask = np.zeros(height, dtype=bool)
     mask[int(height * top):int(height * bottom)] = True
@@ -133,10 +166,26 @@ def build(world_id: str) -> dict:
     for name, mask in layers.items():
         alpha = np.ones((height, width), dtype=np.float32) if name == "sky" else _feather(mask)
         if name == "sky":
-            layer = np.dstack([_sky_plate(rgb, sky), np.full((height, width), 255, np.uint8)])
+            # Built straight onto the master canvas: the gradient is evaluated
+            # at 1920 rows instead of being painted at 540 and then stretched,
+            # so the sky has no resampling softness of its own. Only the cloud
+            # pixels still come from the concept and are resampled once.
+            layer = _sky_master(rgb, sky)
         else:
             layer = np.dstack([rgb, (alpha * 255).astype(np.uint8)])
         image = Image.fromarray(layer, "RGBA")
+        if name == "sky":
+            out = OUT_ROOT / world_id / "sky.png"
+            image.save(out)
+            covered = 1.0
+            report[name] = {
+                "file": str(out),
+                "stored_size": list(image.size),
+                "drawn_width_vs_viewport": WIDTH_SCALE[name],
+                "coverage": 1.0,
+            }
+            print(f"  {name:11s} {image.size[0]}x{image.size[1]}  coverage=100.0%  -> {out}")
+            continue
         detail: float = RESOLUTION_SCALE[name]
         target_width = int(MASTER[0] * WIDTH_SCALE[name] * detail)
         image = image.resize((target_width, int(MASTER[1] * detail)), Image.LANCZOS)
