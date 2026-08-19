@@ -52,28 +52,12 @@ layout_mode = 2
 theme_override_constants/separation = 8
 alignment = 1
 
-[node name="GoldIcon" type="ColorRect" parent="Zones/TopZone/SafeArea/CurrencyRow"]
-custom_minimum_size = Vector2(72, 64)
-layout_mode = 2
-color = Color(0.95, 0.67, 0.12, 1)
-
-[node name="GoldPlaceholder" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow/GoldIcon"]
+[node name="GoldIcon" type="TextureRect" parent="Zones/TopZone/SafeArea/CurrencyRow"]
 unique_name_in_owner = true
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_colors/font_color = Color(0.16, 0.1, 0.02, 1)
-theme_override_font_sizes/font_size = 11
-text = ""
-clip_text = true
-horizontal_alignment = 1
-vertical_alignment = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-autowrap_mode = 2
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+expand_mode = 1
+stretch_mode = 5
 
 [node name="GoldAmount" type="Label" parent="Zones/TopZone/SafeArea/CurrencyRow"]
 clip_text = true
@@ -353,7 +337,7 @@ autowrap_mode = 2
 text_overrun_behavior = 3
 
 [node name="SkillMargin" type="MarginContainer" parent="Zones/BottomZone/BottomMargin/BottomRows"]
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/margin_left = 16
@@ -365,55 +349,55 @@ theme_override_constants/separation = 8
 
 [node name="Skill1" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
 [node name="Skill2" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
 [node name="Skill3" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
 [node name="Skill4" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
 [node name="Skill5" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
 [node name="Skill6" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/SkillMargin/SkillRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 88)
+custom_minimum_size = Vector2(0, 168)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 12
+theme_override_font_sizes/font_size = 17
 text = ""
 autowrap_mode = 2
 
@@ -425,51 +409,51 @@ theme_override_constants/separation = 0
 
 [node name="Battle" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 
 [node name="Heroes" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 
 [node name="Skills" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 
 [node name="Inventory" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 text_overrun_behavior = 3
 
 [node name="Relics" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 
 [node name="Shop" type="Button" parent="Zones/BottomZone/BottomMargin/BottomRows/Navigation"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 96)
+custom_minimum_size = Vector2(0, 112)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = ""
 
 [node name="BalanceDataInvalid" type="Label" parent="."]

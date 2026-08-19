@@ -286,6 +286,11 @@ func _open_debug_panels_from_command_line() -> void:
 		if args[index] == "--debug-inventory":
 			debug_open_inventory()
 			return
+		if args[index] == "--debug-inventory-all":
+			var every: Node = get_tree().get_first_node_in_group("inventory_panel")
+			if every != null:
+				every.call("debug_open_every_item")
+			return
 		if args[index] == "--debug-inventory-empty":
 			debug_open_inventory_empty()
 			return
@@ -315,6 +320,11 @@ func _open_debug_panels_from_command_line() -> void:
 			return
 		if args[index] == "--debug-heroes-locked":
 			debug_open_heroes(true)
+			return
+		if args[index] == "--debug-skill-showcase":
+			var showcase: Node = get_tree().get_first_node_in_group("hud")
+			if showcase != null:
+				showcase.call("debug_skill_showcase")
 			return
 		if args[index] == "--debug-skills-panel":
 			debug_open_skills_panel()
@@ -649,12 +659,27 @@ func _apply_enemy_presentation() -> void:
 		_enemy_tint = Color.WHITE
 	var placeholder: Label = enemy.get_node_or_null("Placeholder") as Label
 	if placeholder != null:
-		placeholder.text = Settings.t(str(combat.current_enemy.get("name_key", "hud.enemy_placeholder")))
+		placeholder.text = Settings.t(str(combat.current_enemy.get("name_key", "hud.enemy_unknown")))
 		# Drawn over artwork rather than a flat swatch, so the name is always
 		# light with a dark outline instead of being matched to a body colour.
 		placeholder.add_theme_color_override("font_color", Color(1, 1, 1))
-		placeholder.add_theme_color_override("font_outline_color", Color(0, 0, 0, 0.9))
-		placeholder.add_theme_constant_override("outline_size", 5)
+		placeholder.add_theme_color_override("font_outline_color", Color(0.03, 0.02, 0.05, 0.95))
+		placeholder.add_theme_constant_override("outline_size", 7)
+		placeholder.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.7))
+		placeholder.add_theme_constant_override("shadow_offset_x", 2)
+		placeholder.add_theme_constant_override("shadow_offset_y", 3)
+		placeholder.add_theme_font_size_override("font_size", 21)
+		var plate := StyleBoxFlat.new()
+		plate.bg_color = Color(0.04, 0.03, 0.07, 0.58)
+		plate.content_margin_left = 12
+		plate.content_margin_right = 12
+		plate.content_margin_top = 3
+		plate.content_margin_bottom = 3
+		plate.corner_radius_top_left = 9
+		plate.corner_radius_top_right = 9
+		plate.corner_radius_bottom_left = 9
+		plate.corner_radius_bottom_right = 9
+		placeholder.add_theme_stylebox_override("normal", plate)
 		# The name belongs under the enemy, not across its face. The rect is
 		# scaled per enemy, so the label scale is inverted to keep the text the
 		# same size whatever the creature's size class is.

@@ -98,7 +98,7 @@ func _make_hero_card(id: String) -> PanelContainer:
 	else:
 		state = Settings.t("ui.state.available_unaffordable")
 	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(0.0, 220.0)
+	card.custom_minimum_size = Vector2(0.0, 240.0)
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.09, 0.08, 0.13, 1.0)
 	style.border_width_left = 3
@@ -131,7 +131,7 @@ func _make_hero_card(id: String) -> PanelContainer:
 	var details := Label.new()
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	details.add_theme_font_size_override("font_size", 17)
+	details.add_theme_font_size_override("font_size", 19)
 	details.text = "%s — %s\n%s %s  ·  %s\n%s %s  ·  %s %s\n%s\n%s" % [
 		Settings.t(str(definition["name_key"])), Settings.t("ui.role.%s" % str(definition["role"])),
 		Settings.t("ui.level"), level, state,
@@ -141,10 +141,12 @@ func _make_hero_card(id: String) -> PanelContainer:
 	]
 	row.add_child(details)
 	var buy := Button.new()
-	buy.custom_minimum_size = Vector2(190.0, 0.0)
+	buy.custom_minimum_size = Vector2(212.0, 0.0)
 	buy.disabled = not affordable
 	buy.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	buy.add_theme_font_size_override("font_size", 16)
+	# The cost and the action are what a player scans for, so they are the
+	# largest type on a card that is otherwise dense with numbers.
+	buy.add_theme_font_size_override("font_size", 20)
 	buy.text = "%s\n%s\n%s" % [
 		Settings.t("ui.heroes.hire") if level == 0 else Settings.t("ui.heroes.level_up"),
 		"Max" if quantity.get_item_metadata(quantity.selected) == -1 else "x%d" % amount,

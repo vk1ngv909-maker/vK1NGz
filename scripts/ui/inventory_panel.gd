@@ -93,6 +93,22 @@ func debug_open_populated(select_compare: bool = false) -> void:
 		_select_item("owned_3")
 
 
+func debug_open_every_item() -> void:
+	## Test-only: one of every defined item, so a capture can prove all twenty
+	## icons and all five slots rather than the six-item fixture.
+	if not _debug_grants_enabled():
+		return
+	_debug_fixture = true
+	inventory = InventoryLogic.new()
+	for item_id: Variant in inventory.definitions.keys():
+		inventory.debug_add(str(item_id))
+	_selected_uid = ""
+	message.text = ""
+	confirmation.hide()
+	visible = true
+	_refresh()
+
+
 func debug_open_salvage_confirmation() -> void:
 	if not _debug_grants_enabled():
 		return
@@ -185,6 +201,7 @@ func _refresh() -> void:
 		return
 	for uid_value: Variant in uids:
 		item_grid.add_child(_make_item_button(str(uid_value)))
+	_fit_item_list.call_deferred()
 	if not _selected_uid.is_empty() and inventory.owned_items.has(_selected_uid):
 		_refresh_compare()
 	else:
@@ -192,6 +209,29 @@ func _refresh() -> void:
 		actions.hide()
 		if message.text.is_empty():
 			message.text = Settings.t("ui.inventory.select_hint")
+
+
+func _fit_item_list() -> void:
+	## On a tall screen the item list used to stretch to fill the panel, which
+	## pushed the comparison and the actions far away from the item the player
+	## just tapped. The list now hugs its contents up to a cap and scrolls past
+	## it, so everything that belongs to the selection stays together and the
+	## spare height falls below the actions instead of inside the flow.
+	var scroll: ScrollContainer = item_grid.get_parent() as ScrollContainer
+	if scroll == null:
+		return
+	var panel_height: float = size.y if size.y > 1.0 else 1280.0
+	var cap: float = panel_height * 0.52
+	var content: float = item_grid.get_combined_minimum_size().y + 8.0
+	scroll.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	var height: float = clampf(content, 180.0, cap)
+	# Snap to whole rows so the list never ends on a card sliced in half.
+	var rows: int = maxi(1, item_grid.get_child_count() / maxi(1, item_grid.columns))
+	if rows > 0 and content > 0.0:
+		var row_height: float = content / float(rows)
+		if row_height > 1.0:
+			height = maxf(row_height, floorf(height / row_height) * row_height)
+	scroll.custom_minimum_size = Vector2(0.0, height)
 
 
 func _make_item_button(uid: String) -> Button:

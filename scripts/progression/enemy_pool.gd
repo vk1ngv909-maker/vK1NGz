@@ -52,8 +52,8 @@ func _fallback(message: String) -> Dictionary:
 	push_error(message)
 	return {
 		"id": "fallback_enemy",
-		"name_key": "hud.enemy_placeholder",
-		"desc_key": "hud.enemy_placeholder",
+		"name_key": "hud.enemy_unknown",
+		"desc_key": "hud.enemy_unknown",
 		"world_id": "fallback",
 		"hp_modifier": 1.0,
 		"gold_modifier": 1.0,

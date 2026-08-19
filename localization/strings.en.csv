@@ -96,11 +96,6 @@ hud.skills,Skills
 hud.inventory,Inventory
 hud.relics,Relics
 hud.shop,Shop
-hud.hero_dps_placeholder,HERO DPS — PLACEHOLDER
-hud.desert_placeholder,DESERT BACKGROUND — PLACEHOLDER
-hud.hero_placeholder,HERO — PLACEHOLDER
-hud.enemy_placeholder,ENEMY — PLACEHOLDER
-hud.falcon_placeholder,FALCON — PLACEHOLDER
 skill.sand_fury,SAND FURY
 skill.falcon_storm,FALCON STORM
 skill.golden_wind,GOLDEN WIND
@@ -303,3 +298,5 @@ boss.ember_crown_construct.name,Clockwork Crown King
 boss.ember_crown_construct.desc,A tall crowned machine with a cannon for a hand.
 boss.vaultback_behemoth.name,Mushroom Monarch
 boss.vaultback_behemoth.desc,A squat crowned monarch that punches with both fists.
+hud.hero_dps,Hero DPS  %s
+hud.enemy_unknown,Enemy

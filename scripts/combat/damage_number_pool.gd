@@ -46,7 +46,14 @@ func show_damage(amount: BigNumber, kind: String, origin: Vector2) -> void:
 	label.position = origin - label.size * Vector2(0.5, 0.5) + jitter
 	label.visible = true
 	label.add_theme_color_override("font_color", _color_for(kind))
-	label.add_theme_font_size_override("font_size", 34 if kind == "critical" else 26)
+	label.add_theme_font_size_override("font_size", 42 if kind == "critical" else 32)
+	# Damage rises over painted daylight, so every number carries a dark outline
+	# and a drop shadow; the tint alone disappeared against bright grass.
+	label.add_theme_color_override("font_outline_color", Color(0.03, 0.02, 0.05, 0.95))
+	label.add_theme_constant_override("outline_size", 8)
+	label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.7))
+	label.add_theme_constant_override("shadow_offset_x", 2)
+	label.add_theme_constant_override("shadow_offset_y", 3)
 	var tween: Tween = create_tween().set_parallel(true)
 	_tweens[label] = tween
 	tween.tween_property(label, "position:y", label.position.y - FLOAT_DISTANCE, FLOAT_DURATION).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)

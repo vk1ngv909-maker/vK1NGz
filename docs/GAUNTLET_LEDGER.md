@@ -522,6 +522,57 @@ A sixth defect surfaced while reviewing them:
 
 Group 4A stays closed; no Group 4B content was added.
 
+## Visual polish pass (awaiting final approval)
+
+Art direction approved; this pass answers the audit's seven blockers.
+
+**1. No visible placeholder text, either language.** `HERO DPS — PLACEHOLDER`
+now reads the roster's real damage per second through `hud.hero_dps`. The unused
+`hud.desert_placeholder`, `hud.hero_placeholder`, `hud.falcon_placeholder` keys
+were deleted and `hud.enemy_placeholder` became `hud.enemy_unknown`.
+`grep PLACEHOLDER localization/*.csv` returns **0** lines.
+
+**2. Gold.** The 72x64 yellow block is a drawn cartoon coin
+(`assets/sprites/ui/coin.webp`), 64px, with the amount at 30px on a dark plate.
+
+**3. Overlay contrast.** World name, boss warning, boss timer, HP readout, gold
+and stage now carry a dark translucent plate plus a 6px outline and a drop
+shadow; the enemy name has the same treatment at 21px; damage numbers went to
+32px (42px critical) with an 8px outline and a shadow. The enemy HP bar gained
+a dark trough and a bright fill — it was a pale bar on pale grass.
+
+**4. Touch size and wasted space.** Skill cards 88px -> 168px tall, navigation
+96px -> 112px with 16pt -> 22pt labels, and the upgrade row became two 108px
+panelled buttons at 24pt, which fills the band that used to hold two small
+captions. Skill card type is sized from the card width, so nothing clips at
+720x1280 in Arabic.
+
+**5. Six skill icons with four distinguishable states.** Each skill has its own
+drawn icon (fist, diving falcon, coins in a gust, cracked clock, three spirits,
+eclipse). State is carried by the icon treatment as well as by text and framing:
+READY full colour with a gold frame, ACTIVE full colour inside a heavy green
+ring with a countdown, COOLDOWN drained to grey with a thin frame and a
+countdown, LOCKED a flat silhouette with the unlock stage. Colour alone never
+carries the state.
+
+**6. All twenty equipment icons proven.**
+`docs/evidence/equipment_contact_sheet.webp` shows every item with its id, slot
+and rarity, grouped by the five real slots — `weapon`, `head`, `outfit`, `aura`,
+`companion_charm` — four rarities each. A new `--debug-inventory-all` fixture
+grants one of every defined item so the live panel can be captured too.
+
+**7. Tall-screen layout.** The item list now hugs its contents up to 52% of the
+panel height, snapped to whole rows, so the comparison and the actions sit
+directly under the selection instead of being pushed to the far bottom; spare
+height collects below the actions.
+
+Also: hero cards went to 19pt body text with a 20pt cost/action button on a
+wider card, which the audit flagged as a weak hierarchy.
+
+Evidence: `docs/evidence/slice2/` — combat, boss, skills panel, live skill
+states, all-items inventory, equipment comparison and heroes, in English and
+Arabic at 720x1280 and 1080x2400.
+
 ## Next highest-priority action
 
 Await visual approval of the world 1 slice. On approval: rebuild the Moonlit

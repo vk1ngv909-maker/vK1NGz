@@ -96,11 +96,6 @@ hud.skills,المهارات
 hud.inventory,المخزون
 hud.relics,الآثار
 hud.shop,المتجر
-hud.hero_dps_placeholder,ضرر الأبطال — PLACEHOLDER
-hud.desert_placeholder,خلفية الصحراء — PLACEHOLDER
-hud.hero_placeholder,البطل — PLACEHOLDER
-hud.enemy_placeholder,العدو — PLACEHOLDER
-hud.falcon_placeholder,الصقر — PLACEHOLDER
 skill.sand_fury,غضب الرمال
 skill.falcon_storm,عاصفة الصقر
 skill.golden_wind,الريح الذهبية
@@ -303,3 +298,5 @@ boss.ember_crown_construct.name,ملك التروس المتوّج
 boss.ember_crown_construct.desc,آلة عالية متوّجة يدها مدفع.
 boss.vaultback_behemoth.name,ملك الفطر
 boss.vaultback_behemoth.desc,ملك قصير متوّج يلكم بقبضتيه.
+hud.hero_dps,ضرر الأبطال  %s
+hud.enemy_unknown,عدو

@@ -16,7 +16,7 @@ from it by `tools/clean_assets.py` into `assets/sprites/`, and world layers by
 `tools/build_world_layers.py` into `assets/worlds/`. The folder carries a
 `.gdignore` so Godot never imports the concept crops.
 
-## Production assets: 46 sprites + 4 world layers
+## Production assets: 53 sprites + 4 world layers
 
 | Item | Count | Source | Built by | Status |
 | --- | --- | --- | --- | --- |
@@ -26,6 +26,7 @@ from it by `tools/clean_assets.py` into `assets/sprites/`, and world layers by
 | Boss archetypes | 4 | approved package | `clean_assets.py` | CONCEPT_SOURCED |
 | Equipment icons, weapon and aura slots | 8 | approved package | `clean_assets.py` + `make_equipment_icons.py` | CONCEPT_SOURCED |
 | Equipment icons, head / outfit / companion_charm slots | 12 | drawn from scratch for this project | `make_equipment_icons.py` | ORIGINAL |
+| Gold coin and six skill icons | 7 | drawn from scratch for this project | `make_ui_icons.py` | ORIGINAL |
 | Emerald Meadow parallax layers (sky, distant, arena, foreground) | 4 | approved package | `build_world_layers.py` | CONCEPT_SOURCED |
 
 `CONCEPT_SOURCED` means: cleaned from an approved concept reference, in use as
@@ -43,12 +44,12 @@ carries the reference sheet's background, and the content validator refuses a
 | Item | Count | Why it is still a placeholder |
 | --- | --- | --- |
 | Moonlit Wildwood and Obsidian Citadel backgrounds | 2 worlds | Layer rebuild deferred until the first world is approved; they render their flat palette colour |
-| Gold icon | 1 | Drawn as a plain swatch |
-| Skill icons | 6 | Drawn as text buttons |
 | Music and SFX | all | `placeholder://` references only, no audio files |
 | Hero and enemy animation frames | all | Single static sprite per subject; the package's animation plans are not built |
 
-Placeholder count: **5 categories, 0 placeholder image files** — the remaining
+Placeholder count: **3 categories, 0 placeholder image files** — the remaining
 placeholders are drawn in-engine or are data-only references.
 
-No placeholder above may be presented as production art.
+No placeholder above may be presented as production art, and no placeholder
+text reaches the player: the localization files contain no `PLACEHOLDER`
+strings in either language.

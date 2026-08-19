@@ -48,6 +48,8 @@ var skill_system: SkillSystem
 const PARALLAX_LAYERS: Array[String] = ["sky", "distant", "arena", "foreground"]
 const PARALLAX_OVERSCAN: Array[float] = [1.0, 1.18, 1.0, 1.12]
 var _world_layers: Dictionary = {}
+var _skill_faces: Dictionary = {}
+const SKILL_ICON_HEIGHT := 62.0
 ## The master canvas the layers are authored on, and how far down that canvas
 ## the visible crop sits: 0 shows the top of the sky, 1 the foreground edge.
 const MASTER_SIZE := Vector2i(1080, 1920)
@@ -66,6 +68,8 @@ func _ready() -> void:
 	# they have room to parallax; without clipping they would paint over the
 	# HUD bars above and below.
 	combat_background.clip_contents = true
+	%GoldIcon.texture = load("res://assets/sprites/ui/coin.webp") as Texture2D
+	_apply_overlay_contrast()
 	_setup_skills()
 	settings_button.pressed.connect(settings_panel.open_panel)
 	inventory_button.pressed.connect(inventory_panel.open_panel)
@@ -122,6 +126,20 @@ func debug_force_cooldown(ids: PackedStringArray) -> void:
 	_refresh_skill_buttons(later)
 
 
+func debug_skill_showcase() -> void:
+	## Test-only: one frame that carries all four states at once — READY,
+	## ACTIVE, COOLDOWN and LOCKED — so the hierarchy can be judged side by side
+	## instead of across four screenshots.
+	var now_ms: int = int(Time.get_unix_time_from_system() * 1000.0)
+	skill_system.tick(now_ms)
+	skill_system.activate("falcon_storm", now_ms, 100)
+	var golden: Dictionary = skill_system.skills.get("golden_wind", {})
+	skill_system.activate("golden_wind", now_ms - int(golden.get("duration_ms", 0)) - 1000, 100)
+	skill_system.tick(now_ms)
+	sync_skill_effects()
+	_refresh_skill_buttons(now_ms)
+
+
 func debug_skill_state(id: String, state: String) -> void:
 	## Test-only: put ONE skill into the requested lifecycle state through the
 	## same skill system the buttons use, then report the modifier it produces so
@@ -169,22 +187,109 @@ func _on_skill_pressed(id: String) -> void:
 	_refresh_skill_buttons(now_ms)
 
 
+func _skill_face(index: int) -> Dictionary:
+	## Icon, name and state labels live inside the button so each skill reads as
+	## a picture first and a word second; a row of six text blocks was
+	## unreadable at a glance on a phone.
+	if _skill_faces.has(index):
+		return _skill_faces[index]
+	var button: Button = skill_buttons[index]
+	button.text = ""
+	button.clip_contents = true
+	var box := VBoxContainer.new()
+	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	box.offset_top = 8.0
+	box.offset_bottom = -6.0
+	box.add_theme_constant_override("separation", 2)
+	button.add_child(box)
+	var icon := TextureRect.new()
+	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	icon.custom_minimum_size = Vector2(0.0, SKILL_ICON_HEIGHT)
+	icon.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	icon.texture = load("res://assets/sprites/ui/skill_%s.webp" % SKILL_IDS[index]) as Texture2D
+	box.add_child(icon)
+	var name_label := Label.new()
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	name_label.add_theme_font_size_override("font_size", 17)
+	name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(name_label)
+	var state_label := Label.new()
+	state_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	state_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	state_label.add_theme_font_size_override("font_size", 16)
+	state_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	box.add_child(state_label)
+	_skill_faces[index] = {"icon": icon, "name": name_label, "state": state_label}
+	return _skill_faces[index]
+
+
+func _skill_style(border: int, border_colour: Color, background: Color) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = background
+	style.border_color = border_colour
+	style.border_width_left = border
+	style.border_width_right = border
+	style.border_width_top = border
+	style.border_width_bottom = border
+	style.corner_radius_top_left = 12
+	style.corner_radius_top_right = 12
+	style.corner_radius_bottom_left = 12
+	style.corner_radius_bottom_right = 12
+	return style
+
+
 func _refresh_skill_buttons(now_ms: int) -> void:
 	for index: int in skill_buttons.size():
 		var id: String = SKILL_IDS[index]
 		var button: Button = skill_buttons[index]
-		var state_text: String = Settings.t("hud.ready")
-		if not skill_system.is_unlocked(id, _max_stage()):
+		var face: Dictionary = _skill_face(index)
+		var icon: TextureRect = face["icon"]
+		var name_label: Label = face["name"]
+		var state_label: Label = face["state"]
+		name_label.text = Settings.t("skill.%s" % id)
+		# Six cards share the width, so on a 720-wide phone the type has to come
+		# down or the skill names clip. Sized from the card, not hardcoded.
+		var card_width: float = button.size.x if button.size.x > 1.0 else 160.0
+		var name_size: int = clampi(int(card_width * 0.115), 12, 19)
+		name_label.add_theme_font_size_override("font_size", name_size)
+		state_label.add_theme_font_size_override("font_size", maxi(11, name_size - 2))
+		icon.custom_minimum_size = Vector2(0.0, clampf(card_width * 0.42, 34.0, SKILL_ICON_HEIGHT))
+		var unlocked: bool = skill_system.is_unlocked(id, _max_stage())
+		var style: StyleBoxFlat
+		# Four treatments that differ in ICON as well as in text, so the state is
+		# not carried by colour alone: full colour, full colour inside a heavy
+		# ring, drained, and a flat silhouette.
+		if not unlocked:
 			var requirement: int = int(((skill_system.skills[id] as Dictionary).get("unlock_condition", {}) as Dictionary).get("max_stage", 1))
-			state_text = "%s\n%s" % [Settings.t("ui.state.locked"), Settings.t("ui.unlock_stage") % requirement]
+			icon.modulate = Color(0.20, 0.19, 0.26, 1.0)
+			state_label.text = "%s\n%s" % [Settings.t("ui.state.locked"), Settings.t("ui.unlock_stage") % requirement]
+			state_label.add_theme_color_override("font_color", Color(0.62, 0.60, 0.70))
+			style = _skill_style(2, Color(0.30, 0.29, 0.36), Color(0.07, 0.07, 0.10, 0.85))
 		elif skill_system.is_active(id):
 			var definition: Dictionary = skill_system.skills.get(id, {})
 			var active_until_ms: int = int(skill_system.activated_at_ms[id]) + int(definition.get("duration_ms", 0))
-			state_text = "%s\n%s" % [Settings.t("hud.active"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(active_until_ms, now_ms))]
+			icon.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			state_label.text = "%s  %s" % [Settings.t("hud.active"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(active_until_ms, now_ms))]
+			state_label.add_theme_color_override("font_color", Color(0.86, 1.0, 0.90))
+			style = _skill_style(6, Color(0.55, 0.95, 0.68), Color(0.10, 0.24, 0.16, 0.95))
 		elif skill_system.is_on_cooldown(id):
-			state_text = "%s\n%s" % [Settings.t("hud.cooldown"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms))]
-		button.text = "%s\n%s" % [Settings.t("skill.%s" % id), state_text]
-		button.disabled = state_text != Settings.t("hud.ready")
+			icon.modulate = Color(0.42, 0.42, 0.48, 1.0)
+			state_label.text = "%s  %s" % [Settings.t("hud.cooldown"), Settings.t("hud.seconds_short") % Settings.format_number(_remaining_seconds(int(skill_system.cooldown_until_ms[id]), now_ms))]
+			state_label.add_theme_color_override("font_color", Color(0.72, 0.70, 0.78))
+			style = _skill_style(2, Color(0.34, 0.33, 0.42), Color(0.09, 0.09, 0.12, 0.9))
+		else:
+			icon.modulate = Color(1.0, 1.0, 1.0, 1.0)
+			state_label.text = Settings.t("hud.ready")
+			state_label.add_theme_color_override("font_color", Color(1.0, 0.92, 0.72))
+			style = _skill_style(4, Color(0.92, 0.74, 0.32), Color(0.14, 0.12, 0.09, 0.92))
+		name_label.add_theme_color_override("font_color", Color(0.96, 0.95, 1.0) if unlocked else Color(0.60, 0.58, 0.68))
+		for slot: String in ["normal", "hover", "pressed", "disabled", "focus"]:
+			button.add_theme_stylebox_override(slot, style)
+		button.disabled = state_label.text != Settings.t("hud.ready")
 
 
 func sync_skill_effects() -> void:
@@ -204,12 +309,7 @@ func refresh_localized_text() -> void:
 	%Inventory.text = Settings.t("hud.inventory")
 	%Relics.text = Settings.t("hud.relics")
 	%Shop.text = Settings.t("hud.shop")
-	%HeroDPS.text = Settings.t("hud.hero_dps_placeholder")
-	# The gold icon is placeholder ART, not placeholder TEXT. Rendering a
-	# localized sentence inside a 72px swatch clipped it — and under RTL the clip
-	# falls on the left, which produced the confusing "الذهب — ACEHOLDER".
-	# Placeholder status is recorded in docs/ASSET_MANIFEST.md instead.
-	%GoldPlaceholder.text = ""
+	refresh_support_dps()
 	# WorldName presents the active localized world. Do not expose the art
 	# placeholder label, which incorrectly called every later world a desert.
 	%BackgroundLabel.text = ""
@@ -326,6 +426,88 @@ func _world_progress() -> float:
 	var from: float = float(current_world.get("stage_from", 1))
 	var to: float = float(current_world.get("stage_to", from + 1.0))
 	return clampf((float(state.get("stage")) - from) / maxf(1.0, to - from), 0.0, 1.0)
+
+
+func _backing(alpha: float, pad: int) -> StyleBoxFlat:
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.04, 0.03, 0.07, alpha)
+	style.content_margin_left = pad
+	style.content_margin_right = pad
+	style.content_margin_top = pad * 0.4
+	style.content_margin_bottom = pad * 0.4
+	style.corner_radius_top_left = 10
+	style.corner_radius_top_right = 10
+	style.corner_radius_bottom_left = 10
+	style.corner_radius_bottom_right = 10
+	return style
+
+
+func _apply_overlay_contrast() -> void:
+	## Combat text sits on painted daylight, where a plain coloured label washes
+	## out. Every overlay gets an outline and a shadow, and the ones that carry
+	## numbers a player reads mid-fight also get a dark translucent plate.
+	var plated: Array[Label] = [world_name, %BossWarning, %BossCountdown, %EnemyHPLabel, %GoldAmount, %Stage]
+	for label: Label in plated:
+		label.add_theme_stylebox_override("normal", _backing(0.62, 18))
+		label.add_theme_color_override("font_outline_color", Color(0.03, 0.02, 0.05, 0.95))
+		label.add_theme_constant_override("outline_size", 6)
+		label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.65))
+		label.add_theme_constant_override("shadow_offset_x", 2)
+		label.add_theme_constant_override("shadow_offset_y", 3)
+	# Bigger currency and stage type, kept on their filled plates: shrinking the
+	# labels to their text collapsed them to empty boxes in the top bar.
+	# Sized from the viewport: 30pt fits a 1080-wide bar, but clipped
+	# "Stage 100 — BOSS" on a 720-wide phone.
+	var readout_size: int = 30 if get_viewport_rect().size.x >= 1000.0 else 22
+	for readout: Label in [%GoldAmount, %Stage]:
+		readout.add_theme_font_size_override("font_size", readout_size)
+		readout.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	# The enemy bar was a pale rectangle on pale grass. Dark trough, bright fill.
+	var trough := StyleBoxFlat.new()
+	trough.bg_color = Color(0.05, 0.04, 0.08, 0.78)
+	trough.border_color = Color(0.02, 0.02, 0.04, 0.9)
+	trough.set_border_width_all(3)
+	trough.set_corner_radius_all(10)
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = Color(0.85, 0.28, 0.30, 1.0)
+	fill.set_corner_radius_all(8)
+	enemy_hp.add_theme_stylebox_override("background", trough)
+	enemy_hp.add_theme_stylebox_override("fill", fill)
+	# The upgrade row is the widest tap target on the screen; give it presence
+	# instead of leaving two small captions in a large empty band.
+	for action: Button in [%TapDamage, support_dps_button]:
+		action.add_theme_font_size_override("font_size", 24)
+		action.custom_minimum_size = Vector2(0.0, 108.0)
+		var panel := StyleBoxFlat.new()
+		panel.bg_color = Color(0.13, 0.12, 0.18, 1.0)
+		panel.border_color = Color(0.36, 0.32, 0.46, 1.0)
+		panel.set_border_width_all(3)
+		panel.set_corner_radius_all(14)
+		panel.content_margin_left = 12
+		panel.content_margin_right = 12
+		for slot: String in ["normal", "hover", "pressed", "focus"]:
+			action.add_theme_stylebox_override(slot, panel)
+		var dim := panel.duplicate() as StyleBoxFlat
+		dim.bg_color = Color(0.09, 0.09, 0.12, 1.0)
+		dim.border_color = Color(0.24, 0.22, 0.30, 1.0)
+		action.add_theme_stylebox_override("disabled", dim)
+	%BossWarning.add_theme_color_override("font_color", Color(1.0, 0.55, 0.42))
+	%BossCountdown.add_theme_color_override("font_color", Color(1.0, 0.93, 0.72))
+	%EnemyHPLabel.add_theme_color_override("font_color", Color(1.0, 0.98, 0.98))
+	world_name.add_theme_color_override("font_color", Color(1.0, 0.98, 0.92))
+
+
+func refresh_support_dps() -> void:
+	## The button shows the roster's real damage per second. It used to print a
+	## placeholder sentence, which is the one thing a player must never be shown.
+	var arena: Node = get_tree().get_first_node_in_group("combat_arena")
+	var total: Object = null
+	if arena != null:
+		var state: Object = arena.get("combat")
+		if state != null:
+			total = state.get("support_total_dps")
+	var shown: String = Settings.format_big_number(total) if total != null else Settings.format_number(0)
+	support_dps_button.text = Settings.t("hud.hero_dps") % shown
 
 
 func _remaining_seconds(until_ms: int, now_ms: int) -> int:
