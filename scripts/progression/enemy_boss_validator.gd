@@ -27,7 +27,7 @@ static func validate(dataset: Dictionary, catalogs: Dictionary) -> Array[Diction
 			for modifier: String in ["hp_modifier", "gold_modifier"]:
 				if entry.has(modifier) and (not is_finite(float(entry[modifier])) or float(entry[modifier]) <= 0.0 or float(entry[modifier]) > 1000.0):
 					_add(issues, path, entry_id, modifier, "invalid modifier")
-			_validate_identity(issues, path, entry_id, entry)
+			_validate_identity(issues, path, entry_id, entry, worlds, type_name)
 	_validate_distinct_sets(issues, dataset, catalogs)
 	_validate_assignments(issues, dataset, catalogs)
 	return issues
@@ -53,7 +53,8 @@ static func validate_encounter_ids(encounter_ids: Array) -> Array[Dictionary]:
 	return issues
 
 
-static func _validate_identity(issues: Array[Dictionary], path: String, entry_id: String, entry: Dictionary) -> void:
+static func _validate_identity(issues: Array[Dictionary], path: String, entry_id: String, entry: Dictionary,
+		worlds: Dictionary = {}, type_name: String = "enemies") -> void:
 	if str(entry.get("silhouette", "")) not in ["squat", "tall", "wide", "spindly"]:
 		_add(issues, path, entry_id, "silhouette", "invalid silhouette")
 	var status: String = str(entry.get("asset_status", ""))
@@ -62,8 +63,30 @@ static func _validate_identity(issues: Array[Dictionary], path: String, entry_id
 	elif status == "CONCEPT_SOURCED":
 		# Claiming real art is only allowed when the sprite is actually there,
 		# so the status can never drift ahead of the assets.
-		var folder: String = "bosses" if path.contains("bosses") else "enemies"
-		if not ResourceLoader.exists("res://assets/sprites/%s/%s.png" % [folder, entry_id]):
+		if type_name == "bosses":
+			# A boss archetype has no sprite of its own: each world dresses it in
+			# a visual of that world. Its art is proven when every world that can
+			# spawn it maps it to a sprite that exists.
+			var covered: int = 0
+			for world_value: Variant in worlds.values():
+				var world: Dictionary = world_value
+				var visuals: Variant = world.get("boss_visuals")
+				if not visuals is Dictionary:
+					continue
+				var mapped: Variant = (visuals as Dictionary).get(entry_id)
+				if not mapped is Dictionary:
+					_add(issues, path, entry_id, "asset_status",
+						"world '%s' has no visual for this archetype" % str(world.get("id", "")))
+					continue
+				var visual_id: String = str((mapped as Dictionary).get("visual_id", ""))
+				if not ResourceLoader.exists("res://assets/sprites/bosses/%s.png" % visual_id):
+					_add(issues, path, entry_id, "asset_status",
+						"world '%s' maps this archetype to missing visual '%s'" % [str(world.get("id", "")), visual_id])
+				else:
+					covered += 1
+			if covered == 0:
+				_add(issues, path, entry_id, "asset_status", "CONCEPT_SOURCED without any world visual")
+		elif not ResourceLoader.exists("res://assets/sprites/enemies/%s.png" % entry_id):
 			_add(issues, path, entry_id, "asset_status", "CONCEPT_SOURCED without a sprite file")
 	var palette: Variant = entry.get("palette")
 	if palette is Dictionary:

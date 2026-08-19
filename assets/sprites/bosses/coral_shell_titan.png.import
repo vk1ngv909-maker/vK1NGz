@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cipwobf4cd1pe"
-path="res://.godot/imported/vaultback_behemoth.png-f34723c67c7b1993b4a01b81ec4e9a22.ctex"
+uid="uid://c46hqxaewpqtd"
+path="res://.godot/imported/coral_shell_titan.png-22ca58635ffef01dd290d028dcb3cf9c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/bosses/vaultback_behemoth.png"
-dest_files=["res://.godot/imported/vaultback_behemoth.png-f34723c67c7b1993b4a01b81ec4e9a22.ctex"]
+source_file="res://assets/sprites/bosses/coral_shell_titan.png"
+dest_files=["res://.godot/imported/coral_shell_titan.png-22ca58635ffef01dd290d028dcb3cf9c.ctex"]
 
 [params]
 

@@ -648,6 +648,17 @@ func _apply_enemy_presentation() -> void:
 		return
 	var id: String = str(combat.current_enemy.get("id", ""))
 	var folder: String = "bosses" if combat.is_boss else "enemies"
+	# A boss keeps its mechanical archetype but wears the visual its world
+	# assigns, so the sprite and the name always belong to the place it is
+	# fought in.
+	var name_key: String = str(combat.current_enemy.get("name_key", "hud.enemy_unknown"))
+	if combat.is_boss:
+		var visual: Dictionary = worlds.boss_visual_for(combat.stage, id)
+		if visual.is_empty():
+			push_error("CombatArena: no boss visual for stage %d archetype '%s'" % [combat.stage, id])
+		else:
+			id = str(visual.get("visual_id", id))
+			name_key = str(visual.get("name_key", name_key))
 	var texture: Texture2D = _sprite("res://assets/sprites/%s/%s.png" % [folder, id])
 	enemy.texture = texture
 	# A world whose art is not built yet still reads correctly: the palette
@@ -664,7 +675,7 @@ func _apply_enemy_presentation() -> void:
 		_enemy_tint = Color.WHITE
 	var placeholder: Label = enemy.get_node_or_null("Placeholder") as Label
 	if placeholder != null:
-		placeholder.text = Settings.t(str(combat.current_enemy.get("name_key", "hud.enemy_unknown")))
+		placeholder.text = Settings.t(name_key)
 		# Drawn over artwork rather than a flat swatch, so the name is always
 		# light with a dark outline instead of being matched to a body colour.
 		placeholder.add_theme_color_override("font_color", Color(1, 1, 1))

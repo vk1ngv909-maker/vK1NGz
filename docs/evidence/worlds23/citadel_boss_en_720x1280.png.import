@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dv7c8kmqljn5h"
-path="res://.godot/imported/ember_crown_construct.png-e3c34704e3ecd00cde3499799c8f0085.ctex"
+uid="uid://d2koby864bq1w"
+path="res://.godot/imported/citadel_boss_en_720x1280.png-d3f713c14e2a83b7947cd3ea396f2f6f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/bosses/ember_crown_construct.png"
-dest_files=["res://.godot/imported/ember_crown_construct.png-e3c34704e3ecd00cde3499799c8f0085.ctex"]
+source_file="res://docs/evidence/worlds23/citadel_boss_en_720x1280.png"
+dest_files=["res://.godot/imported/citadel_boss_en_720x1280.png-d3f713c14e2a83b7947cd3ea396f2f6f.ctex"]
 
 [params]
 

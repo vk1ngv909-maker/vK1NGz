@@ -24,6 +24,26 @@ func _init(path: String = DATA_PATH) -> void:
 	worlds.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return int(a.get("stage_from", 0)) < int(b.get("stage_from", 0)))
 
 
+func boss_visual_for(stage: int, archetype_id: String) -> Dictionary:
+	## The visual identity of a boss encounter, chosen by the world it is fought
+	## in. Mechanics stay on the archetype: the same encounter keeps its id, its
+	## HP and reward multipliers, its timer and its first-clear record, and only
+	## the sprite and the displayed name follow the world. That is what stops a
+	## forest treant from standing inside a volcanic fortress.
+	var world: Dictionary = world_for_stage(stage)
+	if world.is_empty() or archetype_id.is_empty():
+		return {}
+	var mapping: Variant = world.get("boss_visuals")
+	if not mapping is Dictionary:
+		return {}
+	var entry: Variant = (mapping as Dictionary).get(archetype_id)
+	if not entry is Dictionary:
+		return {}
+	var visual: Dictionary = (entry as Dictionary).duplicate(true)
+	visual["world_id"] = str(world.get("id", ""))
+	return visual
+
+
 func world_for_stage(stage: int) -> Dictionary:
 	if worlds.is_empty():
 		return {}

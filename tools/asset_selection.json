@@ -112,26 +112,6 @@
    "target": "enemies/ossuary_warden.png"
   },
   {
-   "category": "bosses",
-   "source": "assets/bosses/ancient_treant.webp",
-   "target": "bosses/sandstorm_colossus.png"
-  },
-  {
-   "category": "bosses",
-   "source": "assets/bosses/crystal_cavern_wyrm.webp",
-   "target": "bosses/lunar_glasswing.png"
-  },
-  {
-   "category": "bosses",
-   "source": "assets/bosses/clockwork_crown_king.webp",
-   "target": "bosses/ember_crown_construct.png"
-  },
-  {
-   "category": "bosses",
-   "source": "assets/bosses/mushroom_monarch.webp",
-   "target": "bosses/vaultback_behemoth.png"
-  },
-  {
    "category": "weapons",
    "source": "assets/weapons/iron_short_sword.webp",
    "target": "equipment/dune_knife.png"
@@ -157,19 +137,64 @@
    "target": "equipment/dust_wisp.png"
   },
   {
-   "category": "weapons",
-   "source": "assets/weapons/star_wand.webp",
-   "target": "equipment/ember_halo.png"
+   "category": "bosses",
+   "source": "assets/bosses/ancient_treant.webp",
+   "target": "bosses/ancient_treant.png"
   },
   {
-   "category": "weapons",
-   "source": "assets/weapons/amethyst_wand.webp",
-   "target": "equipment/djinn_radiance.png"
+   "category": "bosses",
+   "source": "assets/bosses/whispering_marsh_hydra.webp",
+   "target": "bosses/whispering_marsh_hydra.png"
   },
   {
-   "category": "weapons",
-   "source": "assets/weapons/astral_spellbook.webp",
-   "target": "equipment/solar_ascendance.png"
+   "category": "bosses",
+   "source": "assets/bosses/storm_thunder_roc.webp",
+   "target": "bosses/storm_thunder_roc.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/coral_shell_titan.webp",
+   "target": "bosses/coral_shell_titan.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/mushroom_monarch.webp",
+   "target": "bosses/mushroom_monarch.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/crystal_cavern_wyrm.webp",
+   "target": "bosses/crystal_cavern_wyrm.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/celestial_owl_guardian.webp",
+   "target": "bosses/celestial_owl_guardian.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/frost_tusk_mammoth.webp",
+   "target": "bosses/frost_tusk_mammoth.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/magma_horn_beast.webp",
+   "target": "bosses/magma_horn_beast.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/purple_fortress_boss.webp",
+   "target": "bosses/purple_fortress_boss.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/clockwork_crown_king.webp",
+   "target": "bosses/clockwork_crown_king.png"
+  },
+  {
+   "category": "bosses",
+   "source": "assets/bosses/cosmic_star_knight.webp",
+   "target": "bosses/cosmic_star_knight.png"
   }
  ]
 }

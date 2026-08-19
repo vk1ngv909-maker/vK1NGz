@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://biqwpjawsexm4"
-path="res://.godot/imported/sandstorm_colossus.png-f484926e7821fb5126941ba3cc0251b8.ctex"
+uid="uid://d3vqxx6runmvl"
+path="res://.godot/imported/clockwork_crown_king.png-c48d29595786e285dca19d306f151c68.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/bosses/sandstorm_colossus.png"
-dest_files=["res://.godot/imported/sandstorm_colossus.png-f484926e7821fb5126941ba3cc0251b8.ctex"]
+source_file="res://assets/sprites/bosses/clockwork_crown_king.png"
+dest_files=["res://.godot/imported/clockwork_crown_king.png-c48d29595786e285dca19d306f151c68.ctex"]
 
 [params]
 

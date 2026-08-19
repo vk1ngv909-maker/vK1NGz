@@ -33,6 +33,24 @@
    ],
    "transition": {
     "fade_seconds": 0.35
+   },
+   "boss_visuals": {
+    "sandstorm_colossus": {
+     "visual_id": "ancient_treant",
+     "name_key": "boss.visual.ancient_treant.name"
+    },
+    "lunar_glasswing": {
+     "visual_id": "whispering_marsh_hydra",
+     "name_key": "boss.visual.whispering_marsh_hydra.name"
+    },
+    "ember_crown_construct": {
+     "visual_id": "storm_thunder_roc",
+     "name_key": "boss.visual.storm_thunder_roc.name"
+    },
+    "vaultback_behemoth": {
+     "visual_id": "coral_shell_titan",
+     "name_key": "boss.visual.coral_shell_titan.name"
+    }
    }
   },
   {
@@ -67,6 +85,24 @@
    ],
    "transition": {
     "fade_seconds": 0.45
+   },
+   "boss_visuals": {
+    "sandstorm_colossus": {
+     "visual_id": "mushroom_monarch",
+     "name_key": "boss.visual.mushroom_monarch.name"
+    },
+    "lunar_glasswing": {
+     "visual_id": "crystal_cavern_wyrm",
+     "name_key": "boss.visual.crystal_cavern_wyrm.name"
+    },
+    "ember_crown_construct": {
+     "visual_id": "celestial_owl_guardian",
+     "name_key": "boss.visual.celestial_owl_guardian.name"
+    },
+    "vaultback_behemoth": {
+     "visual_id": "frost_tusk_mammoth",
+     "name_key": "boss.visual.frost_tusk_mammoth.name"
+    }
    }
   },
   {
@@ -101,6 +137,24 @@
    ],
    "transition": {
     "fade_seconds": 0.55
+   },
+   "boss_visuals": {
+    "sandstorm_colossus": {
+     "visual_id": "magma_horn_beast",
+     "name_key": "boss.visual.magma_horn_beast.name"
+    },
+    "lunar_glasswing": {
+     "visual_id": "purple_fortress_boss",
+     "name_key": "boss.visual.purple_fortress_boss.name"
+    },
+    "ember_crown_construct": {
+     "visual_id": "clockwork_crown_king",
+     "name_key": "boss.visual.clockwork_crown_king.name"
+    },
+    "vaultback_behemoth": {
+     "visual_id": "cosmic_star_knight",
+     "name_key": "boss.visual.cosmic_star_knight.name"
+    }
    }
   }
  ]

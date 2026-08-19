@@ -628,6 +628,59 @@ an explicit flag, unreachable in a release build).
 `docs/evidence/equipment_contact_sheet.webp` proves 20 unique ids with English
 display name, slot and rarity, and the builder asserts on any duplicate.
 
+## Corrective checkpoint — boss visual identity decoupled
+
+The Citadel was showing `Ancient Treant`, a forest boss inside a volcanic
+fortress. Fixed by separating what a boss *is* from what it *looks like*.
+
+**Architecture.** Each world entry carries a `boss_visuals` map from mechanical
+archetype id to `{visual_id, name_key}`. `Worlds.boss_visual_for(stage,
+archetype)` resolves it, and the arena uses the result for the sprite and the
+displayed name only. Combat still runs entirely on the archetype: encounter id,
+stage number, HP multiplier, gold multiplier, timer, reward table, first-clear
+record and save fields are untouched. Twelve visuals were cleaned from the
+approved package, four per world:
+
+| Archetype (mechanics) | Emerald Meadow | Moonlit Wildwood | Obsidian Citadel |
+| --- | --- | --- | --- |
+| `sandstorm_colossus` | Ancient Treant | Mushroom Monarch | Magma Horn Beast |
+| `lunar_glasswing` | Grove Hydra | Crystal Wyrm | Fortress Warden |
+| `ember_crown_construct` | Meadow Roc | Moonlit Owl Guardian | Clockwork Crown King |
+| `vaultback_behemoth` | Stoneshell Titan | Frostmane Behemoth | Obsidian Star Knight |
+
+**Proof that nothing mechanical moved.** `git diff` against the previous commit
+reports **no change at all** to `balance.json`, `equipment.json`, `bosses.json`,
+`support_heroes.json`, `skills.json`, `relics.json` or `reward_tables.json`; the
+only data change is the additive `boss_visuals` block. `test_boss_visuals.gd`
+pins the authored HP multiplier (1.00 / 1.08 / 1.16 / 1.25) and 30s timer for
+every boss stage, one encounter per stage with a unique id, first clear granted
+exactly once and surviving a reload, a kill on the final tick still counting as
+a victory rather than also timing out, and a tap after a timeout not reviving
+the encounter. It also asserts the Citadel never shows the treant and the meadow
+never shows a volcanic or mechanical boss.
+
+**The validator fails loudly.** A deliberately broken mapping produces:
+`ContentValidator: file=res://resources/worlds/worlds.json
+id=ruins_of_the_sun_kingdom field=boss_visuals.ember_crown_construct.visual_id:
+world 'ruins_of_the_sun_kingdom' (stages 67-100) maps archetype
+'ember_crown_construct' to invalid visual 'not_a_sprite'`. A boss archetype may
+only claim `CONCEPT_SOURCED` when every world maps it to a sprite that exists.
+
+**Three aura icons redrawn.** `ember_halo`, `djinn_radiance` and
+`solar_ascendance` looked like a wand, a wand and a spellbook. They are now a
+golden flame halo, a violet energy ring with orbiting crystal shards, and a sun
+disc inside a radiant orbit. Ids, rarity, stats, save data and display names are
+unchanged, and the other seventeen icons were not touched.
+
+**Balance simulation.** The C17 simulation is not fully deterministic: five runs
+on identical code give 2117-2155s (35.3-35.9 min). The figures recorded before
+this change (2115s / 35.3 min and 2128s / 35.5 min) sit inside that band, and no
+balance value was edited, so first-prestige timing is unchanged within the
+simulation's own tolerance. `CRITERION 1: MET` on every run.
+
+Evidence: `docs/evidence/boss_visuals/` — one boss per world, English and
+Arabic, at 720x1280 and 1080x2400.
+
 ## Next highest-priority action
 
 Gate 5 group 4B: fifteen Relics and the relic sensitivity simulations, then the

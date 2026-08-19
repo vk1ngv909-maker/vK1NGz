@@ -194,6 +194,32 @@ func _validate_world_nested(path: String, entry_id: String, world: Dictionary) -
 		var fade: Variant = (transition as Dictionary).get("fade_seconds")
 		if not (fade is int or fade is float) or not is_finite(float(fade)) or float(fade) < 0.0 or float(fade) > 10.0:
 			_reject(path, entry_id, "transition.fade_seconds", "out of range")
+	# Boss visuals: every archetype the game can spawn must have a world-specific
+	# sprite, and that sprite must exist. A missing or broken mapping would put
+	# the wrong creature in the world, so it is rejected by stage, world and id.
+	var visuals: Variant = world.get("boss_visuals")
+	if not visuals is Dictionary:
+		_reject(path, entry_id, "boss_visuals", "missing boss visual mapping")
+	else:
+		var archetypes: Array = world.get("boss_ids", [])
+		for archetype_value: Variant in archetypes:
+			var archetype: String = str(archetype_value)
+			var mapped: Variant = (visuals as Dictionary).get(archetype)
+			if not mapped is Dictionary:
+				_reject(path, entry_id, "boss_visuals.%s" % archetype,
+					"world '%s' (stages %d-%d) has no visual for archetype '%s'" % [
+						entry_id, int(world.get("stage_from", 0)), int(world.get("stage_to", 0)), archetype])
+				continue
+			var visual_id: String = str((mapped as Dictionary).get("visual_id", ""))
+			var name_key: String = str((mapped as Dictionary).get("name_key", ""))
+			if visual_id.is_empty() or not ResourceLoader.exists("res://assets/sprites/bosses/%s.png" % visual_id):
+				_reject(path, entry_id, "boss_visuals.%s.visual_id" % archetype,
+					"world '%s' (stages %d-%d) maps archetype '%s' to invalid visual '%s'" % [
+						entry_id, int(world.get("stage_from", 0)), int(world.get("stage_to", 0)), archetype, visual_id])
+			if name_key.is_empty():
+				_reject(path, entry_id, "boss_visuals.%s.name_key" % archetype,
+					"world '%s' maps archetype '%s' to a visual with no display name" % [entry_id, archetype])
+
 	var layers: Variant = world.get("background_layers")
 	if layers is Array:
 		for layer: Variant in layers as Array:

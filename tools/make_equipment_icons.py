@@ -13,6 +13,7 @@ Usage: python3 tools/make_equipment_icons.py
 from __future__ import annotations
 
 import json
+import math
 from pathlib import Path
 
 from PIL import Image, ImageDraw
@@ -53,6 +54,9 @@ class Canvas:
     def ellipse(self, box: tuple[float, float, float, float], fill, width: float = 7.0) -> None:
         scaled = [v * SS for v in box]
         self.draw.ellipse(scaled, fill=fill, outline=OUTLINE, width=int(width * SS))
+
+    def arc(self, box, start, end, fill, width: float) -> None:
+        self.draw.arc([v * SS for v in box], start, end, fill=fill, width=int(width * SS))
 
     def arc_band(self, box, start, end, fill, width: float) -> None:
         scaled = [v * SS for v in box]
@@ -177,6 +181,45 @@ def signet(c: Canvas, base, accent) -> None:
     c.poly([(128, 66), (144, 92), (128, 108), (112, 92)], shade(accent, 0.2), 4)
 
 
+def ember_halo(c: Canvas, base, accent) -> None:
+    # A ring of banked flame, not a wand: an aura is worn around you.
+    c.ellipse((44, 44, 212, 212), (0, 0, 0, 0), 0)
+    c.arc((46, 46, 210, 210), 0, 360, OUTLINE, 30)
+    c.arc((46, 46, 210, 210), 0, 360, shade(base, 0.0), 22)
+    c.arc((60, 60, 196, 196), 0, 360, shade(accent, 0.25), 8)
+    for angle in range(0, 360, 45):
+        radians = math.radians(angle)
+        cx = 128 + math.cos(radians) * 84
+        cy = 128 + math.sin(radians) * 84
+        c.poly([(cx, cy - 22), (cx + 13, cy), (cx, cy + 22), (cx - 13, cy)], shade(accent, 0.1), 4)
+
+
+def djinn_radiance(c: Canvas, base, accent) -> None:
+    # A violet energy ring with crystal shards held in orbit.
+    c.arc((48, 48, 208, 208), 0, 360, OUTLINE, 26)
+    c.arc((48, 48, 208, 208), 0, 360, shade(base, 0.0), 18)
+    c.ellipse((104, 104, 152, 152), shade(accent, 0.15), 5)
+    for angle in (30, 150, 270):
+        radians = math.radians(angle)
+        cx = 128 + math.cos(radians) * 80
+        cy = 128 + math.sin(radians) * 80
+        c.poly([(cx, cy - 26), (cx + 16, cy - 4), (cx, cy + 26), (cx - 16, cy - 4)], shade(accent, 0.3), 4)
+
+
+def solar_ascendance(c: Canvas, base, accent) -> None:
+    # A sun disc inside a radiant orbit.
+    for angle in range(0, 360, 30):
+        radians = math.radians(angle)
+        inner = 66
+        outer = 104 if angle % 60 == 0 else 88
+        c.line([(128 + math.cos(radians) * inner, 128 + math.sin(radians) * inner),
+                (128 + math.cos(radians) * outer, 128 + math.sin(radians) * outer)],
+               shade(accent, 0.15), 9)
+    c.ellipse((72, 72, 184, 184), shade(base, 0.0), 6)
+    c.ellipse((94, 94, 162, 162), shade(accent, 0.28), 5)
+    c.arc((36, 36, 220, 220), 200, 340, shade(base, 0.2), 7)
+
+
 ITEMS = {
     # head
     "wanderer_wrap": (hood, "common", (188, 168, 140), (120, 150, 120)),
@@ -188,6 +231,9 @@ ITEMS = {
     "caravan_guard_mail": (mail, "rare", (162, 178, 196), (98, 176, 232)),
     "stormweave_mantle": (mantle, "epic", (120, 118, 200), (250, 226, 120)),
     "sultans_regalia": (regalia, "legendary", (214, 150, 92), (248, 214, 128)),
+    "ember_halo": (ember_halo, "rare", (240, 168, 72), (252, 226, 140)),
+    "djinn_radiance": (djinn_radiance, "epic", (150, 108, 224), (214, 176, 255)),
+    "solar_ascendance": (solar_ascendance, "legendary", (246, 196, 86), (255, 236, 168)),
     # companion_charm
     "beetle_token": (token, "common", (186, 172, 148), (140, 168, 128)),
     "falcon_bell": (bell, "rare", (222, 196, 118), (250, 240, 200)),

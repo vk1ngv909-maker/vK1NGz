@@ -300,3 +300,15 @@ boss.vaultback_behemoth.name,Mushroom Monarch
 boss.vaultback_behemoth.desc,A squat crowned monarch that punches with both fists.
 hud.hero_dps,Hero DPS  %s
 hud.enemy_unknown,Enemy
+boss.visual.ancient_treant.name,Ancient Treant
+boss.visual.whispering_marsh_hydra.name,Grove Hydra
+boss.visual.storm_thunder_roc.name,Meadow Roc
+boss.visual.coral_shell_titan.name,Stoneshell Titan
+boss.visual.mushroom_monarch.name,Mushroom Monarch
+boss.visual.crystal_cavern_wyrm.name,Crystal Wyrm
+boss.visual.celestial_owl_guardian.name,Moonlit Owl Guardian
+boss.visual.frost_tusk_mammoth.name,Frostmane Behemoth
+boss.visual.magma_horn_beast.name,Magma Horn Beast
+boss.visual.purple_fortress_boss.name,Fortress Warden
+boss.visual.clockwork_crown_king.name,Clockwork Crown King
+boss.visual.cosmic_star_knight.name,Obsidian Star Knight

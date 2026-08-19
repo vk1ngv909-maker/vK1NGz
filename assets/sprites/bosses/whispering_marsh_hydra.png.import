@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cno6l23e1pxkk"
-path="res://.godot/imported/lunar_glasswing.png-86cb5e8c5178f79a94a8492b8dd2a935.ctex"
+uid="uid://dmx5pyj7nqjol"
+path="res://.godot/imported/whispering_marsh_hydra.png-100c9140f8a7dd74255ef8b0219555af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/bosses/lunar_glasswing.png"
-dest_files=["res://.godot/imported/lunar_glasswing.png-86cb5e8c5178f79a94a8492b8dd2a935.ctex"]
+source_file="res://assets/sprites/bosses/whispering_marsh_hydra.png"
+dest_files=["res://.godot/imported/whispering_marsh_hydra.png-100c9140f8a7dd74255ef8b0219555af.ctex"]
 
 [params]
 
