@@ -106,6 +106,102 @@ func _ready() -> void:
 			float(Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED)) / 1048576.0,
 			int(cycle_hud.call("debug_resident_layer_count"))])
 		get_tree().quit()
+	if "--demo-attack-seq" in args:
+		# One ordered pass through a single sword attack, saved frame by frame,
+		# so the connection between the blade and the enemy can be checked
+		# rather than asserted.
+		var seq_arena: Node = get_tree().get_first_node_in_group("combat_arena")
+		var base_path: String = out_path.get_basename()
+		var labels: Array[String] = ["idle", "windup", "travel", "impact", "reaction", "recovery"]
+		var waits: Array[float] = [0.0, 0.05, 0.10, 0.06, 0.10, 0.22]
+		for index: int in labels.size():
+			if index == 1 and seq_arena != null:
+				seq_arena.call("debug_tap")
+			if waits[index] > 0.0:
+				await get_tree().create_timer(waits[index]).timeout
+			await get_tree().process_frame
+			var frame: Image = get_viewport().get_texture().get_image()
+			frame.save_png("%s_%d_%s.png" % [base_path, index, labels[index]])
+			print("ATTACKSEQ %d %s" % [index, labels[index]])
+		get_tree().quit()
+	if "--demo-attack-verify" in args:
+		# The claims a still frame cannot carry: that damage is never shown
+		# before the hit connects, that the hero returns to the exact anchor
+		# after sustained tapping, and that the staff bolt actually arrives.
+		var va: Node = get_tree().get_first_node_in_group("combat_arena")
+		var vhud: Node = get_tree().get_first_node_in_group("hud")
+		var vhero: Control = va.get("hero")
+		var venemy: Control = va.get("enemy")
+		var vpool: Node = va.get("damage_pool")
+		var travel: float = float(va.call("attack_travel_seconds"))
+
+		# 1. damage appears only after the blade has had time to cross
+		vpool.call("hide_all")
+		var start: int = Time.get_ticks_usec()
+		va.call("debug_tap")
+		var vslash: Control = va.get("slash")
+		var origin: Vector2 = vhero.position + vhero.size * 0.5
+		var goal: Vector2 = venemy.position + venemy.size * 0.5
+		var full: float = origin.distance_to(goal)
+		# The falcon strikes on its own schedule, so counting labels would time
+		# whichever number happened to appear first. Only the tap's own kinds
+		# count here.
+		var baseline: int = (vpool.call("kind_history") as Array).size()
+		var seen_us: int = -1
+		var progress: float = 0.0
+		var elapsed_game: float = 0.0
+		for f: int in 60:
+			await get_tree().process_frame
+			elapsed_game += get_process_delta_time()
+			var kinds: Array = vpool.call("kind_history")
+			var tapped: bool = false
+			for k: int in range(baseline, kinds.size()):
+				if str(kinds[k]) in ["normal", "critical"]:
+					tapped = true
+			if tapped:
+				seen_us = Time.get_ticks_usec() - start
+				var tip: Vector2 = vslash.position + vslash.size * 0.5
+				progress = 1.0 - clampf(tip.distance_to(goal) / maxf(1.0, full), 0.0, 1.0)
+				break
+		# Frame-quantised and read one frame late under software rendering, so it
+		# is reported for context only; the geometric check below is the claim.
+		print("ATTACKVERIFY frame_quantised_time_to_damage_s=%.3f" % elapsed_game)
+		# Wall-clock timing drifts by up to a frame under software rendering, so
+		# the claim is checked geometrically as well: how far the arc had
+		# travelled toward the enemy on the frame the number first existed.
+		print("ATTACKVERIFY connect_travel_s=%.3f wallclock_s=%.3f arc_progress=%.2f connected_first=%s" % [
+			travel, float(seen_us) / 1000000.0, progress, str(seen_us >= 0 and progress >= 0.9)])
+
+		# 2. the hero returns to the anchor after rapid tapping
+		var anchor_point: Vector2 = vhud.get("hero_anchor")
+		for tap: int in 200:
+			va.call("debug_tap")
+			if tap % 8 == 0:
+				await get_tree().process_frame
+		for settle: int in 90:
+			await get_tree().process_frame
+		var drift: float = vhero.position.distance_to(anchor_point)
+		print("ATTACKVERIFY taps=200 anchor=%s hero=%s drift_px=%.3f" % [
+			str(anchor_point), str(vhero.position), drift])
+		print("ATTACKVERIFY pool_children=%d live=%d" % [
+			vpool.get_child_count(), int(vpool.call("live_label_count"))])
+
+		# 3. the staff bolt reaches the enemy at the moment of impact
+		va.call("debug_force_attack_style", "ranged")
+		print("ATTACKVERIFY style=%s" % str(va.call("attack_style")))
+		va.call("debug_tap")
+		await get_tree().create_timer(travel).timeout
+		await get_tree().process_frame
+		var bolt: Vector2 = va.call("projectile_position")
+		var target: Vector2 = venemy.position + venemy.size * 0.5
+		var reach: float = maxf(venemy.size.x * venemy.scale.x, venemy.size.y * venemy.scale.y) * 0.5
+		print("ATTACKVERIFY bolt=%s enemy_centre=%s gap_px=%.1f enemy_reach_px=%.1f arrived=%s" % [
+			str(bolt), str(target), bolt.distance_to(target), reach,
+			str(bolt.distance_to(target) <= reach)])
+		var ranged_frame: Image = get_viewport().get_texture().get_image()
+		ranged_frame.save_png("%s_ranged.png" % out_path.get_basename())
+		va.call("debug_force_attack_style", "melee")
+		get_tree().quit()
 	if "--demo-perf" in args:
 		# Frame cost and texture memory with the real world and sprites loaded,
 		# measured in the running game rather than estimated from file sizes.

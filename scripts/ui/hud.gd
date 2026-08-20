@@ -4,9 +4,21 @@ const SkillSystemLogic = preload("res://scripts/progression/skill_system.gd")
 
 const SAFE_TOP: int = 48
 const SAFE_BOTTOM: int = 24
-const ACTOR_WIDTH_RATIO: float = 0.20
-const ACTOR_HEIGHT_RATIO: float = 0.26
-const FALCON_SCALE: float = 0.60
+## Approved rear-view composition. The axis both actors stand on, where each
+## one's feet sit, and the share of the arena height each encounter class fills.
+## The bands are ranges: a tall narrow silhouette takes the upper value, a wide
+## one the lower, so every shape fits without a per-boss constant.
+const COMBAT_AXIS: float = 0.5
+const HERO_ANCHOR_Y: float = 0.94
+const HERO_HEIGHT_RATIO: float = 0.30
+const ENEMY_ANCHOR_Y: float = 0.52
+const ENEMY_HEIGHT_BAND := Vector2(0.18, 0.25)
+const BOSS_HEIGHT_BAND := Vector2(0.32, 0.42)
+const ENEMY_MAX_WIDTH: float = 0.44
+const BOSS_MAX_WIDTH: float = 0.62
+const FALCON_SCALE: float = 0.46
+var hero_anchor: Vector2 = Vector2.ZERO
+var _debug_layout: bool = OS.get_cmdline_args().has("--debug-layout") or OS.get_cmdline_user_args().has("--debug-layout")
 const SKILL_IDS: Array[String] = [
 	"sand_fury",
 	"falcon_storm",
@@ -347,6 +359,17 @@ func apply_world(world: Dictionary) -> void:
 	combat_background.set_meta("music_ref", current_music_ref)
 
 
+func _texture_aspect(rect: TextureRect, fallback: float) -> float:
+	## Width over height of the art actually loaded, so scaling follows the
+	## sprite's own bounds instead of one number for every creature.
+	if rect == null or rect.texture == null:
+		return fallback
+	var size: Vector2 = rect.texture.get_size()
+	if size.y <= 0.0:
+		return fallback
+	return size.x / size.y
+
+
 func _apply_world_layers(world_id: String) -> void:
 	## Four separate layers, back to front. A world without built art simply has
 	## no textures and falls back to the flat palette colour behind them.
@@ -538,49 +561,68 @@ func _layout_combat() -> void:
 	if area_size.x <= 0.0 or area_size.y <= 0.0:
 		return
 
-	# Actor dimensions are derived only from the live combat rectangle. These
-	# ratios stay below the brief's 22% width and 28% height limits.
-	var actor_size := Vector2(
-		area_size.x * ACTOR_WIDTH_RATIO,
-		area_size.y * ACTOR_HEIGHT_RATIO
-	)
-	# Actors sit in the middle band, not the lower edge. This leaves headroom
-	# above for the boss banner, timer and rising damage numbers, and stops the
-	# large dead area that the first composition pass left at the top.
-	var hero_position := Vector2(
-		area_size.x * 0.10,
-		area_size.y * 0.42
-	)
-	var enemy_position := Vector2(
-		area_size.x * 0.68,
-		area_size.y * 0.34
-	)
-
-	hero.size = actor_size
-	hero.position = hero_position
-	enemy.size = actor_size
-	enemy.position = enemy_position
-
-	var falcon_size := actor_size * FALCON_SCALE
-	falcon.size = falcon_size
-	falcon.position = Vector2(
-		maxf(0.0, hero_position.x - falcon_size.x * 0.45),
-		maxf(0.0, hero_position.y - falcon_size.y * 1.25)
-	)
+	# Approved composition: the camera sits behind the player. The hero stands
+	# at the lower centre, the enemy directly ahead in the upper middle, and
+	# both share one vertical axis so the attack lane runs straight up the
+	# screen. The falcon flies beside the hero, clear of that lane.
+	var axis: float = area_size.x * COMBAT_AXIS
+	var hero_height: float = area_size.y * HERO_HEIGHT_RATIO
+	var hero_size := Vector2(hero_height * _texture_aspect(hero, 0.62), hero_height)
+	hero.size = hero_size
+	hero.position = Vector2(axis - hero_size.x * 0.5, area_size.y * HERO_ANCHOR_Y - hero_size.y)
+	hero_anchor = hero.position
 
 	var arena_node: Node = get_tree().get_first_node_in_group("combat_arena")
+	var is_boss: bool = false
+	if arena_node != null:
+		var state: Object = arena_node.get("combat")
+		if state != null:
+			is_boss = bool(state.get("is_boss"))
+	# Sprite-bound aware: the height band comes from the encounter class, then a
+	# wide or irregular silhouette is pulled back until it fits the safe width,
+	# so a broad boss never spills over the HUD or its own name.
+	var band: Vector2 = BOSS_HEIGHT_BAND if is_boss else ENEMY_HEIGHT_BAND
+	var aspect: float = _texture_aspect(enemy, 1.0)
+	var enemy_height: float = area_size.y * lerpf(band.x, band.y, clampf((1.3 - aspect) / 1.1, 0.0, 1.0))
+	# The arena scales each creature by its authored size_scale. Dividing it out
+	# here means the band describes what is actually drawn, not the rectangle
+	# before scaling, so every enemy really lands inside its approved range.
+	var creature_scale: float = 1.0
+	if arena_node != null and arena_node.has_method("enemy_size_scale"):
+		creature_scale = clampf(float(arena_node.call("enemy_size_scale")), 0.5, 2.0)
+	enemy_height /= creature_scale
+	var max_width: float = area_size.x * (BOSS_MAX_WIDTH if is_boss else ENEMY_MAX_WIDTH)
+	var enemy_size := Vector2(enemy_height * aspect, enemy_height)
+	if enemy_size.x * creature_scale > max_width:
+		enemy_size = Vector2(max_width / creature_scale, max_width / creature_scale / maxf(0.05, aspect))
+	enemy.size = enemy_size
+	enemy.position = Vector2(axis - enemy_size.x * 0.5, area_size.y * ENEMY_ANCHOR_Y - enemy_size.y)
+
+	var falcon_size := Vector2(hero_size.x * FALCON_SCALE, hero_size.y * FALCON_SCALE)
+	falcon.size = falcon_size
+	# Beside and slightly above the hero, outside the straight line between the
+	# hero and the enemy.
+	# Beside the hero at shoulder height, well clear of the straight line from
+	# the hero up to the enemy.
+	falcon.position = Vector2(
+		clampf(hero.position.x - falcon_size.x * 1.15, 4.0, area_size.x - falcon_size.x - 4.0),
+		clampf(hero.position.y + hero_size.y * 0.06, 4.0, area_size.y - falcon_size.y - 4.0))
+
+	if _debug_layout:
+		print("LAYOUT arena=%s hero=%s@%s enemy=%s@%s enemy_scale=%s boss=%s aspect=%.2f falcon=%s@%s tex=%s vis=%s" % [
+			area_size, hero.size, hero.position, enemy.size, enemy.position, enemy.scale, is_boss, aspect,
+			falcon.size, falcon.position, falcon.texture != null, falcon.visible])
 	if arena_node != null and arena_node.has_method("place_enemy_name"):
 		arena_node.call("place_enemy_name")
 
-	var hp_width := actor_size.x * 1.20
-	var hp_height := maxf(32.0, area_size.y * 0.045)
-	var hp_x := clampf(
-		enemy_position.x + (actor_size.x - hp_width) * 0.5,
-		0.0,
-		area_size.x - hp_width
-	)
-	var hp_y := maxf(30.0, enemy_position.y - hp_height - 34.0)
-	enemy_hp_label.position = Vector2(hp_x, hp_y - 28.0)
-	enemy_hp_label.size = Vector2(hp_width, 26.0)
+	var hp_width: float = minf(area_size.x * 0.72, maxf(enemy_size.x * 1.25, area_size.x * 0.46))
+	var hp_height: float = maxf(30.0, area_size.y * 0.038)
+	var hp_x: float = clampf(axis - hp_width * 0.5, 4.0, area_size.x - hp_width - 4.0)
+	# Below the world title and, in a boss fight, below the banner and countdown
+	# as well: the readout may never sit on top of the timer.
+	var reserved_top: float = area_size.y * (0.16 if is_boss else 0.07)
+	var hp_y: float = maxf(reserved_top, enemy.position.y - hp_height - 40.0)
+	enemy_hp_label.position = Vector2(hp_x, hp_y - 30.0)
+	enemy_hp_label.size = Vector2(hp_width, 28.0)
 	enemy_hp.position = Vector2(hp_x, hp_y)
 	enemy_hp.size = Vector2(hp_width, hp_height)

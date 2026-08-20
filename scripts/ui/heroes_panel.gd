@@ -98,7 +98,7 @@ func _make_hero_card(id: String) -> PanelContainer:
 	else:
 		state = Settings.t("ui.state.available_unaffordable")
 	var card := PanelContainer.new()
-	card.custom_minimum_size = Vector2(0.0, 240.0)
+	card.custom_minimum_size = Vector2(0.0, 210.0)
 	var style := StyleBoxFlat.new()
 	style.bg_color = Color(0.09, 0.08, 0.13, 1.0)
 	style.border_width_left = 3
@@ -117,17 +117,10 @@ func _make_hero_card(id: String) -> PanelContainer:
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 8)
 	margin.add_child(row)
-	var portrait_path: String = "res://assets/sprites/heroes/%s.png" % id
-	if ResourceLoader.exists(portrait_path):
-		var portrait := TextureRect.new()
-		portrait.texture = load(portrait_path) as Texture2D
-		portrait.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
-		portrait.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
-		portrait.custom_minimum_size = Vector2(150.0, 0.0)
-		# A hero the run has not reached yet reads as a dark silhouette, so the
-		# roster still shows who is coming without pretending they are ready.
-		portrait.modulate = Color(1, 1, 1) if unlocked else Color(0.22, 0.2, 0.28)
-		row.add_child(portrait)
+	# Hero Training is not a roster: there is exactly one player hero, and these
+	# are the tracks that hero trains. The character portraits were removed with
+	# the rename; the ids and saved levels are untouched, so an existing run
+	# keeps every level it bought.
 	var details := Label.new()
 	details.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	details.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

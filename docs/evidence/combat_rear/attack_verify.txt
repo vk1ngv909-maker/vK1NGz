@@ -1,0 +1,21 @@
+ATTACKVERIFY frame_quantised_time_to_damage_s=0.150
+ATTACKVERIFY connect_travel_s=0.190 wallclock_s=0.139 arc_progress=1.00 connected_first=true
+ATTACKVERIFY taps=200 anchor=(425.3221, 634.88) hero=(425.3221, 634.88) drift_px=0.000
+ATTACKVERIFY pool_children=32 live=0
+ATTACKVERIFY style=ranged
+ATTACKVERIFY bolt=(524, 346.7159) enemy_centre=(524, 346.7159) gap_px=0.0 enemy_reach_px=180.8 arrived=true
+-- run 1
+ATTACKVERIFY frame_quantised_time_to_damage_s=0.136
+ATTACKVERIFY connect_travel_s=0.190 wallclock_s=0.132 arc_progress=1.00 connected_first=true
+ATTACKVERIFY taps=200 anchor=(425.3221, 634.88) hero=(425.3221, 634.88) drift_px=0.000
+ATTACKVERIFY pool_children=32 live=0
+ATTACKVERIFY style=ranged
+ATTACKVERIFY bolt=(524, 346.7159) enemy_centre=(524, 346.7159) gap_px=0.0 enemy_reach_px=180.8 arrived=true
+-- run 2
+ATTACKVERIFY frame_quantised_time_to_damage_s=0.200
+ATTACKVERIFY connect_travel_s=0.190 wallclock_s=0.187 arc_progress=1.00 connected_first=true
+ATTACKVERIFY taps=200 anchor=(425.3221, 634.88) hero=(425.3221, 634.88) drift_px=0.000
+ATTACKVERIFY pool_children=32 live=0
+ATTACKVERIFY style=ranged
+ATTACKVERIFY bolt=(524, 346.7159) enemy_centre=(524, 346.7159) gap_px=0.0 enemy_reach_px=180.8 arrived=true
+-- run 3

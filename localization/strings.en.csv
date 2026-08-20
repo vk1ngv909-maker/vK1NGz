@@ -91,7 +91,7 @@ hud.cooldown,COOLDOWN
 hud.seconds_short,%s s
 hud.seconds_decimal,%s s
 hud.battle,Battle
-hud.heroes,Heroes
+hud.heroes,Hero
 hud.skills,Skills
 hud.inventory,Inventory
 hud.relics,Relics
@@ -176,22 +176,22 @@ boss.gilded_manticore.name,Gilded Manticore
 boss.sun_priest.name,Sun Priest
 boss.phoenix_regent.name,Phoenix Regent
 boss.sun_king.name,The Sun King
-hero.dune_scout,Meadow Archer
-hero.falconer,Spirit Tamer
-hero.oasis_guard,Grove Knight
-hero.scarab_knight,Royal Guardian
-hero.mirage_weaver,Wind Dancer
-hero.djinn_binder,Rune Scholar
-hero.sun_priestess,Sun Cleric
-hero.star_vizier,Moon Bard
-hero.dune_scout.desc,A keen-eyed archer whose signals strengthen every ally.
-hero.oasis_guard.desc,A steadfast blade who turns close combat into stronger taps.
-hero.sun_priestess.desc,A radiant guide who improves gold and lasting skill power.
-hero.falconer.desc,A precision hunter who raises the company critical chance.
-hero.scarab_knight.desc,A heavy striker who reinforces direct attacks.
-hero.mirage_weaver.desc,A spellcaster whose spinning blades amplify the whole roster.
-hero.djinn_binder.desc,A master of magic who empowers allies and shortens recovery.
-hero.star_vizier.desc,A celestial adviser who bends skill time and fortune.
+hero.dune_scout,Marksmanship Drills
+hero.falconer,Falconry Training
+hero.oasis_guard,Blade Drills
+hero.scarab_knight,Heavy Strikes
+hero.mirage_weaver,Wind Footwork
+hero.djinn_binder,Rune Study
+hero.sun_priestess,Fortune Study
+hero.star_vizier,Moonlit Focus
+hero.dune_scout.desc,Steadier aim on every shot; raises critical chance.
+hero.oasis_guard.desc,Repetition on the training post turns close combat into stronger taps.
+hero.sun_priestess.desc,Reading the ledgers improves gold and lasting skill power.
+hero.falconer.desc,Time spent with the falcon raises the hero critical chance.
+hero.scarab_knight.desc,Weighted practice that reinforces direct attacks.
+hero.mirage_weaver.desc,Faster footing that amplifies everything the hero does.
+hero.djinn_binder.desc,Study of old runes empowers attacks and shortens recovery.
+hero.star_vizier.desc,Night practice bends skill time and fortune.
 skill.sand_fury.desc,A burst of force behind every tap.
 skill.sand_fury.effect,Tap damage x3
 skill.falcon_storm.desc,The falcon dives more often while the storm lasts.
@@ -204,7 +204,7 @@ skill.ancestor_call.desc,Ancestors empower support-hero attacks.
 skill.ancestor_call.effect,Support hero DPS x3
 skill.critical_eclipse.desc,Critical strikes become likelier and more powerful.
 skill.critical_eclipse.effect,Crit chance +40% — cap 95% — crit damage x2
-ui.heroes.title,SUPPORT HEROES
+ui.heroes.title,Hero Training
 ui.heroes.buy_quantity,BUY QUANTITY
 ui.heroes.current_dps,Current DPS
 ui.heroes.next_gain,Next-level gain
@@ -312,3 +312,4 @@ boss.visual.magma_horn_beast.name,Magma Horn Beast
 boss.visual.purple_fortress_boss.name,Fortress Warden
 boss.visual.clockwork_crown_king.name,Clockwork Crown King
 boss.visual.cosmic_star_knight.name,Obsidian Star Knight
+hud.critical,CRITICAL!

@@ -249,6 +249,14 @@ layout_mode = 0
 value = 72.0
 show_percentage = false
 
+[node name="Slash" type="TextureRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 0
+expand_mode = 1
+stretch_mode = 5
+pivot_offset = Vector2(64, 64)
+
 [node name="Enemy" type="TextureRect" parent="Zones/MiddleZone/CombatMargin/CombatArea"]
 unique_name_in_owner = true
 layout_mode = 0

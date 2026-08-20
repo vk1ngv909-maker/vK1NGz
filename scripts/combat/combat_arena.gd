@@ -45,6 +45,16 @@ var _debug_boss_id: String = ""
 ## Utility relics raise offline earnings. Read by the offline dialog so the
 ## bonus is applied where the reward is actually computed.
 var _relic_offline_multiplier: float = 1.0
+## Sword timing. The number and the enemy's reaction are held until wind-up plus
+## travel have elapsed, so damage is never shown before the blade connects.
+const SWORD_WINDUP: float = 0.06
+const SWORD_TRAVEL: float = 0.13
+const SLASH_HOLD: float = 0.07
+const SWORD_RECOVER: float = 0.16
+var _hero_tween: Tween
+var _slash_tween: Tween
+@onready var slash: TextureRect = %Slash
+var _forced_attack_style: String = ""
 
 
 func _ready() -> void:
@@ -54,7 +64,8 @@ func _ready() -> void:
 	_load_combat()
 	_apply_saved_accessibility()
 	_enemy_tint = enemy.modulate
-	hero.texture = _sprite("res://assets/sprites/hero/main_hero.png")
+	# Rear view: the approved composition puts the camera behind the player.
+	hero.texture = _sprite("res://assets/sprites/hero/main_hero_rear.png")
 	falcon.texture = _sprite("res://assets/sprites/hero/falcon.png")
 	tap_upgrade_button.pressed.connect(_on_buy_tap_upgrade)
 	retry_button.pressed.connect(_on_retry_boss)
@@ -104,6 +115,15 @@ func debug_tap() -> void:
 	## Test-only hook so automated capture can drive real taps through the same
 	## path as a player touch, giving genuine in-motion visual evidence.
 	_handle_player_tap_result(combat.tap())
+
+
+func debug_force_attack_style(style: String) -> void:
+	## Test-only: no staff exists in the shipped weapon list yet, so the ranged
+	## path is exercised by declaring the style directly. Release builds cannot
+	## reach it, exactly like every other debug hook.
+	if not OS.is_debug_build():
+		return
+	_forced_attack_style = style if style in ["melee", "ranged"] else ""
 
 
 func debug_flash(reduced: bool) -> void:
@@ -385,7 +405,17 @@ func _handle_player_tap_result(result: Dictionary) -> void:
 		EventBus.tutorial_action.emit("boss_intro")
 	EventBus.tutorial_action.emit("tap_enemy")
 	Settings.vibrate()
-	_react_to_attack(result)
+	# The blade has to arrive before anything reacts: the number, the flash and
+	# the recoil all wait for wind-up plus travel, so a player never sees damage
+	# before the sword reaches the enemy.
+	_play_hero_attack(bool(result.get("kind", "") == "critical"))
+	_present_after_impact(result)
+
+
+func _present_after_impact(result: Dictionary) -> void:
+	await get_tree().create_timer(attack_travel_seconds()).timeout
+	if is_inside_tree():
+		_react_to_attack(result)
 
 
 func _react_to_attack(result: Dictionary) -> void:
@@ -395,6 +425,7 @@ func _react_to_attack(result: Dictionary) -> void:
 		return
 	var damage: BigNumber = result["damage"] as BigNumber
 	var kind: String = result["kind"] as String
+	_sync_damage_lanes()
 	if _damage_numbers_enabled:
 		damage_pool.show_damage(damage, kind, enemy.position + enemy.size * 0.5)
 	_refresh_hp()
@@ -421,6 +452,155 @@ func _react_to_attack(result: Dictionary) -> void:
 				EventBus.stage_changed.emit(combat.stage)
 				_apply_world_for_stage(combat.stage)
 		_play_death_reaction()
+
+
+func _sync_damage_lanes() -> void:
+	## The pool places numbers around the enemy's live rectangle and keeps them
+	## off the readouts a player needs mid-fight, so both are handed to it here
+	## rather than baked in as screen coordinates.
+	if not is_instance_valid(damage_pool) or not is_instance_valid(enemy):
+		return
+	var scaled := Rect2(
+		enemy.position + enemy.size * 0.5 - enemy.size * enemy.scale * 0.5,
+		enemy.size * enemy.scale)
+	damage_pool.enemy_rect = scaled
+	var blocked: Array[Rect2] = []
+	for node: Control in [enemy_hp_label, enemy_hp_bar, boss_warning, boss_countdown]:
+		if is_instance_valid(node) and node.visible:
+			blocked.append(Rect2(node.position, node.size))
+	var name_label: Label = enemy.get_node_or_null("Placeholder") as Label
+	if name_label != null:
+		# The plate is a child of a rectangle scaled about its own centre, so its
+		# screen rect is not position + offset: run it through the same pivot
+		# transform or the number lands on the name it was meant to avoid.
+		var pivot: Vector2 = enemy.size * 0.5
+		var top_left: Vector2 = enemy.position + pivot + (name_label.position - pivot) * enemy.scale
+		var drawn: Vector2 = name_label.size * name_label.scale * enemy.scale
+		blocked.append(Rect2(top_left, drawn).grow(6.0))
+	if is_instance_valid(hero):
+		blocked.append(Rect2(hero.position, hero.size))
+	damage_pool.exclusions = blocked
+	damage_pool.reduced_motion = _reduced_flashing
+
+
+func attack_travel_seconds() -> float:
+	## How long the sword takes to reach the enemy. The number and the enemy's
+	## reaction wait for this, so damage is never seen before the blade lands.
+	return SWORD_WINDUP + SWORD_TRAVEL
+
+
+func attack_style() -> String:
+	## Melee unless the equipped weapon declares otherwise. The field is optional
+	## metadata on the weapon definition, so every existing item keeps its exact
+	## stats and id and simply keeps the default.
+	if not _forced_attack_style.is_empty() and OS.is_debug_build():
+		return _forced_attack_style
+	if combat == null or combat.inventory == null:
+		return "melee"
+	var uid: String = str(combat.inventory.equipped_slots.get("weapon", ""))
+	if uid.is_empty():
+		return "melee"
+	var owned: Dictionary = combat.inventory.owned_items.get(uid, {})
+	var definition: Dictionary = combat.inventory.definitions.get(str(owned.get("item_id", "")), {})
+	var style: String = str(definition.get("attack_style", "melee"))
+	return style if style in ["melee", "ranged"] else "melee"
+
+
+func _play_projectile(critical: bool) -> void:
+	## A staff does not reach the enemy, so the bolt has to. It leaves the hero,
+	## crosses the lane and arrives exactly when the damage is presented, which
+	## is the same instant the blade would have landed.
+	if not is_instance_valid(slash) or not is_instance_valid(enemy) or not is_instance_valid(hero):
+		return
+	var from: Vector2 = hero.position + hero.size * Vector2(0.5, 0.2)
+	var to: Vector2 = enemy.position + enemy.size * 0.5 + enemy.size * enemy.scale * Vector2(0.0, 0.1)
+	var bolt: float = maxf(84.0, enemy.size.x * enemy.scale.x * (0.52 if critical else 0.42))
+	slash.size = Vector2(bolt, bolt)
+	slash.position = from - slash.size * 0.5
+	slash.rotation = (to - from).angle() + PI * 0.5
+	slash.texture = _sprite("res://assets/sprites/ui/magic_bolt.webp")
+	slash.z_index = 15
+	slash.modulate = Color(0.72, 0.9, 1.0, 1.0) if not critical else Color(1.0, 0.72, 0.95, 1.0)
+	slash.visible = true
+	if _slash_tween != null and _slash_tween.is_running():
+		_slash_tween.kill()
+	_slash_tween = create_tween()
+	_slash_tween.tween_property(slash, "position", to - slash.size * 0.5, attack_travel_seconds()).set_trans(Tween.TRANS_LINEAR)
+	_slash_tween.tween_property(slash, "modulate:a", 0.0, 0.12)
+	_slash_tween.tween_callback(func() -> void: slash.visible = false)
+
+
+func projectile_position() -> Vector2:
+	## Exposed so a test can watch the bolt actually arrive rather than trust
+	## that a tween was created.
+	return slash.position + slash.size * 0.5 if is_instance_valid(slash) else Vector2.ZERO
+
+
+func _play_hero_attack(critical: bool) -> void:
+	## Wind up, lunge along the combat axis, land, return to the exact anchor.
+	## The anchor is stored by the layout, not by whatever position the hero
+	## happens to be in, so repeated attacks cannot make the hero drift.
+	if not is_instance_valid(hero) or not is_instance_valid(enemy):
+		return
+	if _hero_tween != null and _hero_tween.is_running():
+		_hero_tween.kill()
+		hero.position = _hero_rest()
+	var rest: Vector2 = _hero_rest()
+	var ranged: bool = attack_style() == "ranged"
+	# A caster plants and leans back into the cast; only a blade closes distance.
+	var toward: Vector2 = rest + Vector2(0.0, hero.size.y * 0.06) if ranged else \
+		rest + (enemy.position + enemy.size * 0.5 - (rest + hero.size * 0.5)) * (0.20 if critical else 0.14)
+	_hero_tween = create_tween()
+	_hero_tween.tween_property(hero, "position", rest + Vector2(0.0, hero.size.y * 0.05), SWORD_WINDUP).set_trans(Tween.TRANS_SINE)
+	_hero_tween.tween_property(hero, "position", toward, SWORD_TRAVEL).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_hero_tween.tween_property(hero, "position", rest, SWORD_RECOVER).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_hero_tween.tween_callback(func() -> void: hero.position = _hero_rest())
+	if ranged:
+		_play_projectile(critical)
+	else:
+		_play_slash(critical)
+
+
+
+func _hero_rest() -> Vector2:
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	if hud != null:
+		var anchor: Vector2 = hud.get("hero_anchor")
+		if anchor != Vector2.ZERO:
+			return anchor
+	return hero.position
+
+
+func _play_slash(critical: bool) -> void:
+	## The slash arc is drawn between the hero and the enemy and reaches the
+	## enemy's body, so the hit visibly connects instead of being implied.
+	if not is_instance_valid(slash):
+		return
+	var from: Vector2 = hero.position + hero.size * Vector2(0.5, 0.25)
+	var to: Vector2 = enemy.position + enemy.size * enemy.scale * 0.5
+	# Capped against the arena as well as the enemy: an arc scaled straight off a
+	# boss silhouette becomes a ring the size of the screen.
+	var arc_cap: float = size.x * 0.5 if size.x > 1.0 else 520.0
+	slash.size = Vector2(clampf(enemy.size.x * enemy.scale.x * (1.5 if critical else 1.2), 150.0, arc_cap), 0.0)
+	slash.size.y = slash.size.x * 0.55
+	slash.position = from - slash.size * 0.5
+	slash.rotation = (to - from).angle() + PI * 0.5
+	slash.texture = _sprite("res://assets/sprites/ui/slash_arc.webp")
+	# Above the enemy and its name plate: the arc has to cross the lane those
+	# occupy, and a hit hidden behind a label is a hit the player never saw.
+	slash.z_index = 15
+	slash.modulate = Color(1.0, 0.92, 0.66, 0.0) if not critical else Color(1.0, 0.66, 0.34, 0.0)
+	slash.visible = true
+	if _slash_tween != null and _slash_tween.is_running():
+		_slash_tween.kill()
+	_slash_tween = create_tween()
+	_slash_tween.tween_property(slash, "position", to - slash.size * 0.5, SWORD_WINDUP + SWORD_TRAVEL).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_slash_tween.parallel().tween_property(slash, "modulate:a", 1.0, SWORD_WINDUP)
+	# Held on the enemy for a beat before it fades, so the connection is a frame
+	# a player can actually see rather than one only a capture can catch.
+	_slash_tween.tween_interval(SLASH_HOLD)
+	_slash_tween.tween_property(slash, "modulate:a", 0.0, SWORD_RECOVER)
+	_slash_tween.tween_callback(func() -> void: slash.visible = false)
 
 
 func _play_falcon_strike() -> void:
@@ -742,9 +922,30 @@ func place_enemy_name() -> void:
 		return
 	placeholder.scale = Vector2(1.0 / maxf(0.01, enemy.scale.x), 1.0 / maxf(0.01, enemy.scale.y))
 	placeholder.size = Vector2(enemy.size.x * enemy.scale.x, 30.0)
-	placeholder.position = Vector2(
-		(enemy.size.x - placeholder.size.x) * 0.5,
-		enemy.size.y * 0.5 + enemy.size.y * 0.5 / maxf(0.01, enemy.scale.y) + 6.0)
+	# The label lives inside a rectangle scaled about its centre, so a local y of
+	# size.y is what lands on the drawn bottom edge whatever the scale is. The
+	# gap is divided by the scale so it stays the same number of screen pixels.
+	var scale_y: float = maxf(0.01, enemy.scale.y)
+	var below: float = enemy.size.y + 8.0 / scale_y
+	# The name sits under the creature unless that would land it on the hero, in
+	# which case it goes above instead. A large boss reaches down toward the
+	# player, and the label must never cover either of them.
+	var hud_node: Node = get_tree().get_first_node_in_group("hud")
+	var hero_top: float = INF
+	if hud_node != null and is_instance_valid(hero):
+		hero_top = hero.position.y
+	var plate_screen_y: float = enemy.position.y + enemy.size.y * 0.5 + (below - enemy.size.y * 0.5) * scale_y
+	if plate_screen_y + 34.0 > hero_top:
+		below = -(placeholder.size.y + 8.0) / scale_y
+	placeholder.position = Vector2((enemy.size.x - placeholder.size.x) * 0.5, below)
+
+
+func enemy_size_scale() -> float:
+	## The authored per-creature scale the arena applies, so the layout can size
+	## the rectangle such that the drawn result lands in its approved band.
+	if combat == null or combat.current_enemy.is_empty():
+		return 1.0
+	return clampf(float(combat.current_enemy.get("size_scale", 1.0)), 0.8, 1.25)
 
 
 func _sprite(path: String) -> Texture2D:

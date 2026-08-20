@@ -16,23 +16,24 @@ from it by `tools/clean_assets.py` into `assets/sprites/`, and world layers by
 `tools/build_world_layers.py` into `assets/worlds/`. The folder carries a
 `.gdignore` so Godot never imports the concept crops.
 
-## Production assets: 53 sprites + 4 world layers
+## Production assets: 56 sprites + 12 world layers
 
 | Item | Count | Source | Built by | Status |
 | --- | --- | --- | --- | --- |
 | Main hero, falcon companion | 2 | approved package | `clean_assets.py` | CONCEPT_SOURCED |
-| Support hero portraits | 8 | approved package | `clean_assets.py` | CONCEPT_SOURCED |
+| Support hero portraits (retained, no longer displayed) | 8 | approved package | `clean_assets.py` | CONCEPT_SOURCED, UNUSED |
 | Regular enemies | 12 | approved package | `clean_assets.py` | CONCEPT_SOURCED |
 | Boss archetypes | 4 | approved package | `clean_assets.py` | CONCEPT_SOURCED |
 | Equipment icons, weapon and aura slots | 8 | approved package | `clean_assets.py` + `make_equipment_icons.py` | CONCEPT_SOURCED |
 | Equipment icons, head / outfit / companion_charm slots | 12 | drawn from scratch for this project | `make_equipment_icons.py` | ORIGINAL |
 | Gold coin and six skill icons | 7 | drawn from scratch for this project | `make_ui_icons.py` | ORIGINAL |
-| Emerald Meadow parallax layers (sky, distant, arena, foreground) | 4 | approved package | `build_world_layers.py` | CONCEPT_SOURCED |
+| Rear-view main hero | 1 | drawn from scratch for this project | `make_hero_rear.py` | ORIGINAL |
+| Sword slash arc, staff magic bolt | 2 | drawn from scratch for this project | `make_slash_arc.py`, `make_magic_bolt.py` | ORIGINAL |
+| Parallax layers for three worlds (sky, distant, arena, foreground each) | 12 | approved package | `build_world_layers.py` | CONCEPT_SOURCED |
 
 `CONCEPT_SOURCED` means: cleaned from an approved concept reference, in use as
 production art, and not yet redrawn as bespoke final art. `ORIGINAL` means drawn
-for this project by `tools/make_equipment_icons.py`, which is checked in and
-reproducible. All twenty equipment icons are 256x256 lossless WebP with a
+for this project by a checked-in, reproducible script under `tools/`. All twenty equipment icons are 256x256 lossless WebP with a
 transparent background, a 12% safe margin, and a rarity frame plus a badge of
 one to four pips so rarity survives without relying on colour.
 `tests/unit/test_sprite_background.gd` fails the build if any sprite still
@@ -43,11 +44,10 @@ carries the reference sheet's background, and the content validator refuses a
 
 | Item | Count | Why it is still a placeholder |
 | --- | --- | --- |
-| Moonlit Wildwood and Obsidian Citadel backgrounds | 2 worlds | Layer rebuild deferred until the first world is approved; they render their flat palette colour |
 | Music and SFX | all | `placeholder://` references only, no audio files |
-| Hero and enemy animation frames | all | Single static sprite per subject; the package's animation plans are not built |
+| Hero and enemy animation frames | all | Single static sprite per subject; motion is tweened (lunge, slash arc, recoil) rather than frame-animated |
 
-Placeholder count: **3 categories, 0 placeholder image files** — the remaining
+Placeholder count: **2 categories, 0 placeholder image files** — the remaining
 placeholders are drawn in-engine or are data-only references.
 
 No placeholder above may be presented as production art, and no placeholder

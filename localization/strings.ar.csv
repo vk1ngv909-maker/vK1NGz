@@ -91,7 +91,7 @@ hud.cooldown,إعادة شحن
 hud.seconds_short,%s ث
 hud.seconds_decimal,%s ث
 hud.battle,المعركة
-hud.heroes,الأبطال
+hud.heroes,البطل
 hud.skills,المهارات
 hud.inventory,المخزون
 hud.relics,الآثار
@@ -176,22 +176,22 @@ boss.gilded_manticore.name,المانتيكور المذهب
 boss.sun_priest.name,كاهن الشمس
 boss.phoenix_regent.name,وصي العنقاء
 boss.sun_king.name,ملك الشمس
-hero.dune_scout,رامية المرج
-hero.falconer,مروّضة الأرواح
-hero.oasis_guard,فارس البستان
-hero.scarab_knight,الحارس الملكي
-hero.mirage_weaver,راقصة الريح
-hero.djinn_binder,عالم الرقيم
-hero.sun_priestess,كاهنة الشمس
-hero.star_vizier,شاعر القمر
-hero.dune_scout.desc,رامية حادة النظر تقوّي إشاراتها كل الرفاق.
-hero.oasis_guard.desc,نصل ثابت يحوّل القتال القريب إلى نقرات أقوى.
-hero.sun_priestess.desc,مرشدة مشعّة ترفع الذهب وقوة المهارات.
-hero.falconer.desc,صيّادة دقيقة ترفع فرصة الضربة الحاسمة للجميع.
-hero.scarab_knight.desc,ضارب ثقيل يعزّز الهجمات المباشرة.
-hero.mirage_weaver.desc,ساحرة نصالها الدوّارة تضاعف قوة الفريق كله.
-hero.djinn_binder.desc,أستاذ سحر يقوّي الرفاق ويقصّر الانتظار.
-hero.star_vizier.desc,مستشار سماوي يطوّع وقت المهارات والحظ.
+hero.dune_scout,تدريب الرماية
+hero.falconer,تدريب البيزرة
+hero.oasis_guard,تدريب النصل
+hero.scarab_knight,الضربات الثقيلة
+hero.mirage_weaver,خطوات الريح
+hero.djinn_binder,دراسة الرقيم
+hero.sun_priestess,دراسة الثروة
+hero.star_vizier,التركيز المقمر
+hero.dune_scout.desc,تصويب أثبت في كل ضربة؛ يرفع فرصة الضربة الحاسمة.
+hero.oasis_guard.desc,التكرار على عمود التدريب يحوّل القتال القريب إلى نقرات أقوى.
+hero.sun_priestess.desc,قراءة السجلات ترفع الذهب وقوة المهارات.
+hero.falconer.desc,الوقت مع الصقر يرفع فرصة الضربة الحاسمة للبطل.
+hero.scarab_knight.desc,تمرين مثقل يعزّز الهجمات المباشرة.
+hero.mirage_weaver.desc,خطوات أسرع تضاعف كل ما يفعله البطل.
+hero.djinn_binder.desc,دراسة الرقوم القديمة تقوّي الهجمات وتقصّر الانتظار.
+hero.star_vizier.desc,تمرين ليلي يطوّع وقت المهارات والحظ.
 skill.sand_fury.desc,دفعة قوة خلف كل لمسة.
 skill.sand_fury.effect,ضرر اللمس ×3
 skill.falcon_storm.desc,ينقض الصقر بوتيرة أسرع أثناء العاصفة.
@@ -204,7 +204,7 @@ skill.ancestor_call.desc,يقوي الأسلاف هجمات أبطال الدع�
 skill.ancestor_call.effect,ضرر أبطال الدعم ×3
 skill.critical_eclipse.desc,تصبح الضربات الحرجة أرجح وأقوى.
 skill.critical_eclipse.effect,فرصة حرجة +40٪ — حد 95٪ — ضرر حرج ×2
-ui.heroes.title,أبطال الدعم
+ui.heroes.title,تدريب البطل
 ui.heroes.buy_quantity,كمية الشراء
 ui.heroes.current_dps,الضرر الحالي في الثانية
 ui.heroes.next_gain,زيادة المستوى التالي
@@ -312,3 +312,4 @@ boss.visual.magma_horn_beast.name,وحش القرن الصهاري
 boss.visual.purple_fortress_boss.name,حارس القلعة
 boss.visual.clockwork_crown_king.name,ملك التروس المتوّج
 boss.visual.cosmic_star_knight.name,فارس نجم السبج
+hud.critical,حاسمة!

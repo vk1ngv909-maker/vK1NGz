@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Reject likely player-facing English that bypasses Settings.t().
 # Excluded below: engine-facing diagnostics and the capture-evidence markers
-# (JOURNEY / BOSSWIN / SKILL / FALCONSEQ / FALCONRATE / PERF / WORLDCYCLE), which are printed to
+# (JOURNEY / BOSSWIN / SKILL / FALCONSEQ / FALCONRATE / PERF / WORLDCYCLE / LAYOUT / ATTACKSEQ / ATTACKVERIFY), which are printed to
 # stdout for verification and are never rendered to a player.
 set -uo pipefail
 
@@ -12,7 +12,7 @@ while IFS= read -r finding; do
 	esac
   literal=${finding#*:*:}
   case "$literal" in
-    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'EnemyPool:'*|*'BossPool:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*|*'CombatArena:'*|*'JOURNEY'*|*'BOSSWIN'*|*'SKILL '*|*'SKILL_'*|*'FALCONSEQ'*|*'FALCONRATE'*|*'PERF frames'*|*'WORLDCYCLE'*|*'hits=%d'*)
+    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'EnemyPool:'*|*'BossPool:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*|*'CombatArena:'*|*'JOURNEY'*|*'BOSSWIN'*|*'SKILL '*|*'SKILL_'*|*'FALCONSEQ'*|*'FALCONRATE'*|*'PERF frames'*|*'WORLDCYCLE'*|*'LAYOUT arena'*|*'ATTACKSEQ'*|*'ATTACKVERIFY'*|*'hits=%d'*)
       continue
       ;;
   esac
