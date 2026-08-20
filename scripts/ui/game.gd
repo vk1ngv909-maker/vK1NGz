@@ -173,7 +173,14 @@ func _ready() -> void:
 			travel, float(seen_us) / 1000000.0, progress, str(seen_us >= 0 and progress >= 0.9)])
 
 		# 2. the hero returns to the anchor after rapid tapping
+		# Settle to idle first: the attack pose has its own rectangle, so a
+		# baseline sampled mid-swing measures the pose change, not drift.
+		vhud.call("set_hero_pose", "idle")
+		for settle_first: int in 40:
+			await get_tree().process_frame
 		var anchor_point: Vector2 = vhud.get("hero_anchor")
+		var idle_entry: Dictionary = vhud.call("hero_metrics", "idle")
+		var anchor_foot: Vector2 = anchor_point + HeroPlacement.body_offset(vhero.size.y, idle_entry)
 		for tap: int in 200:
 			va.call("debug_tap")
 			if tap % 8 == 0:
@@ -181,8 +188,25 @@ func _ready() -> void:
 		for settle: int in 90:
 			await get_tree().process_frame
 		var drift: float = vhero.position.distance_to(anchor_point)
-		print("ATTACKVERIFY taps=200 anchor=%s hero=%s drift_px=%.3f" % [
-			str(anchor_point), str(vhero.position), drift])
+		var settled_foot: Vector2 = vhero.position + HeroPlacement.body_offset(vhero.size.y, vhud.call("hero_metrics"))
+		print("ATTACKVERIFY taps=200 anchor=%s hero=%s drift_px=%.3f foot_drift_px=%.3f pose=%s" % [
+			str(anchor_point), str(vhero.position), drift,
+			anchor_foot.distance_to(settled_foot), str(va.call("hero_pose"))])
+		# The two poses fill their canvas differently, so the check that matters
+		# is not the rectangle's corner but where the visible feet land.
+		var feet: Dictionary = {}
+		for pose: String in ["idle", "attack"]:
+			vhud.call("set_hero_pose", pose)
+			await get_tree().process_frame
+			var entry: Dictionary = vhud.call("hero_metrics", pose)
+			var offset: Vector2 = HeroPlacement.body_offset(vhero.size.y, entry)
+			feet[pose] = vhero.position + offset
+			print("ATTACKVERIFY pose=%s rect=%s pos=%s foot=%s texture=%s" % [
+				pose, str(vhero.size), str(vhero.position), str(feet[pose]),
+				str(vhero.texture.resource_path if vhero.texture != null else "<none>")])
+		vhud.call("set_hero_pose", "idle")
+		await get_tree().process_frame
+		print("ATTACKVERIFY foot_gap_px=%.3f" % (feet["idle"] as Vector2).distance_to(feet["attack"]))
 		print("ATTACKVERIFY pool_children=%d live=%d" % [
 			vpool.get_child_count(), int(vpool.call("live_label_count"))])
 

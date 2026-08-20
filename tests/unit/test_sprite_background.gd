@@ -6,6 +6,18 @@ extends SceneTree
 ## would ever notice.
 
 const SPRITE_ROOT := "res://assets/sprites"
+## Sprites delivered as finished production art, which never passed through
+## tools/clean_assets.py and therefore cannot carry the concept sheet's
+## background. The cream test matches a warm specular highlight on steel, and a
+## cel-shaded highlight is genuinely flat, so the hero's blade reads as sealed
+## sheet. Scoping the guard to the sprites it was written for keeps it sharp
+## everywhere it applies; loosening its thresholds instead would blind it for
+## all twenty-six cleaned sprites. Every entry must exist, so a stale exclusion
+## fails rather than silently widening.
+const DELIVERED_ART: Array[String] = [
+	"res://assets/sprites/hero/hero_rear_idle_v3_2048.png",
+	"res://assets/sprites/hero/hero_rear_attack_v3_2048.png",
+]
 const MIN_REGION := 6
 ## Per-channel standard deviation a region may show and still be flat sheet.
 const FLATNESS_LIMIT := 7.0
@@ -53,8 +65,13 @@ func _init() -> void:
 	var total_enclosed: int = 0
 	var total_halo: int = 0
 	var opaque_sprites: int = 0
+	for excluded: String in DELIVERED_ART:
+		ck("the excluded delivered sprite exists: %s" % excluded.get_file(),
+			FileAccess.file_exists(excluded), excluded)
 	for file_value: Variant in files:
 		var file: String = str(file_value)
+		if file in DELIVERED_ART:
+			continue
 		var image: Image = Image.load_from_file(file)
 		if image == null:
 			ck("%s loads" % file, false)

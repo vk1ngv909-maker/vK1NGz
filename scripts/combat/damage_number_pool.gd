@@ -81,7 +81,16 @@ func lane_position(lane: String, half_size: Vector2 = Vector2(90.0, 30.0)) -> Ve
 	## the arena and away from the HUD rectangles it must never cover.
 	var rect: Rect2 = enemy_rect if enemy_rect.size.x > 1.0 else Rect2(size * 0.5, Vector2(120, 120))
 	var offset: Vector2 = LANE_OFFSETS.get(lane, Vector2.ZERO)
-	var point: Vector2 = rect.position + rect.size * 0.5 + rect.size * offset
+	var centre: Vector2 = rect.position + rect.size * 0.5
+	var point: Vector2 = centre + rect.size * offset
+	# A side lane is a fraction of the enemy's own width, which is not enough
+	# clearance for a small enemy and a wide critical: the number ends up across
+	# the creature. Push it out until its inner edge clears the body.
+	if not is_equal_approx(offset.x, 0.0):
+		var direction: float = signf(offset.x)
+		var clearance: float = rect.size.x * 0.5 + half_size.x * 0.62
+		if absf(point.x - centre.x) < clearance:
+			point.x = centre.x + direction * clearance
 	var half: Vector2 = half_size
 	point.x = clampf(point.x, half.x + 6.0, maxf(half.x + 6.0, size.x - half.x - 6.0))
 	point.y = clampf(point.y, half.y + 6.0, maxf(half.y + 6.0, size.y - half.y - 6.0))

@@ -47,10 +47,13 @@ var _debug_boss_id: String = ""
 var _relic_offline_multiplier: float = 1.0
 ## Sword timing. The number and the enemy's reaction are held until wind-up plus
 ## travel have elapsed, so damage is never shown before the blade connects.
-const SWORD_WINDUP: float = 0.06
-const SWORD_TRAVEL: float = 0.13
-const SLASH_HOLD: float = 0.07
-const SWORD_RECOVER: float = 0.16
+const HERO_IDLE: String = "res://assets/sprites/hero/hero_rear_idle_v3_2048.png"
+const HERO_ATTACK: String = "res://assets/sprites/hero/hero_rear_attack_v3_2048.png"
+
+const SWORD_WINDUP: float = 0.05
+const SWORD_TRAVEL: float = 0.10
+const SLASH_HOLD: float = 0.05
+const SWORD_RECOVER: float = 0.11
 var _hero_tween: Tween
 var _slash_tween: Tween
 @onready var slash: TextureRect = %Slash
@@ -65,7 +68,10 @@ func _ready() -> void:
 	_apply_saved_accessibility()
 	_enemy_tint = enemy.modulate
 	# Rear view: the approved composition puts the camera behind the player.
-	hero.texture = _sprite("res://assets/sprites/hero/main_hero_rear.png")
+	# Two authored poses, not a drawn stand-in. HERO_IDLE is what stands in the
+	# arena; HERO_ATTACK replaces it for the swing and is swapped straight back.
+	hero.texture = _sprite(HERO_IDLE)
+	hero.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS
 	falcon.texture = _sprite("res://assets/sprites/hero/falcon.png")
 	tap_upgrade_button.pressed.connect(_on_buy_tap_upgrade)
 	retry_button.pressed.connect(_on_retry_boss)
@@ -542,24 +548,61 @@ func _play_hero_attack(critical: bool) -> void:
 	## happens to be in, so repeated attacks cannot make the hero drift.
 	if not is_instance_valid(hero) or not is_instance_valid(enemy):
 		return
+	# One swing at a time. A tap arriving mid-swing RESTARTS the swing: the
+	# running tween is killed, the hero is put back on the idle anchor, and the
+	# new swing plays from the top. Nothing queues and nothing stacks, so a
+	# hundred taps a second cannot leave two tweens driving one property.
 	if _hero_tween != null and _hero_tween.is_running():
 		_hero_tween.kill()
-		hero.position = _hero_rest()
+	_set_hero_pose("idle")
+	hero.position = _hero_rest()
 	var rest: Vector2 = _hero_rest()
+	# The attack pose has its own anchor, so the lunge and the recovery both aim
+	# at that one; only the final swap back returns to the idle anchor.
+	var swing_rest: Vector2 = _hero_anchor_for("attack")
 	var ranged: bool = attack_style() == "ranged"
 	# A caster plants and leans back into the cast; only a blade closes distance.
-	var toward: Vector2 = rest + Vector2(0.0, hero.size.y * 0.06) if ranged else \
-		rest + (enemy.position + enemy.size * 0.5 - (rest + hero.size * 0.5)) * (0.20 if critical else 0.14)
+	var toward: Vector2 = swing_rest + Vector2(0.0, hero.size.y * 0.06) if ranged else \
+		swing_rest + (enemy.position + enemy.size * 0.5 - (swing_rest + hero.size * 0.5)) * (0.20 if critical else 0.14)
 	_hero_tween = create_tween()
+	# Wind up in the idle pose, then swap to the attack pose for the lunge. The
+	# swap re-runs the layout, which gives the attack pose its own anchor, so
+	# the lunge is measured from there rather than from the idle rectangle.
 	_hero_tween.tween_property(hero, "position", rest + Vector2(0.0, hero.size.y * 0.05), SWORD_WINDUP).set_trans(Tween.TRANS_SINE)
+	_hero_tween.tween_callback(func() -> void:
+		_set_hero_pose("attack")
+		hero.position = swing_rest)
 	_hero_tween.tween_property(hero, "position", toward, SWORD_TRAVEL).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
-	_hero_tween.tween_property(hero, "position", rest, SWORD_RECOVER).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
-	_hero_tween.tween_callback(func() -> void: hero.position = _hero_rest())
+	_hero_tween.tween_interval(SLASH_HOLD)
+	_hero_tween.tween_property(hero, "position", swing_rest, SWORD_RECOVER).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_IN)
+	_hero_tween.tween_callback(func() -> void:
+		_set_hero_pose("idle")
+		hero.position = _hero_rest())
 	if ranged:
 		_play_projectile(critical)
 	else:
 		_play_slash(critical)
 
+
+
+func _hero_anchor_for(pose: String) -> Vector2:
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("hero_anchor_for"):
+		var anchor: Vector2 = hud.call("hero_anchor_for", pose)
+		if anchor != Vector2.ZERO:
+			return anchor
+	return _hero_rest()
+
+
+func _set_hero_pose(pose: String) -> void:
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	if hud != null and hud.has_method("set_hero_pose"):
+		hud.call("set_hero_pose", pose)
+
+
+func hero_pose() -> String:
+	var hud: Node = get_tree().get_first_node_in_group("hud")
+	return str(hud.call("hero_pose")) if hud != null and hud.has_method("hero_pose") else "idle"
 
 
 func _hero_rest() -> Vector2:

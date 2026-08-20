@@ -1,0 +1,34 @@
+{
+ "schema_version": 1,
+ "alpha_threshold": 16,
+ "sprites": {
+  "idle": {
+   "path": "res://assets/sprites/hero/hero_rear_idle_v3_2048.png",
+   "canvas": [
+    2048,
+    2048
+   ],
+   "bbox": [
+    194,
+    79,
+    1759,
+    1942
+   ],
+   "sha256": "3cdb583f725a00a70d79f168df5d8249f15e80fb9df08b4d567dd49e2cc106d9"
+  },
+  "attack": {
+   "path": "res://assets/sprites/hero/hero_rear_attack_v3_2048.png",
+   "canvas": [
+    2048,
+    2048
+   ],
+   "bbox": [
+    138,
+    82,
+    1816,
+    1971
+   ],
+   "sha256": "b6802b451acf01808448982ee83773b437f68ca0c5afbc065936628e1f249366"
+  }
+ }
+}

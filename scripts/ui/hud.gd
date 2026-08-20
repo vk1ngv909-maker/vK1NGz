@@ -10,7 +10,7 @@ const SAFE_BOTTOM: int = 24
 ## one the lower, so every shape fits without a per-boss constant.
 const COMBAT_AXIS: float = 0.5
 const HERO_ANCHOR_Y: float = 0.94
-const HERO_HEIGHT_RATIO: float = 0.30
+const HERO_HEIGHT_RATIO: float = 0.26
 const ENEMY_ANCHOR_Y: float = 0.52
 const ENEMY_HEIGHT_BAND := Vector2(0.18, 0.25)
 const BOSS_HEIGHT_BAND := Vector2(0.32, 0.42)
@@ -18,6 +18,9 @@ const ENEMY_MAX_WIDTH: float = 0.44
 const BOSS_MAX_WIDTH: float = 0.62
 const FALCON_SCALE: float = 0.46
 var hero_anchor: Vector2 = Vector2.ZERO
+const HERO_METRICS_PATH: String = "res://resources/hero_sprite_metrics.json"
+var _hero_metrics: Dictionary = {}
+var _hero_pose: String = "idle"
 var _debug_layout: bool = OS.get_cmdline_args().has("--debug-layout") or OS.get_cmdline_user_args().has("--debug-layout")
 const SKILL_IDS: Array[String] = [
 	"sand_fury",
@@ -556,6 +559,80 @@ func _on_relics_pressed() -> void:
 		EventBus.tutorial_action.emit("prestige_intro")
 
 
+func hero_metrics(pose: String = "") -> Dictionary:
+	## Alpha bounds for the pose currently on the hero, or for a named pose.
+	## Falls back to the whole canvas so a missing metrics file degrades into a
+	## plain centred sprite rather than a crash.
+	if _hero_metrics.is_empty():
+		_load_hero_metrics()
+	var key: String = pose
+	if key.is_empty():
+		key = "attack" if _hero_pose == "attack" else "idle"
+	return _hero_metrics.get(key, {})
+
+
+func _load_hero_metrics() -> void:
+	var file: FileAccess = FileAccess.open(HERO_METRICS_PATH, FileAccess.READ)
+	if file == null:
+		push_error("hero sprite metrics missing: %s" % HERO_METRICS_PATH)
+		return
+	var json := JSON.new()
+	if json.parse(file.get_as_text()) != OK or not json.data is Dictionary:
+		push_error("hero sprite metrics unreadable: %s" % HERO_METRICS_PATH)
+		file.close()
+		return
+	file.close()
+	_hero_metrics = (json.data as Dictionary).get("sprites", {})
+
+
+func _hero_rect_size(body_height: float, pose: String = "") -> Vector2:
+	var entry: Dictionary = hero_metrics(pose)
+	if entry.is_empty():
+		return Vector2(body_height * _texture_aspect(hero, 0.62), body_height)
+	var side: float = HeroPlacement.rect_side(body_height, entry)
+	return Vector2(side * _texture_aspect(hero, 1.0), side)
+
+
+func hero_anchor_for(pose: String) -> Vector2:
+	## Where a pose WOULD stand, without switching to it. The attack pose fills
+	## its canvas differently from the idle pose, so a swing has to aim at the
+	## attack pose's own anchor or the hero jumps on the frame it swaps.
+	var area_size: Vector2 = combat_area.size
+	if area_size.x <= 0.0 or area_size.y <= 0.0:
+		return hero_anchor
+	var body_height: float = area_size.y * HERO_HEIGHT_RATIO
+	var rect_size: Vector2 = _hero_rect_size(body_height, pose)
+	return _hero_position_for(rect_size, area_size.x * COMBAT_AXIS, area_size.y * HERO_ANCHOR_Y, pose)
+
+
+func _hero_position_for(rect_size: Vector2, axis_x: float, ground_y: float, pose: String = "") -> Vector2:
+	## Place the rectangle so the body's own bottom edge lands on the ground
+	## line and its own horizontal centre lands on the combat axis.
+	var entry: Dictionary = hero_metrics(pose)
+	if entry.is_empty():
+		return Vector2(axis_x - rect_size.x * 0.5, ground_y - rect_size.y)
+	var offset: Vector2 = HeroPlacement.body_offset(rect_size.y, entry)
+	return Vector2(axis_x - offset.x, ground_y - offset.y)
+
+
+func set_hero_pose(pose: String) -> void:
+	## The pose changes the visible body's size and offset inside the same
+	## square, so the layout is redone for it. Called by the arena on every
+	## swing; the anchor it recomputes is the one the hero returns to.
+	var next: String = pose if pose in ["idle", "attack"] else "idle"
+	if next == _hero_pose:
+		return
+	_hero_pose = next
+	var path: String = str(hero_metrics(next).get("path", ""))
+	if not path.is_empty() and ResourceLoader.exists(path):
+		hero.texture = load(path) as Texture2D
+	_layout_combat()
+
+
+func hero_pose() -> String:
+	return _hero_pose
+
+
 func _layout_combat() -> void:
 	var area_size: Vector2 = combat_area.size
 	if area_size.x <= 0.0 or area_size.y <= 0.0:
@@ -566,10 +643,15 @@ func _layout_combat() -> void:
 	# both share one vertical axis so the attack lane runs straight up the
 	# screen. The falcon flies beside the hero, clear of that lane.
 	var axis: float = area_size.x * COMBAT_AXIS
-	var hero_height: float = area_size.y * HERO_HEIGHT_RATIO
-	var hero_size := Vector2(hero_height * _texture_aspect(hero, 0.62), hero_height)
+	# The hero art sits inside transparent padding on a 2048 square, and the two
+	# poses do not fill that square identically. Sizing and placing by the
+	# canvas would let the visible body drift between them, so both are driven
+	# from the baked alpha bounds: the body height is what lands in the band,
+	# and the body's bottom-centre is what lands on the anchor.
+	var body_height: float = area_size.y * HERO_HEIGHT_RATIO
+	var hero_size: Vector2 = _hero_rect_size(body_height)
 	hero.size = hero_size
-	hero.position = Vector2(axis - hero_size.x * 0.5, area_size.y * HERO_ANCHOR_Y - hero_size.y)
+	hero.position = _hero_position_for(hero_size, axis, area_size.y * HERO_ANCHOR_Y)
 	hero_anchor = hero.position
 
 	var arena_node: Node = get_tree().get_first_node_in_group("combat_arena")
