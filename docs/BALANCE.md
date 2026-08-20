@@ -169,3 +169,52 @@ before the first Prestige, and C17's targets stand.
 
 Nothing blocking. Re-measure again when support-hero DPS purchasing is added to
 the simulated policy, since that will change the curve.
+
+
+## Speed relic curve (accepted and rejected candidates)
+
+Speed relics were measured at 0.6 seconds saved per prestige point against 45
+for damage, which is not a choice. The curve was chosen by a deterministic sweep
+(`tests/simulations/sim_speed_sweep.gd`), not by taste:
+
+    falcon_rate = min(relic_speed_rate_max,
+                      1 + relic_speed_rate_gain * bonus / (1 + relic_speed_rate_softcap * bonus))
+
+Targets: 8-12% faster first Prestige at 10 points, 15-22% at 25, 25-35% at 60,
+and weaker than damage and gold at the same investment. Baseline 2018s.
+
+| gain | softcap | max | 10 pts | 25 pts | 60 pts | verdict |
+| --- | --- | --- | --- | --- | --- | --- |
+| 6 | 0.00 / 0.35 / 1.00 | 12 | 1.4-1.6% | 2.6-2.9% | 4.5-5.8% | rejected, far below every target |
+| 12 | 0.00 / 0.35 / 1.00 | 12 | 3.0-3.1% | 4.9-5.5% | 8.4-10.9% | rejected, below every target |
+| 18 | 0.00 / 0.35 / 1.00 | 12 | 4.4-4.7% | 7.0-8.0% | 12.0-15.3% | rejected, below every target |
+| 24 | 0.00 / 0.35 / 1.00 | 12 | 5.3-6.2% | 8.0-10.3% | 12.7-19.5% | rejected, below every target |
+| 30 | 0.00 / 0.35 / 1.00 | 12 | 7.0-7.6% | 11.0-12.6% | 18.3-23.1% | rejected, below 25pt and 60pt targets |
+| 40 | 0.00 | 12 | 9.8% | 15.9% | 24.6% | rejected, 60pt saturates on the rate cap |
+| 40 | 0.35 | 24 | 9.4% | 15.2% | 26.5% | **accepted**, but sits on the low edge of two windows |
+| 40 | 1.00 / 2.00 | 24 | 8.4-9.0% | 12.7-14.1% | 19.4-23.0% | rejected, below 25pt and 60pt targets |
+| 55 | 0.35 | 24 | 12.6% | 19.8% | 33.0% | rejected, 10pt above its window |
+| 55 | 1.00 | 24 | 11.9% | 18.3% | 29.3% | **shipped**, centred in all three windows |
+| 55 | 2.00 | 24 | 11.1% | 16.5% | 24.8% | rejected, 60pt below its window |
+| 70 | 0.35 / 1.00 / 2.00 | 24 | 13.7-15.3% | 20.2-23.9% | 29.6-38.4% | rejected, 10pt above its window |
+| 90 | 0.35 / 1.00 / 2.00 | 24 | 16.8-18.8% | 24.4-28.8% | 34.9-40.2% | rejected, above every window and beats gold at 10 points |
+
+Shipped: `relic_speed_rate_gain = 55.0`, `relic_speed_rate_softcap = 1.0`,
+`relic_speed_rate_max = 24.0`. At 60 points the falcon strikes every 0.10s
+instead of 1.50s, and the cap keeps the interval from ever approaching zero.
+
+Measured sensitivity with the shipped curve, against the 2018s baseline:
+
+| Investment | damage | gold | speed |
+| --- | --- | --- | --- |
+| 10 points | -22.4% | -15.4% | **-11.9%** |
+| 25 points | -37.5% | -28.2% | **-18.3%** |
+| 60 points | -57.0% | -45.6% | **-29.3%** |
+
+Deeper runs at 25 points: to stage 50, damage -36.7%, gold -31.8%,
+speed -18.0%; to stage 60, damage -36.7%, gold -30.5%, speed -17.9%. Speed
+stays useful in the mid and late game and stays the weakest of the three at
+every investment measured.
+
+The zero-relic run is unchanged: the C17 measurement still reports 2077s
+(34.6 min) on every run, inside the 25-45 minute window.

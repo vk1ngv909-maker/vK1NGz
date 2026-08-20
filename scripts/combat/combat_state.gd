@@ -114,16 +114,44 @@ func tap() -> Dictionary:
 	return _apply_damage(damage, kind)
 
 
+static func falcon_rate_from_speed_bonus(bonus: float) -> float:
+	## Speed relics buy falcon tempo on a curve that flattens: each further point
+	## of bonus adds less rate than the one before, and the whole thing is capped
+	## so no amount of investment can drive the strike interval toward zero.
+	var safe: float = maxf(0.0, bonus) if is_finite(bonus) else 0.0
+	var gain: float = float(balance().get("relic_speed_rate_gain", 24.0))
+	var softcap: float = maxf(0.0, float(balance().get("relic_speed_rate_softcap", 0.35)))
+	var maximum: float = maxf(1.0, float(balance().get("relic_speed_rate_max", 12.0)))
+	return minf(maximum, 1.0 + gain * safe / (1.0 + softcap * safe))
+
+
+func falcon_interval() -> float:
+	## Never zero and never negative, whatever multipliers are stacked on it.
+	var rate: float = maxf(0.001, _skill_falcon_rate_mult * _relic_falcon_rate_mult)
+	return maxf(0.01, float(balance()["falcon_interval"]) / rate)
+
+
 func falcon_tick(delta: float) -> Dictionary:
 	if _cannot_attack():
 		return {"ignored": true}
 	_falcon_elapsed += maxf(0.0, delta)
-	var interval: float = float(balance()["falcon_interval"]) / maxf(0.001, _skill_falcon_rate_mult * _relic_falcon_rate_mult)
+	var interval: float = falcon_interval()
 	if _falcon_elapsed < interval:
 		return {"attacked": false}
+	# A fast falcon can owe several strikes in one frame. They are resolved as
+	# one aggregated hit: the arithmetic is identical to firing them one by one,
+	# but the arena plays a single animation and spends a single damage number,
+	# which keeps the pool bounded however high the rate goes. Only the backlog
+	# is bounded, not the rate: a frame that arrives seconds late pays at most a
+	# couple of seconds of strikes instead of an unbounded burst.
+	var cap: int = maxi(1, int(balance().get("falcon_strikes_per_tick_cap", 512)))
+	var catchup: float = maxf(interval, float(balance().get("falcon_catchup_seconds", 2.0)))
+	var strikes: int = clampi(int(floor(minf(_falcon_elapsed, catchup) / interval)), 1, cap)
 	_falcon_elapsed = fmod(_falcon_elapsed, interval)
-	var damage: BigNumber = get_tap_damage().mul_float(float(balance()["falcon_damage_multiplier"]))
-	return _apply_damage(damage, "falcon")
+	var damage: BigNumber = get_tap_damage().mul_float(float(balance()["falcon_damage_multiplier"]) * float(strikes))
+	var result: Dictionary = _apply_damage(damage, "falcon")
+	result["strikes"] = strikes
+	return result
 
 
 func dps_tick(delta: float) -> Dictionary:
@@ -337,12 +365,13 @@ func set_support_hero_levels(saved_levels: Variant) -> void:
 	support_total_dps = support_heroes.total_dps()
 
 
-func set_relic_bonuses(damage_mult: float, gold_mult: float, falcon_rate_mult: float = 1.0) -> void:
-	## Speed relics act on the falcon's strike rate. Without this they were
-	## purchasable with prestige currency and changed nothing at all.
+func set_relic_bonuses(damage_mult: float, gold_mult: float, speed_bonus: float = 0.0) -> void:
+	## Speed relics act on the falcon's strike rate. The raw category bonus is
+	## passed in and converted here, so the curve lives in one place and the
+	## simulation, the tests and the game cannot drift apart.
 	_relic_damage_mult = maxf(0.0, damage_mult) if is_finite(damage_mult) else 1.0
 	_relic_gold_mult = maxf(0.0, gold_mult) if is_finite(gold_mult) else 1.0
-	_relic_falcon_rate_mult = maxf(0.05, falcon_rate_mult) if is_finite(falcon_rate_mult) else 1.0
+	_relic_falcon_rate_mult = falcon_rate_from_speed_bonus(speed_bonus)
 
 
 func set_skill_modifiers(

@@ -537,7 +537,7 @@ func _load_combat() -> void:
 	combat.set_relic_bonuses(
 		1.0 + relics.total_bonus("damage"),
 		1.0 + relics.total_bonus("gold"),
-		1.0 + relics.total_bonus("speed"))
+		relics.total_bonus("speed"))
 	var hud_node: Node = get_tree().get_first_node_in_group("hud")
 	if hud_node != null:
 		var system: Object = hud_node.get("skill_system")

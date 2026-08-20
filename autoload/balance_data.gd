@@ -22,6 +22,11 @@ const SAFE_DEFAULTS: Dictionary = {
 	"equipment_diminishing_k": 1.5,
 	"offline_efficiency": 0.35,
 	"offline_kills_per_second": 0.15,
+	"relic_speed_rate_gain": 55.0,
+	"relic_speed_rate_softcap": 1.0,
+	"relic_speed_rate_max": 24.0,
+	"falcon_strikes_per_tick_cap": 512,
+	"falcon_catchup_seconds": 2.0,
 }
 const REQUIRED_KEYS: Array[String] = [
 	"schema_version",
@@ -43,6 +48,11 @@ const REQUIRED_KEYS: Array[String] = [
 	"equipment_diminishing_k",
 	"offline_efficiency",
 	"offline_kills_per_second",
+	"relic_speed_rate_gain",
+	"relic_speed_rate_softcap",
+	"relic_speed_rate_max",
+	"falcon_strikes_per_tick_cap",
+	"falcon_catchup_seconds",
 ]
 const GROWTH_KEYS: Array[String] = [
 	"enemy_hp_growth",

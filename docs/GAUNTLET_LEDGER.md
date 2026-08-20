@@ -727,6 +727,43 @@ Relic display names were re-themed to match the approved direction
 `Phoenix Ankh` -> `Phoenix Sigil`) with every id untouched. There is still no
 relics panel, so these names are not yet player-visible.
 
+## Speed relic rebalance (shipped)
+
+Speed relics were worth 0.6 seconds per prestige point against 45 for damage.
+The curve was chosen by a deterministic sweep, not by taste:
+
+    falcon_rate = min(24.0, 1 + 55.0 * bonus / (1 + 1.0 * bonus))
+
+Eighteen candidates were measured and recorded in `docs/BALANCE.md` with the
+reason each was rejected. Two met every target; the shipped one sits centred in
+all three windows:
+
+| Investment | damage | gold | speed (shipped) | target |
+| --- | --- | --- | --- | --- |
+| 10 points | -22.4% | -15.4% | **-11.9%** | 8-12% |
+| 25 points | -37.5% | -28.2% | **-18.3%** | 15-22% |
+| 60 points | -57.0% | -45.6% | **-29.3%** | 25-35% |
+
+Deeper runs at 25 points: to stage 50 speed saves 18.0%, to stage 60 17.9%, so
+it stays useful past the first Prestige while remaining the weakest of the three
+at every investment measured. The zero-relic C17 run is unchanged at 2077s /
+34.6 min on every run.
+
+A fast falcon owes several strikes per frame. They are resolved as one
+aggregated hit -- same arithmetic, one animation, one damage number -- with the
+backlog bounded to two seconds, so the damage-number pool stays bounded however
+high the rate goes. `test_speed_relic.gd` pins the curve's monotonicity, its
+cap, the never-zero interval, the three sensitivity windows, speed staying
+weaker than damage, determinism, the untouched boss countdown and skill
+cooldowns, exactly-once death and stage advance under a saturated falcon, and
+survival across save, reload and Prestige.
+
+Relic groundwork also landed: fifteen drawn relic icons and a
+`plan_purchase` / `purchase` transaction API that works out the exact cost and
+resulting level before any state moves. **The player-facing Relics panel itself
+is not built** — it was interrupted by the approved combat-direction rework and
+is the next thing to finish.
+
 ## Next highest-priority action
 
 Two owner decisions, both balance changes that would move the C17 figure:

@@ -17,7 +17,7 @@ const SIM_SEED: int = 0x5EED17
 const STEP: float = 1.0
 const TAPS: float = 5.0
 const PRESTIGE_STAGE: int = 25
-const MAX_SECONDS: float = 400000.0
+const MAX_SECONDS: float = 2500000.0
 const BUDGETS: Array[int] = [0, 10, 25, 60]
 
 
@@ -40,11 +40,11 @@ func spend(category: String, budget: int) -> Dictionary:
 	return {"bonus": relics.total_bonus(category), "spent": spent, "relics": relics}
 
 
-func run_to(target_stage: int, damage: float, gold: float, falcon: float) -> float:
+func run_to(target_stage: int, damage: float, gold: float, speed_bonus: float) -> float:
 	var c = CS.new()
 	c.set_random_seed(SIM_SEED)
 	c.spawn_enemy()
-	c.set_relic_bonuses(damage, gold, falcon)
+	c.set_relic_bonuses(damage, gold, speed_bonus)
 	var t: float = 0.0
 	var tap_acc: float = 0.0
 	while c.stage < target_stage and t < MAX_SECONDS:
@@ -68,7 +68,7 @@ func _init() -> void:
 	print("=== Relic sensitivity: seconds to first Prestige (stage %d) ===" % PRESTIGE_STAGE)
 	print("deterministic seed %d; budgets are prestige currency spent cheapest-first" % SIM_SEED)
 	print("")
-	var baseline: float = run_to(PRESTIGE_STAGE, 1.0, 1.0, 1.0)
+	var baseline: float = run_to(PRESTIGE_STAGE, 1.0, 1.0, 0.0)
 	print("%-12s | %7s | %8s | %9s | %10s | %s" % ["category", "budget", "bonus", "seconds", "saved", "per point"])
 	print("%-12s | %7d | %8s | %9.0f | %10s | %s" % ["baseline", 0, "-", baseline, "-", "-"])
 
@@ -83,9 +83,9 @@ func _init() -> void:
 			var seconds: float = baseline
 			var note: String = ""
 			match category:
-				"damage": seconds = run_to(PRESTIGE_STAGE, 1.0 + bonus, 1.0, 1.0)
-				"gold": seconds = run_to(PRESTIGE_STAGE, 1.0, 1.0 + bonus, 1.0)
-				"speed": seconds = run_to(PRESTIGE_STAGE, 1.0, 1.0, 1.0 + bonus)
+				"damage": seconds = run_to(PRESTIGE_STAGE, 1.0 + bonus, 1.0, 0.0)
+				"gold": seconds = run_to(PRESTIGE_STAGE, 1.0, 1.0 + bonus, 0.0)
+				"speed": seconds = run_to(PRESTIGE_STAGE, 1.0, 1.0, bonus)
 				"skills":
 					# Skill relics shorten cooldowns; the effect is measured on the
 					# skill system directly because this harness does not fire skills.
@@ -109,6 +109,22 @@ func _init() -> void:
 				print("%-12s | %7d | %8.3f | %9s | %10s | %s" % [category, budget, bonus, "-", "-", note])
 		if not moved:
 			inert.append(category)
+
+	# Mid and late game: the same investment measured deeper into the run, where
+	# enemy health has grown far beyond the first Prestige.
+	print("")
+	print("=== deeper runs: seconds to stage 50 (mid) and stage 75 (late) ===")
+	for stage: int in [50, 60]:
+		var base_deep: float = run_to(stage, 1.0, 1.0, 0.0)
+		for category: String in ["damage", "gold", "speed"]:
+			var deep_bonus: float = float(spend(category, 25)["bonus"])
+			var deep: float = base_deep
+			match category:
+				"damage": deep = run_to(stage, 1.0 + deep_bonus, 1.0, 0.0)
+				"gold": deep = run_to(stage, 1.0, 1.0 + deep_bonus, 0.0)
+				"speed": deep = run_to(stage, 1.0, 1.0, deep_bonus)
+			print("stage %-3d | %-8s 25 points | %8.0fs vs %8.0fs baseline | -%5.1f%%" % [
+				stage, category, deep, base_deep, (base_deep - deep) / base_deep * 100.0])
 
 	print("")
 	if inert.is_empty():
