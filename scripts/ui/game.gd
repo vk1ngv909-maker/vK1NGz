@@ -144,10 +144,16 @@ func _ready() -> void:
 		# one thirtieth of a game second and the clip plays at the speed a
 		# device would show. Five rapid taps first, then a run of taps that
 		# carries the fight through a kill and on to the next enemy.
-		var tap_frames: Array[int] = [40, 44, 48, 52, 56]
+		# Beats in frames, meant to be run under --fixed-fps 30 so one frame is
+		# one thirtieth of a game second and the clip plays at the speed a
+		# device would show. A full second of idle first so the resting stance
+		# is on screen long enough to judge, then five rapid taps, then a run
+		# that carries the fight through a kill and on to the next enemy, then
+		# long enough at the end to see the hero settle completely.
+		var tap_frames: Array[int] = [45, 49, 53, 57, 61]
 		var kill_frames: Array[int] = []
-		for k: int in 28:
-			kill_frames.append(100 + k * 4)
+		for k: int in 30:
+			kill_frames.append(110 + k * 4)
 		var timeline: Array[String] = []
 		for frame: int in clip_frames:
 			if frame in tap_frames or frame in kill_frames:

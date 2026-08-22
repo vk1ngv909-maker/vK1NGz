@@ -93,13 +93,15 @@ word as well as a number. The pool is fixed at 32 labels.
 * `hero_1to1_crop_720x1280.png`, `hero_1to1_crop_1080x2400.png`,
   `hero_clip_1to1_720x1280.png` — unscaled runtime crops, for inspecting the
   texture's own edges.
-* `hero_runtime_720x1280.gif` — 9 s of the running game at 720x1280: idle, five
-  rapid taps, normal and critical hits, an enemy death, and the return to idle.
-  Captured with `--demo-clip` under `--fixed-fps 30`, so one frame is one
-  thirtieth of a game second and playback runs at the speed a device would.
-  Re-sampled to 25 fps for the GIF because its frame delay is stored in
-  hundredths of a second and 1/30 s is not representable — at 30 fps the file
-  plays 9 % fast. Playback length matches the recorded game time exactly.
+* `hero_runtime_720x1280.mp4` — 10 s of the running game at its native
+  720x1280: idle, five rapid taps, normal and critical hits, an enemy death and
+  stage transition, and the return to idle. H.264 High, yuv420p, fixed 30 fps,
+  300 frames. Captured with `--demo-clip` under `--fixed-fps 30`, so one frame
+  is one thirtieth of a game second and playback runs at the speed a device
+  would. A GIF was tried first and rejected: its frame delay is stored in
+  hundredths of a second, so 1/30 s is not representable.
+* `hero_runtime_contact_sheet.png` — twelve chronological frames from that same
+  recording, each labelled with its frame number and game time.
 * `hero_runtime_timeline.csv` — one row per recorded frame: pose, foot point,
   live numbers, stage, cumulative tap damage, and how far the arc had travelled.
   This is the frame-level evidence behind the claims above.
