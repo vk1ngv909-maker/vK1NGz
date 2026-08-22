@@ -124,6 +124,66 @@ func _ready() -> void:
 			frame.save_png("%s_%d_%s.png" % [base_path, index, labels[index]])
 			print("ATTACKSEQ %d %s" % [index, labels[index]])
 		get_tree().quit()
+	if "--demo-clip" in args:
+		# A frame dump of the real running game: every frame written here is a
+		# frame the renderer actually produced, in order, with the game delta
+		# that produced it recorded alongside. Still frames cannot show whether
+		# the pose swap pops or the hero drifts; consecutive ones can.
+		var clip_frames: int = 150
+		for i in args.size():
+			if args[i] == "--demo-clip" and i + 1 < args.size():
+				clip_frames = clampi(int(args[i + 1]), 10, 600)
+		var clip_arena: Node = get_tree().get_first_node_in_group("combat_arena")
+		var clip_hud: Node = get_tree().get_first_node_in_group("hud")
+		var clip_hero: Control = clip_arena.get("hero")
+		var clip_base: String = out_path.get_basename()
+		# Scripted beats so the clip always contains the same events: settle,
+		# five rapid taps, then enough taps to kill and roll on to the next
+		# enemy, then settle again.
+		# Beats in frames, meant to be run under --fixed-fps 30 so one frame is
+		# one thirtieth of a game second and the clip plays at the speed a
+		# device would show. Five rapid taps first, then a run of taps that
+		# carries the fight through a kill and on to the next enemy.
+		var tap_frames: Array[int] = [40, 44, 48, 52, 56]
+		var kill_frames: Array[int] = []
+		for k: int in 28:
+			kill_frames.append(100 + k * 4)
+		var timeline: Array[String] = []
+		for frame: int in clip_frames:
+			if frame in tap_frames or frame in kill_frames:
+				clip_arena.call("debug_tap")
+			await get_tree().process_frame
+			var image: Image = get_viewport().get_texture().get_image()
+			image.save_png("%s_%03d.png" % [clip_base, frame])
+			var entry: Dictionary = clip_hud.call("hero_metrics")
+			var foot: Vector2 = clip_hero.position + HeroPlacement.body_offset(clip_hero.size.y, entry)
+			# Count only the tap's own damage. The falcon and the DPS tick post
+			# numbers on their own schedule, and counting those made an earlier
+			# reading look like damage appeared one frame after the tap.
+			var tap_damage: int = 0
+			for kind_value: Variant in clip_arena.get("damage_pool").call("kind_history"):
+				if str(kind_value) in ["normal", "critical"]:
+					tap_damage += 1
+			# How far the slash has travelled from the hero to the enemy, 0-1.
+			var clip_slash: Control = clip_arena.get("slash")
+			var clip_enemy: Control = clip_arena.get("enemy")
+			var goal: Vector2 = clip_enemy.position + clip_enemy.size * 0.5
+			var span: float = (clip_hero.position + clip_hero.size * 0.5).distance_to(goal)
+			var arc: float = 0.0
+			if clip_slash.visible and span > 1.0:
+				arc = 1.0 - clampf((clip_slash.position + clip_slash.size * 0.5).distance_to(goal) / span, 0.0, 1.0)
+			timeline.append("%d,%.5f,%s,%.3f,%.3f,%d,%d,%d,%.3f" % [
+				frame, get_process_delta_time(), str(clip_hud.call("hero_pose")),
+				foot.x, foot.y, int(clip_arena.get("damage_pool").call("live_label_count")),
+				clip_arena.get("combat").stage, tap_damage, arc])
+		var log_file: FileAccess = FileAccess.open("%s_timeline.csv" % clip_base, FileAccess.WRITE)
+		if log_file != null:
+			log_file.store_line("frame,delta_s,pose,foot_x,foot_y,live_numbers,stage,tap_damage_total,arc_progress")
+			for row: String in timeline:
+				log_file.store_line(row)
+			log_file.close()
+		print("CLIP frames=%d base=%s" % [clip_frames, clip_base])
+		get_tree().quit()
 	if "--demo-attack-verify" in args:
 		# The claims a still frame cannot carry: that damage is never shown
 		# before the hit connects, that the hero returns to the exact anchor

@@ -48,9 +48,20 @@ swapping back — 0.31 s in total. Damage, the enemy reaction and the death chec
 are all deferred by `attack_travel_seconds()` = 0.15 s, so nothing is shown
 before the hit connects.
 
-A tap arriving mid-swing **restarts** the swing: the running tween is killed, the
-hero is returned to the idle anchor, and the new swing plays from the top.
-Nothing queues and nothing stacks, so no two tweens can drive one property. The hero returns to `hud.hero_anchor` — the anchor the layout
+A tap arriving mid-swing has one deterministic rule, split at the moment of
+impact: **before** the blade lands the tap is **absorbed** — the swing in flight
+keeps going, connects, and the absorbed tap's damage is presented at that same
+impact; **after** it lands the swing **restarts** from the top. Nothing queues
+either way, so no two tweens can drive one property.
+
+Absorbing is not cosmetic. Damage used to wait on a timer of its own, so during
+rapid tapping a number could surface while the visible blade was barely off the
+hero. Recorded at 30 fps, 26 of 29 damage events landed with the arc under 85 %
+of the way to the enemy. With the rule in place all 16 events land at 92-98 %.
+
+That rule is counted in **game** time, not wall clock. The first attempt
+compared `Time.get_ticks_msec()` against game-time tweens, which meant it never
+fired under a fixed frame rate and the recording looked unchanged. The hero returns to `hud.hero_anchor` — the anchor the layout
 stored, not wherever the hero happened to be — so repeated tapping cannot make
 the hero drift.
 
@@ -79,8 +90,19 @@ word as well as a number. The pool is fixed at 32 labels.
   1080×2400.
 * 4 Hero Training captures, both languages, both resolutions.
 * `attack_verify_ranged.png` — the staff bolt on the enemy.
-* `hero_1to1_crop_720x1280.png`, `hero_1to1_crop_1080x2400.png` — unscaled
-  runtime crops, for inspecting the texture's own edges.
+* `hero_1to1_crop_720x1280.png`, `hero_1to1_crop_1080x2400.png`,
+  `hero_clip_1to1_720x1280.png` — unscaled runtime crops, for inspecting the
+  texture's own edges.
+* `hero_runtime_720x1280.gif` — 9 s of the running game at 720x1280: idle, five
+  rapid taps, normal and critical hits, an enemy death, and the return to idle.
+  Captured with `--demo-clip` under `--fixed-fps 30`, so one frame is one
+  thirtieth of a game second and playback runs at the speed a device would.
+  Re-sampled to 25 fps for the GIF because its frame delay is stored in
+  hundredths of a second and 1/30 s is not representable — at 30 fps the file
+  plays 9 % fast. Playback length matches the recorded game time exactly.
+* `hero_runtime_timeline.csv` — one row per recorded frame: pose, foot point,
+  live numbers, stage, cumulative tap damage, and how far the arc had travelled.
+  This is the frame-level evidence behind the claims above.
 
 Measured by `--demo-attack-verify`: the arc had travelled 97–100 % of the way to
 the enemy on the frame the tap's own damage number first existed; the hero's

@@ -70,7 +70,7 @@ ui.numerals.western,غربية (0123)
 ui.numerals.arabic_indic,عربية هندية (٠١٢٣)
 ui.tutorial.tap_enemy,اضغط على العدو لإلحاق الضرر.
 ui.tutorial.upgrade_hero,طور ضرر لمس بطلك.
-ui.tutorial.support_dps,استخدم أبطال الدعم للضرر التلقائي.
+ui.tutorial.support_dps,درّب بطلك للضرر التلقائي.
 ui.tutorial.activate_skill,فعّل مهارة قتالية.
 ui.tutorial.boss_intro,يجب هزيمة الزعماء قبل انتهاء الوقت.
 ui.tutorial.boss_retry,أعد محاولة الزعيم عندما تصبح أقوى.
@@ -138,7 +138,7 @@ ui.prestige.entry_line,• %s
 ui.prestige.entry.stage,المرحلة
 ui.prestige.entry.gold,الذهب
 ui.prestige.entry.tap_level,مستوى اللمس
-ui.prestige.entry.support_hero_levels,أبطال الدعم
+ui.prestige.entry.support_hero_levels,تدريب البطل
 ui.prestige.entry.active_skills,المهارات النشطة
 ui.prestige.entry.skill_timestamps,مؤقتات المهارات
 ui.prestige.entry.temporary_buffs,التعزيزات المؤقتة
@@ -200,8 +200,8 @@ skill.golden_wind.desc,تتضاعف مكافآت الأعداء مرة واحد�
 skill.golden_wind.effect,مكافآت الذهب ×2.5
 skill.time_fracture.desc,تضيف وقتًا إلى معركة الزعيم الحالية مرة واحدة.
 skill.time_fracture.effect,مؤقت الزعيم +10 ث مرة واحدة — الحد 60 ث
-skill.ancestor_call.desc,يقوي الأسلاف هجمات أبطال الدعم.
-skill.ancestor_call.effect,ضرر أبطال الدعم ×3
+skill.ancestor_call.desc,الأسلاف يقوّون هجمات بطلك المُدرَّبة.
+skill.ancestor_call.effect,ضرر التدريب ×3
 skill.critical_eclipse.desc,تصبح الضربات الحرجة أرجح وأقوى.
 skill.critical_eclipse.effect,فرصة حرجة +40٪ — حد 95٪ — ضرر حرج ×2
 ui.heroes.title,تدريب البطل
@@ -210,7 +210,7 @@ ui.heroes.current_dps,الضرر الحالي في الثانية
 ui.heroes.next_gain,زيادة المستوى التالي
 ui.heroes.milestone_progress,المعلم %s / %s
 ui.heroes.milestones_complete,اكتملت جميع المعالم
-ui.heroes.hire,توظيف
+ui.heroes.hire,ابدأ التدريب
 ui.heroes.level_up,رفع المستوى
 ui.heroes.cost,التكلفة %s ذهب
 ui.skills.title,مهارات القتال
@@ -230,7 +230,7 @@ ui.state.available_unaffordable,متاحة — لا يكفي الذهب
 ui.role.melee,قتال قريب
 ui.role.ranged,بعيد المدى
 ui.role.magic,سحري
-ui.role.support,دعم
+ui.role.support,حظ
 relic.sun_blade,نصل الشمس
 relic.falcon_feather,ريشة الصقر
 relic.gilded_scarab,الخنفساء المذهّبة
@@ -298,7 +298,7 @@ boss.ember_crown_construct.name,ملك التروس المتوّج
 boss.ember_crown_construct.desc,آلة عالية متوّجة يدها مدفع.
 boss.vaultback_behemoth.name,ملك الفطر
 boss.vaultback_behemoth.desc,ملك قصير متوّج يلكم بقبضتيه.
-hud.hero_dps,ضرر الأبطال  %s
+hud.hero_dps,ضرر البطل  %s
 hud.enemy_unknown,عدو
 boss.visual.ancient_treant.name,الشجرة العتيقة
 boss.visual.whispering_marsh_hydra.name,هيدرا البستان

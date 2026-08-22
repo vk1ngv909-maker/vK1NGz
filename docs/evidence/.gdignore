@@ -1,0 +1,3 @@
+# Evidence is documentation, not game content. Without this Godot imports
+# every capture, and it read the timeline CSV as a translation resource and
+# generated bogus .translation files alongside the real localization.

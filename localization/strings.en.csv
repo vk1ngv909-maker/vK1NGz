@@ -70,7 +70,7 @@ ui.numerals.western,Western (0123)
 ui.numerals.arabic_indic,Arabic-Indic (٠١٢٣)
 ui.tutorial.tap_enemy,Tap the enemy to deal damage.
 ui.tutorial.upgrade_hero,Upgrade your hero's tap damage.
-ui.tutorial.support_dps,Use support heroes for automatic DPS.
+ui.tutorial.support_dps,Train your hero for automatic damage.
 ui.tutorial.activate_skill,Activate a combat skill.
 ui.tutorial.boss_intro,Bosses must be defeated before time runs out.
 ui.tutorial.boss_retry,Retry the boss when you are stronger.
@@ -138,7 +138,7 @@ ui.prestige.entry_line,• %s
 ui.prestige.entry.stage,Stage
 ui.prestige.entry.gold,Gold
 ui.prestige.entry.tap_level,Tap Level
-ui.prestige.entry.support_hero_levels,Support Heroes
+ui.prestige.entry.support_hero_levels,Hero Training
 ui.prestige.entry.active_skills,Active Skills
 ui.prestige.entry.skill_timestamps,Skill Timers
 ui.prestige.entry.temporary_buffs,Temporary Buffs
@@ -200,8 +200,8 @@ skill.golden_wind.desc,Enemy rewards are multiplied once when awarded.
 skill.golden_wind.effect,Gold awards x2.5
 skill.time_fracture.desc,Adds time to the current boss battle once.
 skill.time_fracture.effect,Boss timer +10s once — maximum 60s
-skill.ancestor_call.desc,Ancestors empower support-hero attacks.
-skill.ancestor_call.effect,Support hero DPS x3
+skill.ancestor_call.desc,Ancestors empower your hero's trained attacks.
+skill.ancestor_call.effect,Training DPS x3
 skill.critical_eclipse.desc,Critical strikes become likelier and more powerful.
 skill.critical_eclipse.effect,Crit chance +40% — cap 95% — crit damage x2
 ui.heroes.title,Hero Training
@@ -210,7 +210,7 @@ ui.heroes.current_dps,Current DPS
 ui.heroes.next_gain,Next-level gain
 ui.heroes.milestone_progress,Milestone %s / %s
 ui.heroes.milestones_complete,All milestones reached
-ui.heroes.hire,Hire
+ui.heroes.hire,Start Training
 ui.heroes.level_up,Level Up
 ui.heroes.cost,Cost %s gold
 ui.skills.title,COMBAT SKILLS
@@ -230,7 +230,7 @@ ui.state.available_unaffordable,AVAILABLE — NOT AFFORDABLE
 ui.role.melee,Melee
 ui.role.ranged,Ranged
 ui.role.magic,Magic
-ui.role.support,Support
+ui.role.support,Fortune
 relic.sun_blade,Sun Blade
 relic.falcon_feather,Falcon Feather
 relic.gilded_scarab,Gilded Beetle

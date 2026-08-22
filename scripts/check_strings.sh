@@ -12,7 +12,7 @@ while IFS= read -r finding; do
 	esac
   literal=${finding#*:*:}
   case "$literal" in
-    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'hero sprite metrics'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'EnemyPool:'*|*'BossPool:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*|*'CombatArena:'*|*'JOURNEY'*|*'BOSSWIN'*|*'SKILL '*|*'SKILL_'*|*'FALCONSEQ'*|*'FALCONRATE'*|*'PERF frames'*|*'WORLDCYCLE'*|*'LAYOUT arena'*|*'ATTACKSEQ'*|*'ATTACKVERIFY'*|*'hits=%d'*)
+    *'res://'*|*'PLACEHOLDER'*|*'SaveManager.'*|*'SaveAdapter.'*|*'BalanceData:'*|*'hero sprite metrics'*|*'BigNumber.'*|*'Inventory:'*|*'Inventory.'*|*'CombatState:'*|*'RewardSystem.'*|*'RewardSystem:'*|*'Relics:'*|*'SupportHeroes:'*|*'SkillSystem:'*|*'Worlds:'*|*'EnemyPool:'*|*'BossPool:'*|*'ContentValidator:'*|*'screenshot failed'*|*'SHOT_SAVED'*|*'CombatArena:'*|*'JOURNEY'*|*'BOSSWIN'*|*'SKILL '*|*'SKILL_'*|*'FALCONSEQ'*|*'FALCONRATE'*|*'PERF frames'*|*'WORLDCYCLE'*|*'LAYOUT arena'*|*'ATTACKSEQ'*|*'CLIP frames'*|*'ATTACKVERIFY'*|*'hits=%d'*)
       continue
       ;;
   esac

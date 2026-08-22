@@ -20,8 +20,14 @@ export XDG_DATA_HOME=/tmp/godot-shot-data XDG_CACHE_HOME=/tmp/godot-shot-cache X
 ABS="$(cd "$(dirname "$OUT")" && pwd)/$(basename "$OUT")"
 cp project.godot /tmp/project.godot.bak
 sed -i "s/^window\/size\/viewport_width=.*/window\/size\/viewport_width=$W/; s/^window\/size\/viewport_height=.*/window\/size\/viewport_height=$H/" project.godot
-timeout 200 xvfb-run -a --server-args="-screen 0 ${W}x${H}x24" \
-  godot --path . --rendering-driver opengl3 --shot --shot-out "$ABS" "${SHOT_EXTRA_ARGS[@]}" \
+# SHOT_FIXED_FPS forces a fixed game delta, so a frame dump plays back at the
+# rate a device would run rather than at whatever llvmpipe manages.
+FIXED_FPS_ARGS=()
+if [ -n "${SHOT_FIXED_FPS:-}" ]; then
+  FIXED_FPS_ARGS=(--fixed-fps "$SHOT_FIXED_FPS")
+fi
+timeout "${SHOT_TIMEOUT:-200}" xvfb-run -a --server-args="-screen 0 ${W}x${H}x24" \
+  godot --path . --rendering-driver opengl3 "${FIXED_FPS_ARGS[@]}" --shot --shot-out "$ABS" "${SHOT_EXTRA_ARGS[@]}" \
   2>&1 | grep -E "$SHOT_GREP" | tail -"${SHOT_TAIL:-30}"
 cp /tmp/project.godot.bak project.godot
 [ -f "$OUT" ] && python3 -c "import struct;d=open('$OUT','rb').read(33);w,h=struct.unpack('>II',d[16:24]);print(f'FILE {w}x{h}')" || echo "NO SHOT"
