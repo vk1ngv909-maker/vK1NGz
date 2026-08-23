@@ -1,0 +1,938 @@
+{
+  "schema_version": 1,
+  "hero_id": "main_hero",
+  "rig_target": "Skeleton2D",
+  "canvas": {
+    "width": 1000,
+    "height": 560,
+    "root_anchor": "bottom-center",
+    "ground_y": 512
+  },
+  "angle_convention": "degrees, 0 = +x, 90 = +y (screen down); rest values are absolute",
+  "bones": {
+    "root_anchor": {
+      "parent": null,
+      "off": [
+        0,
+        0
+      ],
+      "rest": 0,
+      "len": 0
+    },
+    "pelvis": {
+      "parent": "root_anchor",
+      "off": [
+        0,
+        -176
+      ],
+      "rest": -90,
+      "len": 30
+    },
+    "torso": {
+      "parent": "pelvis",
+      "off": [
+        30,
+        0
+      ],
+      "rest": -92,
+      "len": 44
+    },
+    "chest": {
+      "parent": "torso",
+      "off": [
+        44,
+        0
+      ],
+      "rest": -89,
+      "len": 30
+    },
+    "neck": {
+      "parent": "chest",
+      "off": [
+        28,
+        0
+      ],
+      "rest": -88,
+      "len": 12
+    },
+    "head": {
+      "parent": "neck",
+      "off": [
+        12,
+        0
+      ],
+      "rest": -88,
+      "len": 44
+    },
+    "hair_back": {
+      "parent": "head",
+      "off": [
+        8,
+        0
+      ],
+      "rest": 135,
+      "len": 36
+    },
+    "hair_front": {
+      "parent": "head",
+      "off": [
+        34,
+        0
+      ],
+      "rest": -32,
+      "len": 30
+    },
+    "arm_front_upper": {
+      "parent": "chest",
+      "off": [
+        26,
+        17
+      ],
+      "rest": 74,
+      "len": 46
+    },
+    "arm_front_fore": {
+      "parent": "arm_front_upper",
+      "off": [
+        46,
+        0
+      ],
+      "rest": 82,
+      "len": 42
+    },
+    "hand_front": {
+      "parent": "arm_front_fore",
+      "off": [
+        42,
+        0
+      ],
+      "rest": 86,
+      "len": 16
+    },
+    "weapon": {
+      "parent": "hand_front",
+      "off": [
+        9,
+        0
+      ],
+      "rest": 24,
+      "len": 88
+    },
+    "arm_rear_upper": {
+      "parent": "chest",
+      "off": [
+        26,
+        -17
+      ],
+      "rest": 101,
+      "len": 46
+    },
+    "arm_rear_fore": {
+      "parent": "arm_rear_upper",
+      "off": [
+        46,
+        0
+      ],
+      "rest": 95,
+      "len": 42
+    },
+    "hand_rear": {
+      "parent": "arm_rear_fore",
+      "off": [
+        42,
+        0
+      ],
+      "rest": 92,
+      "len": 16
+    },
+    "leg_front_thigh": {
+      "parent": "pelvis",
+      "off": [
+        2,
+        13
+      ],
+      "rest": 92,
+      "len": 68
+    },
+    "leg_front_shin": {
+      "parent": "leg_front_thigh",
+      "off": [
+        68,
+        0
+      ],
+      "rest": 90,
+      "len": 66
+    },
+    "boot_front": {
+      "parent": "leg_front_shin",
+      "off": [
+        66,
+        0
+      ],
+      "rest": 92,
+      "len": 42
+    },
+    "leg_rear_thigh": {
+      "parent": "pelvis",
+      "off": [
+        2,
+        -13
+      ],
+      "rest": 88,
+      "len": 68
+    },
+    "leg_rear_shin": {
+      "parent": "leg_rear_thigh",
+      "off": [
+        68,
+        0
+      ],
+      "rest": 90,
+      "len": 66
+    },
+    "boot_rear": {
+      "parent": "leg_rear_shin",
+      "off": [
+        66,
+        0
+      ],
+      "rest": 88,
+      "len": 42
+    },
+    "cape_a": {
+      "parent": "chest",
+      "off": [
+        24,
+        0
+      ],
+      "rest": 99,
+      "len": 54
+    },
+    "cape_b": {
+      "parent": "cape_a",
+      "off": [
+        54,
+        0
+      ],
+      "rest": 94,
+      "len": 54
+    },
+    "cape_c": {
+      "parent": "cape_b",
+      "off": [
+        54,
+        0
+      ],
+      "rest": 92,
+      "len": 46
+    }
+  },
+  "secondary_motion": {
+    "hair_back": [
+      0.9,
+      0.45
+    ],
+    "hair_front": [
+      -0.7,
+      -0.35
+    ],
+    "cape_a": [
+      1.5,
+      0.8
+    ],
+    "cape_b": [
+      2.1,
+      1.1
+    ],
+    "cape_c": [
+      2.6,
+      1.3
+    ]
+  },
+  "layers": [
+    {
+      "layer": "character_shadow",
+      "bone": "root_anchor",
+      "z_front": 0,
+      "z_rear": 0
+    },
+    {
+      "layer": "cape_back_lower",
+      "bone": "cape_c",
+      "z_front": 5,
+      "z_rear": 92
+    },
+    {
+      "layer": "cape_back_mid",
+      "bone": "cape_b",
+      "z_front": 6,
+      "z_rear": 93
+    },
+    {
+      "layer": "cape_back_upper",
+      "bone": "cape_a",
+      "z_front": 7,
+      "z_rear": 94
+    },
+    {
+      "layer": "boot_rear",
+      "bone": "boot_rear",
+      "z_front": 10,
+      "z_rear": 10
+    },
+    {
+      "layer": "leg_rear_lower",
+      "bone": "leg_rear_shin",
+      "z_front": 11,
+      "z_rear": 11
+    },
+    {
+      "layer": "leg_rear_thigh",
+      "bone": "leg_rear_thigh",
+      "z_front": 12,
+      "z_rear": 12
+    },
+    {
+      "layer": "arm_rear_upper",
+      "bone": "arm_rear_upper",
+      "z_front": 14,
+      "z_rear": 14
+    },
+    {
+      "layer": "arm_rear_forearm",
+      "bone": "arm_rear_fore",
+      "z_front": 15,
+      "z_rear": 15
+    },
+    {
+      "layer": "hand_rear",
+      "bone": "hand_rear",
+      "z_front": 16,
+      "z_rear": 16
+    },
+    {
+      "layer": "pelvis",
+      "bone": "pelvis",
+      "z_front": 20,
+      "z_rear": 20
+    },
+    {
+      "layer": "torso_base",
+      "bone": "torso",
+      "z_front": 22,
+      "z_rear": 22
+    },
+    {
+      "layer": "leg_front_thigh",
+      "bone": "leg_front_thigh",
+      "z_front": 26,
+      "z_rear": 26
+    },
+    {
+      "layer": "leg_front_lower",
+      "bone": "leg_front_shin",
+      "z_front": 27,
+      "z_rear": 27
+    },
+    {
+      "layer": "boot_front",
+      "bone": "boot_front",
+      "z_front": 28,
+      "z_rear": 28
+    },
+    {
+      "layer": "outfit_front",
+      "bone": "torso",
+      "z_front": 30,
+      "z_rear": 30
+    },
+    {
+      "layer": "belt_and_pouches",
+      "bone": "torso",
+      "z_front": 32,
+      "z_rear": 32
+    },
+    {
+      "layer": "cape_clasp",
+      "bone": "chest",
+      "z_front": 34,
+      "z_rear": 96
+    },
+    {
+      "layer": "neck",
+      "bone": "neck",
+      "z_front": 36,
+      "z_rear": 36
+    },
+    {
+      "layer": "head",
+      "bone": "head",
+      "z_front": 38,
+      "z_rear": 38
+    },
+    {
+      "layer": "hair_back",
+      "bone": "hair_back",
+      "z_front": 37,
+      "z_rear": 99
+    },
+    {
+      "layer": "expression_eyes",
+      "bone": "head",
+      "z_front": 39,
+      "z_rear": -1
+    },
+    {
+      "layer": "hair_front",
+      "bone": "hair_front",
+      "z_front": 40,
+      "z_rear": 98
+    },
+    {
+      "layer": "arm_front_upper",
+      "bone": "arm_front_upper",
+      "z_front": 44,
+      "z_rear": 100
+    },
+    {
+      "layer": "arm_front_forearm",
+      "bone": "arm_front_fore",
+      "z_front": 45,
+      "z_rear": 101
+    },
+    {
+      "layer": "hand_front",
+      "bone": "hand_front",
+      "z_front": 46,
+      "z_rear": 102
+    },
+    {
+      "layer": "weapon_short_sword",
+      "bone": "weapon",
+      "z_front": 48,
+      "z_rear": 104
+    }
+  ],
+  "sockets": [
+    {
+      "name": "root_anchor",
+      "bone": "root_anchor",
+      "offset": [
+        0,
+        0
+      ],
+      "use": "Bottom-center arena placement. Never keyed."
+    },
+    {
+      "name": "foot_left",
+      "bone": "boot_front",
+      "offset": [
+        42,
+        0
+      ],
+      "use": "Ground-contact validation, front foot."
+    },
+    {
+      "name": "foot_right",
+      "bone": "boot_rear",
+      "offset": [
+        42,
+        0
+      ],
+      "use": "Ground-contact validation, rear foot."
+    },
+    {
+      "name": "weapon_grip",
+      "bone": "hand_front",
+      "offset": [
+        9,
+        0
+      ],
+      "use": "Weapon and weapon-skin attachment."
+    },
+    {
+      "name": "weapon_tip",
+      "bone": "weapon",
+      "offset": [
+        88,
+        0
+      ],
+      "use": "Trail origin and impact collision timing."
+    },
+    {
+      "name": "hit_fx",
+      "bone": "chest",
+      "offset": [
+        14,
+        0
+      ],
+      "use": "Incoming-hit effect origin."
+    },
+    {
+      "name": "chest_fx",
+      "bone": "chest",
+      "offset": [
+        24,
+        0
+      ],
+      "use": "Level-up and buff effects."
+    },
+    {
+      "name": "head_fx",
+      "bone": "head",
+      "offset": [
+        44,
+        0
+      ],
+      "use": "Status and victory effects."
+    },
+    {
+      "name": "feet_fx",
+      "bone": "root_anchor",
+      "offset": [
+        0,
+        -4
+      ],
+      "use": "Gold-teal rune ring on level-up."
+    },
+    {
+      "name": "companion_home",
+      "bone": "root_anchor",
+      "offset": [
+        -96,
+        -330
+      ],
+      "use": "Kiro idle position, clear of weapon path."
+    }
+  ],
+  "animations": {
+    "idle": {
+      "duration": 2.1,
+      "loop": true,
+      "events": [],
+      "interpolation": "cubic_in_out",
+      "keys": [
+        {
+          "time": 0,
+          "bone_rotation_deg": {},
+          "root_offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "time": 0.35,
+          "bone_rotation_deg": {
+            "torso": -1.2,
+            "chest": -1,
+            "neck": 0.5,
+            "head": -0.8,
+            "arm_rear_upper": -2,
+            "arm_front_upper": 1.5,
+            "pelvis": 1.2,
+            "leg_front_thigh": -1.2,
+            "leg_rear_thigh": 1,
+            "leg_front_shin": 1.5
+          },
+          "root_offset": {
+            "x": 2,
+            "y": -3
+          }
+        },
+        {
+          "time": 0.7,
+          "bone_rotation_deg": {
+            "torso": 0.5,
+            "chest": 1.5,
+            "head": 0.5,
+            "arm_rear_upper": 1,
+            "arm_front_upper": -1,
+            "pelvis": -0.8,
+            "leg_front_thigh": 0.8,
+            "leg_rear_thigh": -1
+          },
+          "root_offset": {
+            "x": 3,
+            "y": 0
+          }
+        },
+        {
+          "time": 1.05,
+          "bone_rotation_deg": {
+            "torso": 1.5,
+            "chest": 0.5,
+            "neck": -0.6,
+            "head": 1,
+            "arm_front_upper": -2.5,
+            "arm_front_fore": 2.2,
+            "weapon": -5,
+            "pelvis": -1.5,
+            "leg_rear_shin": 1.8
+          },
+          "root_offset": {
+            "x": -1,
+            "y": -1
+          }
+        },
+        {
+          "time": 1.4,
+          "bone_rotation_deg": {
+            "torso": -0.8,
+            "chest": -1.5,
+            "head": -0.5,
+            "arm_front_upper": 1,
+            "arm_front_fore": -1.2,
+            "weapon": 2,
+            "pelvis": 0.6,
+            "leg_front_thigh": 1,
+            "leg_rear_thigh": -1.4
+          },
+          "root_offset": {
+            "x": -3,
+            "y": -3
+          }
+        },
+        {
+          "time": 1.75,
+          "bone_rotation_deg": {
+            "torso": 0.8,
+            "chest": 1,
+            "head": 0.3,
+            "arm_rear_upper": -1.5,
+            "arm_front_upper": 0.8,
+            "pelvis": 1,
+            "leg_front_shin": 1
+          },
+          "root_offset": {
+            "x": -1,
+            "y": 0
+          }
+        },
+        {
+          "time": 2.1,
+          "bone_rotation_deg": {},
+          "root_offset": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    "idle_variant": {
+      "duration": 1.6,
+      "loop": false,
+      "events": [
+        {
+          "t": 0.62,
+          "name": "glance_kiro"
+        }
+      ],
+      "interpolation": "cubic_in_out",
+      "keys": [
+        {
+          "time": 0,
+          "bone_rotation_deg": {},
+          "root_offset": {}
+        },
+        {
+          "time": 0.3,
+          "bone_rotation_deg": {
+            "head": -13,
+            "neck": -6,
+            "chest": -4,
+            "arm_front_upper": -14,
+            "arm_front_fore": 16,
+            "weapon": -24,
+            "pelvis": -2
+          },
+          "root_offset": {
+            "x": -2,
+            "y": -2
+          }
+        },
+        {
+          "time": 0.65,
+          "bone_rotation_deg": {
+            "head": -17,
+            "neck": -7,
+            "chest": -5,
+            "arm_front_upper": -18,
+            "arm_front_fore": 22,
+            "weapon": -31,
+            "arm_rear_upper": -6
+          },
+          "root_offset": {
+            "x": -3,
+            "y": -2
+          }
+        },
+        {
+          "time": 1.05,
+          "bone_rotation_deg": {
+            "head": -6,
+            "neck": -2,
+            "chest": -1,
+            "arm_front_upper": -6,
+            "arm_front_fore": 7,
+            "weapon": -10
+          },
+          "root_offset": {
+            "x": -1,
+            "y": 0
+          }
+        },
+        {
+          "time": 1.6,
+          "bone_rotation_deg": {},
+          "root_offset": {}
+        }
+      ]
+    },
+    "attack_a": {
+      "duration": 0.36,
+      "loop": false,
+      "events": [
+        {
+          "t": 0.22,
+          "name": "impact_a"
+        }
+      ],
+      "interpolation": "cubic_in_out",
+      "keys": [
+        {
+          "time": 0,
+          "bone_rotation_deg": {},
+          "root_offset": {
+            "x": 0,
+            "y": 0
+          }
+        },
+        {
+          "time": 0.06,
+          "bone_rotation_deg": {
+            "pelvis": 7,
+            "torso": 4,
+            "chest": 9,
+            "head": 4,
+            "arm_front_upper": 26,
+            "arm_front_fore": 18,
+            "weapon": 35,
+            "arm_rear_upper": -14,
+            "leg_rear_thigh": 4
+          },
+          "root_offset": {
+            "x": 3,
+            "y": 0
+          }
+        },
+        {
+          "time": 0.12,
+          "bone_rotation_deg": {
+            "pelvis": 10,
+            "torso": 6,
+            "chest": 13,
+            "head": 6,
+            "arm_front_upper": 40,
+            "arm_front_fore": 10,
+            "weapon": 55,
+            "arm_rear_upper": -22,
+            "leg_rear_thigh": 7,
+            "leg_rear_shin": -5
+          },
+          "root_offset": {
+            "x": 5,
+            "y": 2
+          }
+        },
+        {
+          "time": 0.18,
+          "bone_rotation_deg": {
+            "pelvis": -8,
+            "torso": -6,
+            "chest": -14,
+            "head": -3,
+            "arm_front_upper": -30,
+            "arm_front_fore": -40,
+            "weapon": -60,
+            "arm_rear_upper": 18,
+            "leg_front_thigh": -5,
+            "leg_rear_thigh": 6
+          },
+          "root_offset": {
+            "x": -4,
+            "y": -2
+          }
+        },
+        {
+          "time": 0.22,
+          "bone_rotation_deg": {
+            "pelvis": -14,
+            "torso": -10,
+            "chest": -24,
+            "head": -8,
+            "arm_front_upper": -52,
+            "arm_front_fore": -55,
+            "weapon": -85,
+            "arm_rear_upper": 30,
+            "arm_rear_fore": -14,
+            "leg_front_thigh": -8,
+            "leg_rear_thigh": 10,
+            "leg_front_shin": 6
+          },
+          "root_offset": {
+            "x": -8,
+            "y": 0
+          }
+        },
+        {
+          "time": 0.27,
+          "bone_rotation_deg": {
+            "pelvis": -16,
+            "torso": -11,
+            "chest": -28,
+            "head": -9,
+            "arm_front_upper": -62,
+            "arm_front_fore": -40,
+            "weapon": -100,
+            "arm_rear_upper": 34,
+            "arm_rear_fore": -18,
+            "leg_front_thigh": -9,
+            "leg_rear_thigh": 11
+          },
+          "root_offset": {
+            "x": -9,
+            "y": 1
+          }
+        },
+        {
+          "time": 0.32,
+          "bone_rotation_deg": {
+            "pelvis": -6,
+            "torso": -4,
+            "chest": -10,
+            "head": -3,
+            "arm_front_upper": -20,
+            "arm_front_fore": -12,
+            "weapon": -30,
+            "arm_rear_upper": 12,
+            "leg_front_thigh": -3,
+            "leg_rear_thigh": 4
+          },
+          "root_offset": {
+            "x": -3,
+            "y": 0
+          }
+        },
+        {
+          "time": 0.36,
+          "bone_rotation_deg": {},
+          "root_offset": {
+            "x": 0,
+            "y": 0
+          }
+        }
+      ]
+    },
+    "seam_test": {
+      "duration": 3,
+      "loop": true,
+      "events": [],
+      "interpolation": "cubic_in_out",
+      "keys": [
+        {
+          "time": 0,
+          "bone_rotation_deg": {},
+          "root_offset": {}
+        },
+        {
+          "time": 0.5,
+          "bone_rotation_deg": {
+            "arm_front_upper": -95,
+            "arm_front_fore": -70,
+            "arm_rear_upper": 85,
+            "arm_rear_fore": 60,
+            "leg_front_thigh": -55,
+            "leg_rear_thigh": 45,
+            "leg_front_shin": 70,
+            "chest": 22,
+            "pelvis": 18,
+            "head": 20,
+            "weapon": 40
+          },
+          "root_offset": {}
+        },
+        {
+          "time": 1,
+          "bone_rotation_deg": {
+            "arm_front_upper": 90,
+            "arm_front_fore": 30,
+            "arm_rear_upper": -90,
+            "arm_rear_fore": -70,
+            "leg_front_thigh": 50,
+            "leg_rear_thigh": -50,
+            "leg_rear_shin": 80,
+            "chest": -22,
+            "pelvis": -18,
+            "head": -20,
+            "weapon": -40
+          },
+          "root_offset": {}
+        },
+        {
+          "time": 1.5,
+          "bone_rotation_deg": {
+            "arm_front_upper": -140,
+            "arm_front_fore": -90,
+            "arm_rear_upper": 140,
+            "leg_front_thigh": -70,
+            "leg_rear_thigh": 70,
+            "leg_front_shin": 95,
+            "chest": 30,
+            "pelvis": 14,
+            "weapon": 120,
+            "head": 14
+          },
+          "root_offset": {
+            "y": -6
+          }
+        },
+        {
+          "time": 2,
+          "bone_rotation_deg": {
+            "arm_front_upper": 150,
+            "arm_front_fore": 80,
+            "arm_rear_upper": -150,
+            "arm_rear_fore": -40,
+            "leg_front_thigh": 65,
+            "leg_rear_thigh": -65,
+            "leg_rear_shin": 95,
+            "chest": -30,
+            "pelvis": 25,
+            "weapon": -120,
+            "head": -14
+          },
+          "root_offset": {
+            "y": -4
+          }
+        },
+        {
+          "time": 2.5,
+          "bone_rotation_deg": {
+            "arm_front_upper": -60,
+            "arm_rear_upper": 60,
+            "leg_front_thigh": -30,
+            "leg_rear_thigh": 30,
+            "chest": 10,
+            "pelvis": -8
+          },
+          "root_offset": {}
+        },
+        {
+          "time": 3,
+          "bone_rotation_deg": {},
+          "root_offset": {}
+        }
+      ]
+    }
+  }
+}
