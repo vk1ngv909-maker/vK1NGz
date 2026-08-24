@@ -27,8 +27,11 @@ standing figure 332 px tall with both feet at y=510 against a declared
 sword arc needs. No proportion conflict with the approved hero.
 
 `seam_test` is a QA track: 3 s of extreme joint rotations (arms to ±150°, legs
-to ±70°) whose only purpose is to expose holes and seams in layer art. Its
-presence is itself confirmation that real layer art is expected to exist.
+to ±70°) whose purpose is to expose holes and seams in layer art. It says
+nothing about whether that art exists — a specification can declare a validation
+track for work not yet produced. An earlier draft of this audit claimed its
+presence implied the layers existed somewhere; that inference was wrong and is
+withdrawn.
 
 ## 2. What is missing
 
